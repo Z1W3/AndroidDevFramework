@@ -26,7 +26,7 @@ class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActiv
 
     override fun setContent() {
         launch (Dispatchers.Unconfined) {
-            dggService.fetchLotteryTypes().enqueue(object : retrofit2.Callback<ResponseBody> {
+            dggService.getLotteryTypes().enqueue(object : retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 }
 
