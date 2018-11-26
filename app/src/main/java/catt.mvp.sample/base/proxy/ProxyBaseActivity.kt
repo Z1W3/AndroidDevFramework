@@ -18,6 +18,7 @@ import java.lang.reflect.ParameterizedType
  */
 abstract class ProxyBaseActivity<T : AppCompatActivity, V : IRootViewIFS, P: BasePresenter<V>>
 constructor(override val reference: Reference<T>) : ILifecycle<T> {
+
     override val target: T?
         get() = reference.get()
 

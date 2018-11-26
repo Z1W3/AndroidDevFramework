@@ -7,9 +7,13 @@ import android.support.v4.app.FragmentActivity
 import android.view.View
 import catt.mvp.sample.base.view.IRootViewIFS
 import catt.mvp.sample.base.presenter.BasePresenter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import java.lang.ref.Reference
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
+import kotlin.coroutines.CoroutineContext
 
 /**
  * type T, 绑定Fragment
