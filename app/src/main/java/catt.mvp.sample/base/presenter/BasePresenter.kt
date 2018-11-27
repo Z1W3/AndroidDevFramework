@@ -7,10 +7,9 @@ import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 abstract class BasePresenter<V : IRootViewIFS>: CoroutineScope {
-    protected lateinit var job: Job
+    private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
-
 
     var viewIFS: V? = null
 

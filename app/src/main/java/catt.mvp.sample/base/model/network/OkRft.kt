@@ -5,6 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+
 object OkRft {
 
     @JvmStatic
@@ -12,11 +13,9 @@ object OkRft {
         OkHttpClient.Builder()
             .connectTimeout(6180L, TimeUnit.MILLISECONDS)
             .readTimeout(6180L, TimeUnit.MILLISECONDS)
-            .addNetworkInterceptor(HeaderInterceptor())
-            .addNetworkInterceptor(LoggingInterceptor())
+            .addInterceptor(HeaderInterceptor())
+            .addInterceptor(LoggingInterceptor())
             .build()
-
-
     }
 
     @JvmStatic
