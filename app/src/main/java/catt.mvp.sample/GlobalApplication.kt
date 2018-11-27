@@ -2,7 +2,6 @@ package catt.mvp.sample
 
 import android.app.Application
 import android.graphics.Color
-import android.util.Log.e
 import catt.compat.layout.internal.TargetScreenMetrics
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
