@@ -12,7 +12,7 @@ android {
         versionName "1.0_$versionCode"
 
         ndk {
-//            abiFilters "armeabi", "armeabi-v7a"
+            abiFilters "armeabi", "armeabi-v7a"
         }
     }
 
