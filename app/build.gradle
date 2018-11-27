@@ -12,16 +12,16 @@ android {
         versionName "1.0_$versionCode"
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a"
+//            abiFilters "armeabi", "armeabi-v7a"
         }
     }
 
     signingConfigs {
         /*签名配置*/config {
-//            storeFile file(RELEASE_STORE_FILE)
-//            keyAlias RELEASE_KEY_ALIAS
-//            storePassword RELEASE_STORE_PASSWORD
-//            keyPassword RELEASE_KEY_PASSWORD
+            storeFile file(JKS_STORE_FILE)
+            keyAlias JKS_ALIAS
+            storePassword JKS_STORE_PASSWORD
+            keyPassword JKS_PASSWORD
         }
     }
 
@@ -29,7 +29,7 @@ android {
         /*生产环境*/release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            /*签名配置*/signingConfig signingConfigs.config
+            /*签名配置*/signingConfig signingConfigs.config
             /*包名后缀*/applicationIdSuffix ""
             /*版本后缀*/versionNameSuffix "-re-kt"
             /*图片加载框架,缓存路径*/ buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
@@ -43,7 +43,7 @@ android {
             ]
         }
         /*测试环境*/debug {
-//            /*签名配置*/signingConfig signingConfigs.config
+            /*签名配置*/signingConfig signingConfigs.config
             /*包名后缀*/applicationIdSuffix ".debug"
             /*版本后缀*/versionNameSuffix "-de-kt"
             /*图片加载框架,缓存路径*/ buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
@@ -58,7 +58,7 @@ android {
         }
 
         /*开发环境*/development {
-//            /*签名配置*/signingConfig signingConfigs.config
+            /*签名配置*/signingConfig signingConfigs.config
             /*包名后缀*/applicationIdSuffix ".dev"
             /*版本后缀*/versionNameSuffix "-dev-kt"
             /*图片加载框架,缓存路径*/ buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
