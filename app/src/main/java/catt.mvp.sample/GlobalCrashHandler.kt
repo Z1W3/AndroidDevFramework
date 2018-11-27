@@ -26,7 +26,7 @@ import kotlin.collections.HashMap
  *     Application.class
  *     public void onCreate(){
  *          super.onCreate();
- *          CrashHandler.get().initContext(context);
+ *          GlobalCrashHandler.get().initContext(context);
  *      }
  * </pre>
  *
@@ -35,14 +35,14 @@ import kotlin.collections.HashMap
  *     Application.kt
  *     override fun void onCreate(){
  *          super.onCreate();
- *          CrashHandler.get().initContext(context)
+ *          GlobalCrashHandler.get().initContext(context)
  *      }
  * </pre>
  */
-class CrashHandler: Thread.UncaughtExceptionHandler {
+class GlobalCrashHandler: Thread.UncaughtExceptionHandler {
     private var context: Context? = null
 
-    private val _TAG by lazy { CrashHandler::class.java.simpleName }
+    private val _TAG by lazy { GlobalCrashHandler::class.java.simpleName }
 
 
     private val defaultHandler: Thread.UncaughtExceptionHandler by lazy {
@@ -171,11 +171,11 @@ class CrashHandler: Thread.UncaughtExceptionHandler {
             "FINGERPRINT", "CPU_ABI", "CPU_ABI2", "ID", "SERIAL", "MANUFACTURER", "BRAND", "TYPE")
 
         private object Single{
-            internal val INSTANCE by lazy { CrashHandler() }
+            internal val INSTANCE by lazy { GlobalCrashHandler() }
         }
 
         @JvmStatic
-        fun get(): CrashHandler = Single.INSTANCE
+        fun get(): GlobalCrashHandler = Single.INSTANCE
     }
 
 }

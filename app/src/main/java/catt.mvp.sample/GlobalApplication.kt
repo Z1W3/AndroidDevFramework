@@ -25,8 +25,9 @@ class GlobalApplication : Application() {
             UMConfigure.init(applicationContext, BuildConfig.UMENG_APP_IDENTITY, BuildConfig.UMENG_CHANNEL, UMConfigure.DEVICE_TYPE_PHONE, BuildConfig.UMENG_SECRET_KEY)
             MobclickAgent.setScenarioType(applicationContext, MobclickAgent.EScenarioType.E_UM_NORMAL)
             MobclickAgent.setCatchUncaughtExceptions(false)
-            CrashHandler.get().initContext(applicationContext)
+            GlobalCrashHandler.get().initContext(applicationContext)
             Toasty.Config.getInstance().generatedConfig().apply()
+            return@launch
         }
     }
 
