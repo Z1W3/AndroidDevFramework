@@ -84,7 +84,7 @@ android {
 }
 
 dependencies {
-    /*彩色Toast提示框架*/implementation project(':ToastyLibs')
+    /*彩色Toast提示框架*/implementation project(':ToastyLibrary')
     /*system*/implementation fileTree(include: ['*.jar'], dir: 'libs')
     /*system-kotlin*/implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     /*system-kotlinX*/implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'

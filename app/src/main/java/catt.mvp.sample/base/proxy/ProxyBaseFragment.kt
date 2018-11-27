@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import catt.mvp.sample.base.function.component.IGlideComponent
+import catt.mvp.sample.base.function.component.IToastyComponent
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
@@ -21,7 +22,7 @@ import java.lang.reflect.ParameterizedType
  */
 abstract class ProxyBaseFragment<T: Fragment, V : IRootViewIFS, P: BasePresenter<V>>
 constructor(override val reference: Reference<T>) : ILifecycle<T>,
-    IGlideComponent {
+    IGlideComponent, IToastyComponent {
 
     override val target: T?
         get() = reference.get()

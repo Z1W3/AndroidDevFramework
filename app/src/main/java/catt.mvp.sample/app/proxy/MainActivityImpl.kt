@@ -22,7 +22,6 @@ class MainActivityImpl(target: MainActivity) :
         e(_TAG, "onCreate: ${R.id.container_layout}")
         target?.supportFragmentManager!!.beginTransaction()
             .replace(R.id.container_layout, MainFragment(), "MainFragment").commitAllowingStateLoss()
-
     }
 
     override fun onViewLoadCompleted() {
