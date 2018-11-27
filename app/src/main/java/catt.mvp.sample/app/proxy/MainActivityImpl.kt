@@ -31,5 +31,6 @@ class MainActivityImpl(target: MainActivity) :
     override fun onContent(content: String) {
         e(_TAG, "content = $content")
         val imageView: ImageView? = null
+        context?.toastSuccess("aAAAA")
     }
 }
