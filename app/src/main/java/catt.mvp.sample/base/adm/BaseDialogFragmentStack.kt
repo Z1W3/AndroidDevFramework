@@ -76,11 +76,11 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
     }
 
     companion object {
-        private object ASM {
+        private object Single {
             internal val INSTANCE: BaseDialogFragmentStack by lazy { BaseDialogFragmentStack() }
         }
 
         @JvmStatic
-        fun get(): BaseDialogFragmentStack = ASM.INSTANCE
+        fun get(): BaseDialogFragmentStack = Single.INSTANCE
     }
 }

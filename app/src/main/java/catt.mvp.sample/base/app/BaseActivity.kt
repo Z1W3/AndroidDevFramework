@@ -9,12 +9,14 @@ import android.widget.FrameLayout
 import catt.compat.layout.app.CompatLayoutActivity
 import catt.compat.layout.app.CompatLayoutDialogFragment
 import catt.compat.layout.app.CompatLayoutFragment
+import catt.mvp.sample.R
 import catt.mvp.sample.base.proxy.IProxyLifecycle
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
+import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 
@@ -31,6 +33,7 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     private val transaction by lazy { supportFragmentManager.beginTransaction() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         BaseActivityStack.get().push(this@BaseActivity)
         super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
@@ -43,11 +46,13 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     override fun onResume() {
         super.onResume()
         proxy.onResume()
+        MobclickAgent.onResume(this)
     }
 
     override fun onPause() {
         super.onPause()
         proxy.onPause()
+        MobclickAgent.onPause(this)
     }
 
     override fun onDestroy() {

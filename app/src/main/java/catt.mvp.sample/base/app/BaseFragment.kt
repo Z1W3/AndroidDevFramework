@@ -9,11 +9,17 @@ import catt.mvp.sample.base.proxy.IProxyLifecycle
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
+import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     IProxyLifecycle<T>,
     IRootViewIFS {
+
+    /**
+     * 友盟记录
+     */
+    abstract fun pageLabel():String
 
     abstract fun injectLayoutId(): Int
 
@@ -59,11 +65,13 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     override fun onResume() {
         super.onResume()
         proxy.onResume()
+        MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
         proxy.onPause()
+        MobclickAgent.onPageEnd(pageLabel())
     }
 
     override fun onStop() {

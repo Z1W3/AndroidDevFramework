@@ -10,11 +10,18 @@ import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
+import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayoutDialogFragment(),
     IProxyLifecycle<T>, IRootViewIFS {
     var isShowing: Boolean = false
+
+    /**
+     * 友盟记录
+     */
+    abstract fun pageLabel():String
+
     abstract fun injectLayoutId(): Int
 
     override val proxy: ProxyBaseDialogFragment<T, IRootViewIFS, BasePresenter<IRootViewIFS>>
@@ -63,11 +70,13 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
     override fun onResume() {
         super.onResume()
         proxy.onResume()
+        MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
         proxy.onPause()
+        MobclickAgent.onPageEnd(pageLabel())
     }
 
     override fun onStop() {

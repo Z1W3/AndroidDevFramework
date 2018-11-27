@@ -45,14 +45,15 @@ internal class BaseActivityStack : IStack<Activity> {
             aty.finish()
         }
         android.os.Process.killProcess(android.os.Process.myPid())
+        System.exit(1)
     }
 
     companion object {
-        private object ASM {
+        private object Single {
             internal val INSTANCE: BaseActivityStack by lazy { BaseActivityStack() }
         }
 
         @JvmStatic
-        fun get(): BaseActivityStack = ASM.INSTANCE
+        fun get(): BaseActivityStack = Single.INSTANCE
     }
 }

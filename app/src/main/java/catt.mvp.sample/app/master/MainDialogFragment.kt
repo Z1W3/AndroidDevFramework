@@ -7,6 +7,9 @@ import catt.mvp.sample.base.proxy.ILifecycle
 
 
 class MainDialogFragment : BaseDialogFragment<MainDialogFragment>() {
+
+    override fun pageLabel(): String = "演示DialogFragment"
+
     override fun injectLayoutId(): Int = R.layout.dialog_main
 
     override fun injectProxyImpl(): ILifecycle<MainDialogFragment> {
