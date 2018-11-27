@@ -57,7 +57,7 @@ android {
             ]
         }
 
-        /*开发环境*/development {
+        /*开发环境*/dev {
             /*签名配置*/signingConfig signingConfigs.config
             /*包名后缀*/applicationIdSuffix ".dev"
             /*版本后缀*/versionNameSuffix "-dev-kt"
