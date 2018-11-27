@@ -2,6 +2,7 @@ package catt.mvp.sample.app.proxy
 
 import android.os.Bundle
 import android.util.Log.e
+import android.widget.ImageView
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainActivityIFS
 import catt.mvp.sample.app.master.MainActivity
@@ -29,5 +30,6 @@ class MainActivityImpl(target: MainActivity) :
 
     override fun onContent(content: String) {
         e(_TAG, "content = $content")
+        val imageView: ImageView? = null
     }
 }

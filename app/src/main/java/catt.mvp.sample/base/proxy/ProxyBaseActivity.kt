@@ -3,8 +3,9 @@ package catt.mvp.sample.base.proxy
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import catt.mvp.sample.base.view.IRootViewIFS
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.function.component.IGlideComponent
+import catt.mvp.sample.base.mvp.view.IRootViewIFS
+import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
@@ -17,7 +18,8 @@ import java.lang.reflect.ParameterizedType
  * params reference, 绑定Activity的引用类型,建议采用WeakReference<T>
  */
 abstract class ProxyBaseActivity<T : AppCompatActivity, V : IRootViewIFS, P: BasePresenter<V>>
-constructor(override val reference: Reference<T>) : ILifecycle<T> {
+constructor(override val reference: Reference<T>) : ILifecycle<T>,
+    IGlideComponent {
 
     override val target: T?
         get() = reference.get()

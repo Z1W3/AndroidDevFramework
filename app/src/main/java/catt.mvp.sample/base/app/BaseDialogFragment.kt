@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutDialogFragment
 import catt.mvp.sample.base.proxy.IProxyLifecycle
-import catt.mvp.sample.base.view.IRootViewIFS
+import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
 import kotlinx.android.synthetic.*
 

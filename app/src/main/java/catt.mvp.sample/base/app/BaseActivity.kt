@@ -12,9 +12,9 @@ import catt.compat.layout.app.CompatLayoutFragment
 import catt.mvp.sample.base.proxy.IProxyLifecycle
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
-import catt.mvp.sample.base.view.IRootViewIFS
+import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import kotlinx.android.synthetic.*
 
 

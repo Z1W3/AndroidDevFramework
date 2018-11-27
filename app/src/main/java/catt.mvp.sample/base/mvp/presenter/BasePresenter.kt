@@ -1,6 +1,6 @@
-package catt.mvp.sample.base.presenter
+package catt.mvp.sample.base.mvp.presenter
 
-import catt.mvp.sample.base.view.IRootViewIFS
+import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

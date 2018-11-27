@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -16,6 +15,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "Long", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
+            buildConfigField "Long", "GLIDE_CACHE_MEMORY", "${glide_cache_memory}"
+        }
+        debug{
+            buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
+            buildConfigField "Long", "GLIDE_CACHE_MEMORY", "${glide_cache_memory}"
         }
     }
 }
@@ -34,4 +39,13 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
+    implementation('com.github.bumptech.glide:okhttp3-integration:4.8.0') {
+        exclude group: "com.android.support"
+        exclude group: "com.squareup.okhttp3"
+    }
+    implementation('com.github.bumptech.glide:glide:4.8.0') {
+        exclude group: "com.android.support"
+    }
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
 }

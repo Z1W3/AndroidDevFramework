@@ -1,11 +1,10 @@
 package catt.mvp.sample.presenter
 
-import android.util.Log
 import android.util.Log.e
 import android.util.Log.i
 import catt.mvp.sample.app.interfaces.IMainActivityIFS
-import catt.mvp.sample.base.model.network.OkRft
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.mvp.model.network.OkRft
+import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.model.network.IDggStoreService
 import kotlinx.coroutines.*
 import okhttp3.ResponseBody

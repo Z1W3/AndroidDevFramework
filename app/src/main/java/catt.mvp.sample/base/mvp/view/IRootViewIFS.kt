@@ -1,4 +1,4 @@
-package catt.mvp.sample.base.view
+package catt.mvp.sample.base.mvp.view
 
 /**
  * 所有View层接口的parent

@@ -1,8 +1,8 @@
 package catt.mvp.sample.base.proxy
 
 import android.support.v4.app.DialogFragment
-import catt.mvp.sample.base.view.IRootViewIFS
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.mvp.view.IRootViewIFS
+import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 
 /**

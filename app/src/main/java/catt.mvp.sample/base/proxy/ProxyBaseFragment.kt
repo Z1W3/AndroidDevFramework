@@ -5,15 +5,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
-import catt.mvp.sample.base.view.IRootViewIFS
-import catt.mvp.sample.base.presenter.BasePresenter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import catt.mvp.sample.base.function.component.IGlideComponent
+import catt.mvp.sample.base.mvp.view.IRootViewIFS
+import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
-import kotlin.coroutines.CoroutineContext
 
 /**
  * type T, 绑定Fragment
@@ -23,7 +20,8 @@ import kotlin.coroutines.CoroutineContext
  * params reference, 绑定Fragment的引用类型,建议采用WeakReference<T>
  */
 abstract class ProxyBaseFragment<T: Fragment, V : IRootViewIFS, P: BasePresenter<V>>
-constructor(override val reference: Reference<T>) : ILifecycle<T> {
+constructor(override val reference: Reference<T>) : ILifecycle<T>,
+    IGlideComponent {
 
     override val target: T?
         get() = reference.get()
