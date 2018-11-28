@@ -43,6 +43,7 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
 
     /**
      * 统计堆栈中的Dialog
+     * array[0] 即 当前堆栈顶端Dialog
      */
     internal fun statisticsStackDialog(): Array<DialogFragment>{
         if(empty()) return emptyArray()
@@ -55,6 +56,7 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
 
     /**
      * 统计显示中的Dialog
+     * array[0] 即 当前堆栈顶端Dialog
      */
     internal fun statisticsShowingDialog(): Array<DialogFragment>{
         if(empty()) return emptyArray()

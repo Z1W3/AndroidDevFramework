@@ -3,7 +3,9 @@ package catt.mvp.sample.base.proxy
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import catt.mvp.sample.base.function.component.IDialogComponent
 import catt.mvp.sample.base.function.component.IGlideComponent
+import catt.mvp.sample.base.function.component.ISupportFragmentComponent
 import catt.mvp.sample.base.function.component.IToastyComponent
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
@@ -20,7 +22,7 @@ import java.lang.reflect.ParameterizedType
  */
 abstract class ProxyBaseActivity<T : AppCompatActivity, V : IRootViewIFS, P: BasePresenter<V>>
 constructor(override val reference: Reference<T>) : ILifecycle<T>,
-    IGlideComponent, IToastyComponent {
+    IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
     override val target: T?
         get() = reference.get()

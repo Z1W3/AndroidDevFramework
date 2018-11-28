@@ -20,8 +20,7 @@ class MainActivityImpl(target: MainActivity) :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         e(_TAG, "onCreate: ${R.id.container_layout}")
-        target?.supportFragmentManager!!.beginTransaction()
-            .replace(R.id.container_layout, MainFragment(), "MainFragment").commitAllowingStateLoss()
+        target?.supportFragmentManager!!.beginTransaction().commitFragment(R.id.container_layout, MainFragment())
     }
 
     override fun onViewLoadCompleted() {
