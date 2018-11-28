@@ -20,7 +20,7 @@ interface IPermissionComponent {
      * true, 需要授权
      * false，权限已授权或Manifest中没有权限
      */
-    fun scan() : Boolean
+    fun scan()
     fun onActivityResultForPermissions(requestCode: Int, resultCode: Int, data: Intent?)
     fun onPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray)
 

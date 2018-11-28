@@ -8,7 +8,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.text.HtmlCompat
 import android.support.v7.app.AlertDialog
 import android.text.Spanned
-import android.util.Log.e
+import android.util.Log.i
 import catt.mvp.sample.R
 import catt.mvp.sample.base.function.component.IPermissionComponent
 import catt.mvp.sample.base.function.component.IPermissionComponent.PH.PERMISSION_REQUEST_CODE
@@ -23,7 +23,7 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
 
     override fun onPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if(PERMISSION_REQUEST_CODE != requestCode) return
-        e(_TAG, "onPermissionsResult: requestCode=$requestCode, \n" +
+        i(_TAG, "onPermissionsResult: requestCode=$requestCode, \n" +
                 "permissions:{\n${permissions.joinToString(",\n")}\n}\n" +
                 "grantResults:{\n${grantResults.joinToString(",\n")}\n}")
         val needRationaleList: MutableList<String> = mutableListOf()
@@ -64,7 +64,6 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
 
     override fun onActivityResultForPermissions(requestCode: Int, resultCode: Int, data: Intent?) {
         if(PERMISSION_REQUEST_CODE != requestCode) return
-        e(_TAG, "onActivityResultForPermissions: requestCode=$requestCode, resultCode=$resultCode")
         if (activity.isNeedEnablePermission()) {
             scan()
         } else {
@@ -73,12 +72,9 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
         }
     }
 
-    override fun scan():Boolean {
-        if (activity.isNeedEnablePermission()) {
-            activity.requestAllOwnPermissions()
-            return true
-        }
-        return false
+    override fun scan() {
+        if (activity.isNeedEnablePermission()) activity.requestAllOwnPermissions()
+        else listener.onGrantedPermissionCompleted()
     }
 
 
