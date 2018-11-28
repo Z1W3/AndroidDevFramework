@@ -50,7 +50,7 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
             }
             needRationaleList.size == 0 && disablePermissionList.size != 0 && !isShowingPermissionAlertDialog()->{
                 val sb = StringBuffer()
-                sb.append("<font color='#333333' size=20px>以下权限需要前往『权限』手动授权.</>").append("<br>").append("<br>")
+                sb.append("<font color='#333333' size=20px>${context.getString(R.string.goto_apply_permission)}</>").append("<br>").append("<br>")
                 for(index in disablePermissionList.indices){
                     sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
                     sb.append("<font color='#888888' size=16px>・${translatePermission(context, disablePermissionList[index])}</>")

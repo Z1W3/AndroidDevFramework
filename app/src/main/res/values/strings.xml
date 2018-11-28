@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TestPresenter</string>
     <string name="unapply_permission_list_title">等申请权限列表</string>
+    <string name="goto_apply_permission">以下权限需要前往『权限』手动授权.</string>
     <string name="apply_now">立即申请</string>
 
     <string name="dangerous_permission_group_calendar">访问日历相关的运行时权限</string>
