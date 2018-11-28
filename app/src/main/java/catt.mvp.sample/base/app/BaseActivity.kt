@@ -1,11 +1,14 @@
 package catt.mvp.sample.base.app
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import catt.compat.layout.app.CompatLayoutActivity
 import catt.mvp.sample.R
 import catt.mvp.sample.base.proxy.IProxyLifecycle
 import catt.mvp.sample.base.adm.BaseActivityStack
+import catt.mvp.sample.base.function.component.IPermissionComponent
+import catt.mvp.sample.base.function.helper.PermissionHelper
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
@@ -15,7 +18,9 @@ import kotlinx.android.synthetic.*
 
 abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     IProxyLifecycle<T>,
-    IRootViewIFS {
+    IRootViewIFS, PermissionHelper.OnPermissionListener {
+
+    private val permission : IPermissionComponent by lazy { PermissionHelper(this, this) }
 
     abstract fun injectLayoutId():Int
 
@@ -31,8 +36,12 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
         super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
         setContentView(injectLayoutId())
+        permission.scan()
         window.decorView.postOnViewLoadCompleted()
     }
+
+    override fun onGrantedPermissionCompleted() =
+        proxy.onGrantedPermissionCompleted()
 
     override fun onResume() {
         super.onResume()
@@ -61,6 +70,19 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     override fun onRestart() {
         super.onRestart()
         proxy.onRestart()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        permission.onActivityResultForPermissions(requestCode, resultCode, data)
+        for (fragment in supportFragmentManager.fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permission.onPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun View.postOnViewLoadCompleted() {

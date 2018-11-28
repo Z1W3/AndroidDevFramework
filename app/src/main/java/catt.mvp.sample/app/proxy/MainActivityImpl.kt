@@ -14,7 +14,6 @@ import java.lang.ref.WeakReference
 class MainActivityImpl(target: MainActivity) :
     ProxyBaseActivity<MainActivity, IMainActivityIFS.View, MainActivityPresenter>(WeakReference(target)),
     IMainActivityIFS.View {
-
     private val _TAG: String by lazy { MainActivityImpl::class.java.simpleName }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,13 +22,20 @@ class MainActivityImpl(target: MainActivity) :
         target?.supportFragmentManager!!.beginTransaction().commitFragment(R.id.container_layout, MainFragment())
     }
 
-    override fun onViewLoadCompleted() {
-        e(_TAG, "onViewLoadCompleted: ")
-    }
-
     override fun onContent(content: String) {
         e(_TAG, "content = $content")
         val imageView: ImageView? = null
         context?.toastSuccess("aAAAA")
     }
+
+
+    override fun onGrantedPermissionCompleted() {
+        target?.toastSuccess("权限已全部授权")
+    }
+
+
+    override fun onViewLoadCompleted() {
+        e(_TAG, "onViewLoadCompleted: ")
+    }
+
 }
