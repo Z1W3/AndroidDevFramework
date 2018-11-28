@@ -33,9 +33,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        compatCreateView(injectLayoutId(), container)?.apply {
-            post { proxy.onViewLoadCompleted() }
-        }
+        compatCreateView(injectLayoutId(), container)?.postOnViewLoadCompleted()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,5 +80,10 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     override fun onDestroy() {
         super.onDestroy()
         proxy.onDestroy()
+    }
+
+    private fun View.postOnViewLoadCompleted():View {
+        post { proxy.onViewLoadCompleted() }
+        return this
     }
 }

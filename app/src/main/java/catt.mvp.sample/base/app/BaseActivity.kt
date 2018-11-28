@@ -1,18 +1,11 @@
 package catt.mvp.sample.base.app
 
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
-import android.widget.FrameLayout
+import android.view.View
 import catt.compat.layout.app.CompatLayoutActivity
-import catt.compat.layout.app.CompatLayoutDialogFragment
-import catt.compat.layout.app.CompatLayoutFragment
 import catt.mvp.sample.R
 import catt.mvp.sample.base.proxy.IProxyLifecycle
 import catt.mvp.sample.base.adm.BaseActivityStack
-import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
@@ -38,9 +31,7 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
         super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
         setContentView(injectLayoutId())
-        window.decorView.apply {
-            post { proxy.onViewLoadCompleted() }
-        }
+        window.decorView.postOnViewLoadCompleted()
     }
 
     override fun onResume() {
@@ -70,5 +61,9 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     override fun onRestart() {
         super.onRestart()
         proxy.onRestart()
+    }
+
+    private fun View.postOnViewLoadCompleted() {
+        post { proxy.onViewLoadCompleted() }
     }
 }

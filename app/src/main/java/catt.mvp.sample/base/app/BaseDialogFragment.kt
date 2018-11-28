@@ -34,12 +34,7 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        compatCreateView(injectLayoutId(), container)?.apply {
-            post {
-                proxy.onViewLoadCompleted()
-                isShowing = true
-            }
-        }
+        compatCreateView(injectLayoutId(), container)?.postOnViewLoadCompleted()
 
     override fun onHiddenChanged(hidden: Boolean){
         proxy.onHiddenChanged(hidden)
@@ -88,5 +83,12 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
         super.onDestroy()
         proxy.onDestroy()
         BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
+    }
+
+    private fun View.postOnViewLoadCompleted():View {
+        post {
+            isShowing = true
+            proxy.onViewLoadCompleted() }
+        return this
     }
 }
