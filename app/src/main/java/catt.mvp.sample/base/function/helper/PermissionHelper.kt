@@ -24,14 +24,12 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
 
     override fun onPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if(PERMISSION_REQUEST_CODE != requestCode) return
-        i(_TAG, "onPermissionsResult: requestCode=$requestCode, \n" +
-                "permissions:{\n${permissions.joinToString(",\n")}\n}\n" +
-                "grantResults:{\n${grantResults.joinToString(",\n")}\n}")
         val needRationaleList: MutableList<String> = mutableListOf()
         val disablePermissionList:MutableList<String> = mutableListOf()
         for(index in permissions.indices){
             val permission:String = permissions[index]
             val enablePermission:Boolean = grantResults[index] == PackageManager.PERMISSION_GRANTED
+            i(_TAG, "onPermissionsResult: permission:{name=$permission, enable=$enablePermission}")
             val needRationale:Boolean = ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[index])
             when {
                 !enablePermission && needRationale -> /*权限未授权并且未点击不再提醒*/{
