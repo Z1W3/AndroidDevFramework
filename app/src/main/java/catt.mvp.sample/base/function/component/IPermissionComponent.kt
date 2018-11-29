@@ -77,7 +77,7 @@ interface IPermissionComponent {
     }
 
     private fun Context.requestedPermissions() : Array<String> {
-        val list = arrayListOf<String>()
+        val list = mutableListOf<String>()
         val permissionArray:Array<String> = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions
         for(index in permissionArray.indices){
             try {
@@ -90,7 +90,7 @@ interface IPermissionComponent {
                 ex.printStackTrace()
             }
         }
-        return list.toArray(arrayOf<String>())
+        return list.toTypedArray()
     }
 
 
