@@ -24,6 +24,7 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
 
     override fun onPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if(PERMISSION_REQUEST_CODE != requestCode) return
+        i(_TAG, "onPermissionsResult: begin")
         val needRationaleList: MutableList<String> = mutableListOf()
         val disablePermissionList:MutableList<String> = mutableListOf()
         for(index in permissions.indices){
@@ -50,6 +51,7 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
             needRationaleList.size == 0 && disablePermissionList.size != 0 && !isShowingPermissionAlertDialog()->
                 permissionAlertDialog = configurePermissionAlertDialogBuilder(scanPermissionList(disablePermissionList).toString()).show()
         }
+        i(_TAG, "onPermissionsResult: finished")
     }
 
     override fun onActivityResultForPermissions(requestCode: Int, resultCode: Int, data: Intent?) {
