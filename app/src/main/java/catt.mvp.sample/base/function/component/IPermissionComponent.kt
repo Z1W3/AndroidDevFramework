@@ -5,12 +5,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.PermissionInfo
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.support.annotation.StringDef
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.pm.PermissionInfoCompat
 import catt.mvp.sample.R
 
 interface IPermissionComponent {
@@ -74,8 +76,22 @@ interface IPermissionComponent {
         ActivityCompat.startActivityForResult(this, it, PERMISSION_REQUEST_CODE, null)
     }
 
-    fun Context.requestedPermissions() : Array<String> =
-        packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions
+    private fun Context.requestedPermissions() : Array<String> {
+        val list = arrayListOf<String>()
+        val permissionArray:Array<String> = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions
+        for(index in permissionArray.indices){
+            try {
+                val permission = permissionArray[index]
+                val permissionInfo = packageManager.getPermissionInfo(permission, PackageManager.GET_META_DATA)
+                if(PermissionInfo.PROTECTION_DANGEROUS == PermissionInfoCompat.getProtection(permissionInfo))
+                    list.add(permission)
+            }
+            catch (ex : PackageManager.NameNotFoundException){
+                ex.printStackTrace()
+            }
+        }
+        return list.toArray(arrayOf<String>())
+    }
 
 
     companion object PH{
