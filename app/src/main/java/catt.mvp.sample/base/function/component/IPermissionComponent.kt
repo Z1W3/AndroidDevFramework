@@ -18,9 +18,7 @@ import catt.mvp.sample.R
 interface IPermissionComponent {
 
     /**
-     * 扫描是否需要授权的权限
-     * true, 需要授权
-     * false，权限已授权或Manifest中没有权限
+     * 扫描需要授权的权限
      */
     fun scan()
     fun onActivityResultForPermissions(requestCode: Int, resultCode: Int, data: Intent?)
