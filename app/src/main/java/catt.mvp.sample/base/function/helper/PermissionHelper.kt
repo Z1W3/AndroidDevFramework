@@ -15,10 +15,6 @@ import catt.mvp.sample.base.function.component.IPermissionComponent.PH.PERMISSIO
 import catt.mvp.sample.base.function.component.IPermissionComponent.PH.permissionAscriptionGroup
 import catt.mvp.sample.base.function.component.IPermissionComponent.PH.translatePermission
 import catt.mvp.sample.base.function.component.IToastyComponent
-import java.util.Collections.addAll
-import android.text.method.TextKeyListener.clear
-
-
 
 class PermissionHelper(private val activity: Activity, private val listener: OnPermissionListener) : IPermissionComponent, IToastyComponent {
     private val _TAG by lazy { PermissionHelper::class.java.simpleName }
@@ -55,7 +51,6 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
             }
             needRationaleList.size == 0 && disablePermissionList.size != 0 && !isShowingPermissionAlertDialog()->
                 permissionAlertDialog = configurePermissionAlertDialogBuilder(scanPermissionList(disablePermissionList).toString()).show()
-
         }
     }
 
