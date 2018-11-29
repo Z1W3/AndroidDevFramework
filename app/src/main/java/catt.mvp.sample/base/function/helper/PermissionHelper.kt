@@ -12,8 +12,13 @@ import android.util.Log.i
 import catt.mvp.sample.R
 import catt.mvp.sample.base.function.component.IPermissionComponent
 import catt.mvp.sample.base.function.component.IPermissionComponent.PH.PERMISSION_REQUEST_CODE
+import catt.mvp.sample.base.function.component.IPermissionComponent.PH.permissionAscriptionGroup
 import catt.mvp.sample.base.function.component.IPermissionComponent.PH.translatePermission
 import catt.mvp.sample.base.function.component.IToastyComponent
+import java.util.Collections.addAll
+import android.text.method.TextKeyListener.clear
+
+
 
 class PermissionHelper(private val activity: Activity, private val listener: OnPermissionListener) : IPermissionComponent, IToastyComponent {
     private val _TAG by lazy { PermissionHelper::class.java.simpleName }
@@ -48,17 +53,9 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
                 needRationaleList.addAll(disablePermissionList)
                 ActivityCompat.requestPermissions(activity, needRationaleList.toTypedArray(), PERMISSION_REQUEST_CODE)
             }
-            needRationaleList.size == 0 && disablePermissionList.size != 0 && !isShowingPermissionAlertDialog()->{
-                val sb = StringBuffer()
-                sb.append("<font color='#333333' size=20px>${context.getString(R.string.goto_apply_permission)}</>").append("<br>").append("<br>")
-                for(index in disablePermissionList.indices){
-                    sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-                    sb.append("<font color='#888888' size=16px>・${translatePermission(context, disablePermissionList[index])}</>")
-                    sb.append("<br>")
-                }
-                sb.removeSuffix("<br>")
-                permissionAlertDialog = configurePermissionAlertDialogBuilder(sb.toString()).show()
-            }
+            needRationaleList.size == 0 && disablePermissionList.size != 0 && !isShowingPermissionAlertDialog()->
+                permissionAlertDialog = configurePermissionAlertDialogBuilder(scanPermissionList(disablePermissionList).toString()).show()
+
         }
     }
 
@@ -77,6 +74,23 @@ class PermissionHelper(private val activity: Activity, private val listener: OnP
         else listener.onGrantedPermissionCompleted()
     }
 
+    private fun scanPermissionList(disablePermissionList: MutableList<String>): StringBuffer {
+        val mutableMap = mutableMapOf<String, String>()
+        for (index in disablePermissionList.indices) {
+            val permission = disablePermissionList[index]
+            mutableMap[permissionAscriptionGroup(permission)] = translatePermission(context, permission)
+        }
+        val sb = StringBuffer()
+        sb.append("<font color='#333333' size=20px>${context.getString(R.string.goto_apply_permission)}</>")
+            .append("<br>").append("<br>")
+        for (map in mutableMap.entries) {
+            sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+            sb.append("<font color='#888888' size=16px>・${map.value}</>")
+            sb.append("<br>")
+        }
+        sb.removeSuffix("<br>")
+        return sb
+    }
 
     // 提示用户去应用设置界面手动开启权限
     private fun configurePermissionAlertDialogBuilder(msg:String): AlertDialog.Builder =

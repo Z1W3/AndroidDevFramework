@@ -147,7 +147,7 @@ interface IPermissionComponent {
             return context.getString(i)
         }
 
-        private fun permissionAscriptionGroup(@DangerousPermission permission:String) : String{
+        fun permissionAscriptionGroup(@DangerousPermission permission:String) : String{
             for(map in permissionGroupMap.entries){
                 for(index in map.value.indices){
                     if(permission == map.value[index]){
