@@ -15,7 +15,6 @@ import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
-import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
