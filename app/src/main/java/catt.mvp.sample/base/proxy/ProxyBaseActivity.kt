@@ -1,10 +1,8 @@
 package catt.mvp.sample.base.proxy
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log.e
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.IDialogComponent
 import catt.mvp.sample.base.function.component.IGlideComponent
