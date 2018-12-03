@@ -46,7 +46,7 @@ abstract class ProxyBaseFragment<T: Fragment, V : IRootViewIFS, P: BasePresenter
     override val target: T?
         get() = reference?.get()
 
-    open val activity:FragmentActivity?
+    val activity:FragmentActivity?
         get() = target?.activity
 
     override val context: Context?

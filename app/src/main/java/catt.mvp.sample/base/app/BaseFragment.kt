@@ -17,6 +17,8 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     IProxyLifecycle<T>,
     IRootViewIFS {
 
+    var isPaused:Boolean = false
+
     /**
      * 友盟记录
      */
@@ -29,7 +31,6 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseFragmentStack.get().push(this)
         super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
     }
@@ -38,6 +39,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
         compatCreateView(injectLayoutId(), container)?.postOnViewLoadCompleted()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        BaseFragmentStack.get().push(this)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
@@ -55,6 +57,8 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
         this.clearFindViewByIdCache()
         super.onDestroyView()
         proxy.onDestroyView()
+        BaseFragmentStack.get().remove(this)
+        System.runFinalization()
     }
 
     override fun onStart() {
@@ -64,12 +68,14 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
 
     override fun onResume() {
         super.onResume()
+        isPaused = false
         proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
+        isPaused = true
         proxy.onPause()
         MobclickAgent.onPageEnd(pageLabel())
     }
@@ -82,8 +88,6 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     override fun onDestroy() {
         super.onDestroy()
         proxy.onDestroy()
-        BaseFragmentStack.get().remove(this)
-        System.runFinalization()
     }
 
     private fun View.postOnViewLoadCompleted():View {

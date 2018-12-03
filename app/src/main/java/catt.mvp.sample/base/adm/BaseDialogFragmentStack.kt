@@ -1,6 +1,7 @@
 package catt.mvp.sample.base.adm
 
 import android.support.v4.app.DialogFragment
+import android.util.Log
 import catt.mvp.sample.base.app.BaseDialogFragment
 import java.util.*
 import kotlin.collections.ArrayList
@@ -10,6 +11,7 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
     override fun push(target: BaseDialogFragment<*>) {
         synchronized(target) {
             stack.remove(target)
+            Log.e("DialogFragmentStack", "push name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
             stack.push(target)
             return@synchronized
         }
@@ -23,6 +25,7 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
     }
 
     override fun remove(target: BaseDialogFragment<*>) {
+        Log.e("DialogFragmentStack", "remove name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
         stack.remove(target)
     }
 
@@ -43,7 +46,8 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
 
     fun <T> search(clazz:Class<T>): T? {
         for (index in stack.indices.reversed()) {
-            if(stack[index]::class.java.name == clazz.name){
+            Log.e("DialogFragmentStack", "search name=${stack[index]::class.java.name}, isPaused=${stack[index].isPaused}, hashCode=${stack[index].hashCode()}")
+            if(!stack[index].isPaused && stack[index]::class.java.name == clazz.name){
                 return stack[index] as T
             }
         }

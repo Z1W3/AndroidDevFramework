@@ -1,13 +1,16 @@
 package catt.mvp.sample.base.adm
 
-import android.app.Activity
+import android.util.Log
+import android.util.Log.e
+import catt.mvp.sample.base.app.BaseActivity
 import java.util.*
 
-internal class BaseActivityStack : IStack<Activity> {
-    private val stack: Stack<Activity> by lazy { Stack<Activity>() }
-    override fun push(target: Activity) {
+internal class BaseActivityStack : IStack<BaseActivity<*>> {
+    private val stack: Stack<BaseActivity<*>> by lazy { Stack<BaseActivity<*>>() }
+    override fun push(target: BaseActivity<*>) {
         synchronized(target) {
             stack.remove(target)
+            Log.e("ActivityStack", "push name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
             stack.push(target)
             return@synchronized
         }
@@ -20,18 +23,19 @@ internal class BaseActivityStack : IStack<Activity> {
         }
     }
 
-    override fun remove(target: Activity) {
+    override fun remove(target: BaseActivity<*>) {
+        Log.e("ActivityStack", "remove name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
         stack.remove(target)
     }
 
-    override fun peek(): Activity? {
+    override fun peek(): BaseActivity<*>? {
         if (empty()) return null
         return stack.peek()
     }
 
     override fun empty(): Boolean = stack.empty()
 
-    override fun search(target: Activity): Activity? {
+    override fun search(target: BaseActivity<*>): BaseActivity<*>? {
         val absoluteIndex = stack.search(target)
         return when (!stack.empty() && absoluteIndex != -1) {
             true -> stack[absoluteIndex - 1]
@@ -40,14 +44,17 @@ internal class BaseActivityStack : IStack<Activity> {
     }
 
     fun <T> search(clazz:Class<T>): T? {
+        for (index in stack.indices.reversed()){
+        }
+
         for (index in stack.indices.reversed()) {
-            if(stack[index]::class.java.name == clazz.name){
+            e("ActivityStack","search name=${stack[index]::class.java.name}, isPaused=${stack[index].isPaused}, hashCode=${stack[index].hashCode()}")
+            if(!stack[index].isPaused && stack[index]::class.java.name == clazz.name){
                 return stack[index] as T
             }
         }
         return null
     }
-
 
     internal fun killMyPid() {
         for (index in stack.indices.reversed()) {

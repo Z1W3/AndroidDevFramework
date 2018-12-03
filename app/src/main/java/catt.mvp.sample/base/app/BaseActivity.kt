@@ -1,6 +1,5 @@
 package catt.mvp.sample.base.app
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -20,6 +19,8 @@ import kotlinx.android.synthetic.*
 abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     IProxyLifecycle<T>,
     IRootViewIFS, PermissionHelper.OnPermissionListener {
+
+    var isPaused:Boolean = false
 
     private val permission : IPermissionComponent by lazy { PermissionHelper(this, this) }
 
@@ -46,12 +47,14 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
 
     override fun onResume() {
         super.onResume()
+        isPaused = false
         proxy.onResume()
         MobclickAgent.onResume(this)
     }
 
     override fun onPause() {
         super.onPause()
+        isPaused = true
         proxy.onPause()
         MobclickAgent.onPause(this)
     }
