@@ -10,10 +10,9 @@ import catt.mvp.sample.app.master.MainDialogFragment
 import catt.mvp.sample.app.master.MainFragment
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import catt.mvp.sample.presenter.MainFragmentPresenter
-import java.lang.ref.WeakReference
 
-class MainFragmentImpl(target: MainFragment) :
-    ProxyBaseFragment<MainFragment, IMainFragmentInterIFS.View, MainFragmentPresenter>(WeakReference(target)),
+class MainFragmentImpl :
+    ProxyBaseFragment<MainFragment, IMainFragmentInterIFS.View, MainFragmentPresenter>(),
     IMainFragmentInterIFS.View {
 
     private val _TAG: String by lazy { MainFragmentImpl::class.java.simpleName }

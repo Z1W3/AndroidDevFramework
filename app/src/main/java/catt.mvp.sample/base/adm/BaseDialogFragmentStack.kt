@@ -6,11 +6,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
-    private val dialogStack: Stack<BaseDialogFragment<*>> by lazy { Stack<BaseDialogFragment<*>>() }
+    private val stack: Stack<BaseDialogFragment<*>> by lazy { Stack<BaseDialogFragment<*>>() }
     override fun push(target: BaseDialogFragment<*>) {
         synchronized(target) {
-            dialogStack.remove(target)
-            dialogStack.push(target)
+            stack.remove(target)
+            stack.push(target)
             return@synchronized
         }
     }
@@ -18,27 +18,36 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
     override fun pop() {
         peek()?.apply {
             dismissAllowingStateLoss()
-            dialogStack.pop()
+            stack.pop()
         }
     }
 
     override fun remove(target: BaseDialogFragment<*>) {
-        dialogStack.remove(target)
+        stack.remove(target)
     }
 
     override fun peek(): BaseDialogFragment<*>? {
         if(empty()) return null
-        return dialogStack.peek()
+        return stack.peek()
     }
 
-    override fun empty(): Boolean = dialogStack.empty()
+    override fun empty(): Boolean = stack.empty()
 
     override fun search(target: BaseDialogFragment<*>): BaseDialogFragment<*>? {
-        val absoluteIndex = dialogStack.search(target)
-        return when (!dialogStack.empty() && absoluteIndex != -1) {
-            true -> dialogStack[absoluteIndex - 1]
+        val absoluteIndex = stack.search(target)
+        return when (!stack.empty() && absoluteIndex != -1) {
+            true -> stack[absoluteIndex - 1]
             false -> null
         }
+    }
+
+    fun <T> search(clazz:Class<T>): T? {
+        for (index in stack.indices.reversed()) {
+            if(stack[index]::class.java.name == clazz.name){
+                return stack[index] as T
+            }
+        }
+        return null
     }
 
     /**
@@ -48,8 +57,8 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
     internal fun statisticsStackDialog(): Array<DialogFragment>{
         if(empty()) return emptyArray()
         val list = ArrayList<DialogFragment>()
-        for(index in dialogStack.indices.reversed()){
-            list.add(dialogStack[index])
+        for(index in stack.indices.reversed()){
+            list.add(stack[index])
         }
         return list.toArray(arrayOf())
     }
@@ -61,8 +70,8 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
     internal fun statisticsShowingDialog(): Array<DialogFragment>{
         if(empty()) return emptyArray()
         val list = ArrayList<DialogFragment>()
-        for(index in dialogStack.indices.reversed()){
-            val dialog = dialogStack[index]
+        for(index in stack.indices.reversed()){
+            val dialog = stack[index]
             if(dialog.isShowing) list.add(dialog)
         }
         return list.toArray(arrayOf())

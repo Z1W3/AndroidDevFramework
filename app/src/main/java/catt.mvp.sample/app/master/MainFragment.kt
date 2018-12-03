@@ -10,6 +10,6 @@ class MainFragment : BaseFragment<MainFragment>() {
     override fun injectLayoutId(): Int = R.layout.fragment_main
 
     override fun injectProxyImpl(): ILifecycle<MainFragment> {
-        return MainFragmentImpl(this@MainFragment)
+        return MainFragmentImpl()
     }
 }

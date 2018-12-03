@@ -13,6 +13,6 @@ class MainDialogFragment : BaseDialogFragment<MainDialogFragment>() {
     override fun injectLayoutId(): Int = R.layout.dialog_main
 
     override fun injectProxyImpl(): ILifecycle<MainDialogFragment> {
-        return MainDialogFragmentImpl(this@MainDialogFragment)
+        return MainDialogFragmentImpl()
     }
 }

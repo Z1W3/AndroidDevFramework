@@ -1,5 +1,6 @@
 package catt.mvp.sample.base.app
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -31,8 +32,8 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     private val transaction by lazy { supportFragmentManager.beginTransaction() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
         BaseActivityStack.get().push(this@BaseActivity)
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
         setContentView(injectLayoutId())

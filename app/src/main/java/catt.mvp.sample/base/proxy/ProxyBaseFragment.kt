@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
+import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.function.component.IDialogComponent
 import catt.mvp.sample.base.function.component.IGlideComponent
 import catt.mvp.sample.base.function.component.ISupportFragmentComponent
@@ -12,6 +13,7 @@ import catt.mvp.sample.base.function.component.IToastyComponent
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
+import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
 
@@ -23,11 +25,16 @@ import java.lang.reflect.ParameterizedType
  * params reference, 绑定Fragment的引用类型,建议采用WeakReference<T>
  */
 abstract class ProxyBaseFragment<T: Fragment, V : IRootViewIFS, P: BasePresenter<V>>
-constructor(override val reference: Reference<T>) : ILifecycle<T>,
-    IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
+    : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
-    override val target: T?
-        get() = reference.get()
+    private val fragment : T?
+        get() = BaseFragmentStack.get().search(fragmentClazz)
+
+    private val fragmentClazz: Class<T> by lazy {
+        val genType = javaClass.genericSuperclass
+        val params = (genType as ParameterizedType).actualTypeArguments
+        params[0] as Class<T>
+    }
 
     private val presenterClazz: Class<P>
         get() {
@@ -41,11 +48,18 @@ constructor(override val reference: Reference<T>) : ILifecycle<T>,
         c.newInstance()
     }
 
-    val activity:FragmentActivity?
+    override val reference: Reference<T>? by lazy {
+        WeakReference<T>(fragment)
+    }
+
+    override val target: T?
+        get() = reference?.get()
+
+    open val activity:FragmentActivity?
         get() = target?.activity
 
     override val context: Context?
-        get() = reference.get()?.context
+        get() = reference?.get()?.context
 
     override fun onCreate(savedInstanceState: Bundle?) {
     }

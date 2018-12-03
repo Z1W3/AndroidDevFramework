@@ -9,11 +9,11 @@ import catt.mvp.sample.app.master.MainActivity
 import catt.mvp.sample.app.master.MainFragment
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import catt.mvp.sample.presenter.MainActivityPresenter
-import java.lang.ref.WeakReference
 
-class MainActivityImpl(target: MainActivity) :
-    ProxyBaseActivity<MainActivity, IMainActivityIFS.View, MainActivityPresenter>(WeakReference(target)),
+class MainActivityImpl :
+    ProxyBaseActivity<MainActivity, IMainActivityIFS.View, MainActivityPresenter>(),
     IMainActivityIFS.View {
+
     private val _TAG: String by lazy { MainActivityImpl::class.java.simpleName }
 
     override fun onCreate(savedInstanceState: Bundle?) {
