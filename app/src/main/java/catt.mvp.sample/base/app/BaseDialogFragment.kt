@@ -15,6 +15,9 @@ import kotlinx.android.synthetic.*
 
 abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayoutDialogFragment(),
     IProxyLifecycle<T>, IRootViewIFS {
+
+    var isPaused:Boolean = false
+
     var isShowing: Boolean = false
 
     /**
@@ -28,7 +31,6 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
             by lazy { injectProxyImpl() as ProxyBaseDialogFragment<T, IRootViewIFS, BasePresenter<IRootViewIFS>> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseDialogFragmentStack.get().push(this@BaseDialogFragment)
         super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
     }
@@ -41,6 +43,7 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        BaseDialogFragmentStack.get().push(this@BaseDialogFragment)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
@@ -55,6 +58,8 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
         super.onDestroyView()
         proxy.onDestroyView()
         isShowing = false
+        BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
+        System.runFinalization()
     }
 
     override fun onStart() {
@@ -64,12 +69,14 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
 
     override fun onResume() {
         super.onResume()
+        isPaused = false
         proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
+        isPaused = true
         proxy.onPause()
         MobclickAgent.onPageEnd(pageLabel())
     }
@@ -82,8 +89,6 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
     override fun onDestroy() {
         super.onDestroy()
         proxy.onDestroy()
-        BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
-        System.runFinalization()
     }
 
     private fun View.postOnViewLoadCompleted():View {
