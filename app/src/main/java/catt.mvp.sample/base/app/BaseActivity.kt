@@ -61,6 +61,7 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
         super.onDestroy()
         proxy.onDestroy()
         BaseActivityStack.get().remove(this@BaseActivity)
+        System.runFinalization()
     }
 
     override fun onStart() {
