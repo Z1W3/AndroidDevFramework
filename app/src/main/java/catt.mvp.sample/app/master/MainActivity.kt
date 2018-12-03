@@ -11,6 +11,6 @@ class MainActivity : BaseActivity<MainActivity>(){
     override fun injectLayoutId(): Int = R.layout.activity_main
 
     override fun injectProxyImpl(): ILifecycle<MainActivity> {
-        return MainActivityImpl(this@MainActivity)
+        return MainActivityImpl()
     }
 }

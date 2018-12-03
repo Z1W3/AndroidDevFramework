@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutFragment
+import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.proxy.IProxyLifecycle
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
@@ -28,6 +29,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        BaseFragmentStack.get().push(this)
         super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
     }
@@ -80,6 +82,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
     override fun onDestroy() {
         super.onDestroy()
         proxy.onDestroy()
+        BaseFragmentStack.get().remove(this)
     }
 
     private fun View.postOnViewLoadCompleted():View {

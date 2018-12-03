@@ -6,7 +6,7 @@ import java.lang.ref.Reference
 
 
 interface ILifecycle<T>{
-    val reference: Reference<T>
+    val reference: Reference<T>?
 
     val target: T?
 

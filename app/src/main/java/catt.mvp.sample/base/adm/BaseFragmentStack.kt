@@ -1,11 +1,11 @@
 package catt.mvp.sample.base.adm
 
-import android.app.Activity
+import android.support.v4.app.Fragment
 import java.util.*
 
-internal class BaseActivityStack : IStack<Activity> {
-    private val stack: Stack<Activity> by lazy { Stack<Activity>() }
-    override fun push(target: Activity) {
+internal class BaseFragmentStack : IStack<Fragment> {
+    private val stack: Stack<Fragment> by lazy { Stack<Fragment>() }
+    override fun push(target: Fragment) {
         synchronized(target) {
             stack.remove(target)
             stack.push(target)
@@ -15,23 +15,22 @@ internal class BaseActivityStack : IStack<Activity> {
 
     override fun pop() {
         peek()?.apply {
-            finish()
             stack.pop()
         }
     }
 
-    override fun remove(target: Activity) {
+    override fun remove(target: Fragment) {
         stack.remove(target)
     }
 
-    override fun peek(): Activity? {
+    override fun peek(): Fragment? {
         if (empty()) return null
         return stack.peek()
     }
 
     override fun empty(): Boolean = stack.empty()
 
-    override fun search(target: Activity): Activity? {
+    override fun search(target: Fragment): Fragment? {
         val absoluteIndex = stack.search(target)
         return when (!stack.empty() && absoluteIndex != -1) {
             true -> stack[absoluteIndex - 1]
@@ -48,22 +47,12 @@ internal class BaseActivityStack : IStack<Activity> {
         return null
     }
 
-
-    internal fun killMyPid() {
-        for (index in stack.indices.reversed()) {
-            val aty = stack[index]
-            aty.finish()
-        }
-        android.os.Process.killProcess(android.os.Process.myPid())
-        System.exit(1)
-    }
-
     companion object {
         private object Single {
-            internal val INSTANCE: BaseActivityStack by lazy { BaseActivityStack() }
+            internal val INSTANCE: BaseFragmentStack by lazy { BaseFragmentStack() }
         }
 
         @JvmStatic
-        fun get(): BaseActivityStack = Single.INSTANCE
+        fun get(): BaseFragmentStack = Single.INSTANCE
     }
 }

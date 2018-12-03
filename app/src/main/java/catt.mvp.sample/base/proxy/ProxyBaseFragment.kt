@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
+import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.function.component.IDialogComponent
 import catt.mvp.sample.base.function.component.IGlideComponent
 import catt.mvp.sample.base.function.component.ISupportFragmentComponent
@@ -12,8 +13,10 @@ import catt.mvp.sample.base.function.component.IToastyComponent
 import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
+import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 /**
  * type T, 绑定Fragment
@@ -23,29 +26,31 @@ import java.lang.reflect.ParameterizedType
  * params reference, 绑定Fragment的引用类型,建议采用WeakReference<T>
  */
 abstract class ProxyBaseFragment<T: Fragment, V : IRootViewIFS, P: BasePresenter<V>>
-constructor(override val reference: Reference<T>) : ILifecycle<T>,
-    IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
+    : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
-    override val target: T?
-        get() = reference.get()
-
-    private val presenterClazz: Class<P>
+    private val declaredClazz: Array<Type>
         get() {
             val genType = javaClass.genericSuperclass
-            val params = (genType as ParameterizedType).actualTypeArguments.reversed()
-            return params[0] as Class<P>
+            return (genType as ParameterizedType).actualTypeArguments
         }
 
-    val presenter: P by lazy {
-        val c: Constructor<P> = presenterClazz.getConstructor()
-        c.newInstance()
+    private val fragment : T?
+        get() = BaseFragmentStack.get().search(declaredClazz[0] as Class<T>)
+
+    val presenter: P by lazy { (declaredClazz[declaredClazz.size - 1] as Class<P>).getConstructor().newInstance() }
+
+    override val reference: Reference<T>? by lazy {
+        WeakReference<T>(fragment)
     }
 
-    val activity:FragmentActivity?
+    override val target: T?
+        get() = reference?.get()
+
+    open val activity:FragmentActivity?
         get() = target?.activity
 
     override val context: Context?
-        get() = reference.get()?.context
+        get() = reference?.get()?.context
 
     override fun onCreate(savedInstanceState: Bundle?) {
     }

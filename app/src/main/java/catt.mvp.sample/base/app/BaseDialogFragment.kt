@@ -28,8 +28,8 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
             by lazy { injectProxyImpl() as ProxyBaseDialogFragment<T, IRootViewIFS, BasePresenter<IRootViewIFS>> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         BaseDialogFragmentStack.get().push(this@BaseDialogFragment)
+        super.onCreate(savedInstanceState)
         proxy.onCreate(savedInstanceState)
     }
 

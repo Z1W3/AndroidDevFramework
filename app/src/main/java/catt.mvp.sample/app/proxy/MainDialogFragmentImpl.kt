@@ -5,10 +5,9 @@ import catt.mvp.sample.app.interfaces.IMainDialogFragmentIFS
 import catt.mvp.sample.app.master.MainDialogFragment
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
 import catt.mvp.sample.presenter.MainDialogPresenter
-import java.lang.ref.WeakReference
 
-class MainDialogFragmentImpl(target: MainDialogFragment)
-    : ProxyBaseDialogFragment<MainDialogFragment, IMainDialogFragmentIFS.View, MainDialogPresenter>(WeakReference(target)),
+class MainDialogFragmentImpl
+    : ProxyBaseDialogFragment<MainDialogFragment, IMainDialogFragmentIFS.View, MainDialogPresenter>(),
     IMainDialogFragmentIFS.View {
 
 
