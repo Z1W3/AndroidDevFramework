@@ -83,6 +83,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
         super.onDestroy()
         proxy.onDestroy()
         BaseFragmentStack.get().remove(this)
+        System.runFinalization()
     }
 
     private fun View.postOnViewLoadCompleted():View {

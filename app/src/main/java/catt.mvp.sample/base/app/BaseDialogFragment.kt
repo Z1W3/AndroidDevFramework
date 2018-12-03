@@ -83,6 +83,7 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
         super.onDestroy()
         proxy.onDestroy()
         BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
+        System.runFinalization()
     }
 
     private fun View.postOnViewLoadCompleted():View {
