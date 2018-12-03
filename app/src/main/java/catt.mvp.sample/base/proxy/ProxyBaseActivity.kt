@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log.e
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.IDialogComponent
 import catt.mvp.sample.base.function.component.IGlideComponent
@@ -16,38 +17,35 @@ import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 
 /**
- * type T, 绑定Activity
- * type V, 绑定View,所有ViewInterface均需继承IRootViewInterface
- * type P, 绑定Presenter,并且Presenter绑定View
+ * 泛型注释
+ * type T, 需要代理实现的Activity
+ * type V, View Interface,所有ViewInterface均需继承IRootViewInterface
+ * type P, Presenter类,
  *
- * params reference, 绑定Activity的引用类型,建议采用WeakReference<T>
+ * 功能：
+ * 获取代理Activity类的对象
+ * 对代理Activity类进行弱引用处理
+ * 获取Presenter类的对象
  */
 abstract class ProxyBaseActivity<T : AppCompatActivity, V : IRootViewIFS, P: BasePresenter<V>>
     : ILifecycle<T>, PermissionHelper.OnPermissionListener,
     IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
+    private val declaredClazz: Array<Type>
+        get() {
+            val genType = javaClass.genericSuperclass
+            return (genType as ParameterizedType).actualTypeArguments
+        }
+
     private val activity : T?
-        get() = BaseActivityStack.get().search(activityClazz)
+        get() = BaseActivityStack.get().search(declaredClazz[0] as Class<T>)
 
-    private val activityClazz: Class<T> by lazy {
-        val genType = javaClass.genericSuperclass
-        val params = (genType as ParameterizedType).actualTypeArguments
-        params[0] as Class<T>
-    }
 
-    private val presenterClazz: Class<P> by lazy {
-        val genType = javaClass.genericSuperclass
-        val params = (genType as ParameterizedType).actualTypeArguments.reversed()
-         params[0] as Class<P>
-    }
-
-    val presenter : P by lazy {
-        val c: Constructor<P> = presenterClazz.getConstructor()
-        c.newInstance()
-    }
+    val presenter : P by lazy { (declaredClazz[declaredClazz.size - 1]as Class<P>).getConstructor().newInstance() }
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(activity)

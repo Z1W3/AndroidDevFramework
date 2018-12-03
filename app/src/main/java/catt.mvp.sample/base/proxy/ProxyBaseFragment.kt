@@ -16,6 +16,7 @@ import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 /**
  * type T, 绑定Fragment
@@ -27,26 +28,16 @@ import java.lang.reflect.ParameterizedType
 abstract class ProxyBaseFragment<T: Fragment, V : IRootViewIFS, P: BasePresenter<V>>
     : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
-    private val fragment : T?
-        get() = BaseFragmentStack.get().search(fragmentClazz)
-
-    private val fragmentClazz: Class<T> by lazy {
-        val genType = javaClass.genericSuperclass
-        val params = (genType as ParameterizedType).actualTypeArguments
-        params[0] as Class<T>
-    }
-
-    private val presenterClazz: Class<P>
+    private val declaredClazz: Array<Type>
         get() {
             val genType = javaClass.genericSuperclass
-            val params = (genType as ParameterizedType).actualTypeArguments.reversed()
-            return params[0] as Class<P>
+            return (genType as ParameterizedType).actualTypeArguments
         }
 
-    val presenter: P by lazy {
-        val c: Constructor<P> = presenterClazz.getConstructor()
-        c.newInstance()
-    }
+    private val fragment : T?
+        get() = BaseFragmentStack.get().search(declaredClazz[0] as Class<T>)
+
+    val presenter: P by lazy { (declaredClazz[declaredClazz.size - 1] as Class<P>).getConstructor().newInstance() }
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(fragment)

@@ -9,6 +9,7 @@ import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 /**
  * type T, 绑定DialogFragment
@@ -19,14 +20,14 @@ import java.lang.reflect.ParameterizedType
  */
 abstract class ProxyBaseDialogFragment<T: DialogFragment, V : IRootViewIFS, P: BasePresenter<V>> : ProxyBaseFragment<T, V, P>(){
 
-    private val dialog : T?
-        get() = BaseDialogFragmentStack.get().search(dialogClazz)
+    private val declaredClazz: Array<Type>
+        get() {
+            val genType = javaClass.genericSuperclass
+            return (genType as ParameterizedType).actualTypeArguments
+        }
 
-    private val dialogClazz: Class<T> by lazy {
-        val genType = javaClass.genericSuperclass
-        val params = (genType as ParameterizedType).actualTypeArguments
-        params[0] as Class<T>
-    }
+    private val dialog : T?
+        get() = BaseDialogFragmentStack.get().search(declaredClazz[0] as Class<T>)
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(dialog)
