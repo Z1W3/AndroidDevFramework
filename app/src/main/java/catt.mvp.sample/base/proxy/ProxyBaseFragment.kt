@@ -10,22 +10,24 @@ import catt.mvp.sample.base.function.component.IDialogComponent
 import catt.mvp.sample.base.function.component.IGlideComponent
 import catt.mvp.sample.base.function.component.ISupportFragmentComponent
 import catt.mvp.sample.base.function.component.IToastyComponent
-import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
-import java.lang.reflect.Constructor
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 /**
- * type T, 绑定Fragment
- * type V, 绑定View,所有ViewInterface均需继承IRootViewInterface
- * type P, 绑定Presenter,并且Presenter绑定View
+ * 泛型注释
+ * type T, 需要代理实现的Fragment
+ * type V, View Interface
+ * type P, Presenter类,
  *
- * params reference, 绑定Fragment的引用类型,建议采用WeakReference<T>
+ * 功能：
+ * 获取代理Fragment类的对象
+ * 对代理Fragment类进行弱引用处理
+ * 获取Presenter类的对象
  */
-abstract class ProxyBaseFragment<T: Fragment, V : IRootViewIFS, P: BasePresenter<V>>
+abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
     : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
     private val declaredClazz: Array<Type>

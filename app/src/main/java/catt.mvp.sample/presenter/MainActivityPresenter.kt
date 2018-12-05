@@ -25,7 +25,7 @@ class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActiv
     }
 
     override fun setContent() {
-        val call:Call<ResponseBody> = dggService.getLotteryTypes()
+        val call: Call<ResponseBody> = dggService.getLotteryTypes()
         call.enqueue(object : retrofit2.Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 e(_TAG, "onFailure", t)
@@ -34,7 +34,7 @@ class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActiv
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 i(_TAG, "onResponse: code=${response.code()}, message=${response.message()}")
                 val string = response.body()?.string()
-                launch(Dispatchers.Main, CoroutineStart.ATOMIC) {
+                launch(Dispatchers.Main, CoroutineStart.UNDISPATCHED) {
                     viewIFS?.onContent(string!!)
                 }
             }

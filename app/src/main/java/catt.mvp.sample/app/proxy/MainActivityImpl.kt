@@ -8,7 +8,10 @@ import catt.mvp.sample.app.interfaces.IMainActivityIFS
 import catt.mvp.sample.app.master.MainActivity
 import catt.mvp.sample.app.master.MainFragment
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
+import catt.mvp.sample.model.User
 import catt.mvp.sample.presenter.MainActivityPresenter
+import org.android.eventbus.EventBus
+import org.android.eventbus.Subscriber
 
 class MainActivityImpl :
     ProxyBaseActivity<MainActivity, IMainActivityIFS.View, MainActivityPresenter>(),
@@ -20,6 +23,7 @@ class MainActivityImpl :
         super.onCreate(savedInstanceState)
         e(_TAG, "onCreate: ${R.id.container_layout}")
         target?.supportFragmentManager!!.beginTransaction().commitFragment(R.id.container_layout, MainFragment())
+        EventBus.getDefault().register(this)
     }
 
     override fun onContent(content: String) {
@@ -28,6 +32,11 @@ class MainActivityImpl :
         context?.toastSuccess("aAAAA")
     }
 
+    @Subscriber(tag = MainDialogFragmentImpl.EVENT_BUS_TAG)
+    private fun getUser(user:User){
+        e(_TAG, "username=${user.username}, age=${user.age}, identity=${user.identity}")
+        context?.toastSuccess("username=${user.username}, age=${user.age}, identity=${user.identity}")
+    }
 
     override fun onGrantedPermissionCompleted() {
         target?.toastSuccess("权限已全部授权")
@@ -38,4 +47,8 @@ class MainActivityImpl :
         e(_TAG, "onViewLoadCompleted: ")
     }
 
+    override fun onDestroy() {
+        EventBus.getDefault().unregister(this)
+        super.onDestroy()
+    }
 }

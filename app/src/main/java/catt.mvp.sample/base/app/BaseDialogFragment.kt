@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutDialogFragment
 import catt.mvp.sample.base.proxy.IProxyLifecycle
-import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
@@ -14,7 +13,7 @@ import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayoutDialogFragment(),
-    IProxyLifecycle<T>, IRootViewIFS {
+    IProxyLifecycle<T> {
 
     var isPaused:Boolean = false
 
@@ -27,8 +26,8 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
 
     abstract fun injectLayoutId(): Int
 
-    override val proxy: ProxyBaseDialogFragment<T, IRootViewIFS, BasePresenter<IRootViewIFS>>
-            by lazy { injectProxyImpl() as ProxyBaseDialogFragment<T, IRootViewIFS, BasePresenter<IRootViewIFS>> }
+    override val proxy: ProxyBaseDialogFragment<T, *, BasePresenter<*>>
+            by lazy { injectProxyImpl() as ProxyBaseDialogFragment<T, *, BasePresenter<*>> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -11,14 +11,12 @@ import catt.mvp.sample.base.function.component.IPermissionComponent
 import catt.mvp.sample.base.function.helper.PermissionHelper
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
-import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 
 abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
-    IProxyLifecycle<T>,
-    IRootViewIFS, PermissionHelper.OnPermissionListener {
+    IProxyLifecycle<T>, PermissionHelper.OnPermissionListener {
 
     var isPaused:Boolean = false
 
@@ -26,8 +24,8 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
 
     abstract fun injectLayoutId():Int
 
-    override val proxy: ProxyBaseActivity<T, IRootViewIFS, BasePresenter<IRootViewIFS>> by lazy {
-        injectProxyImpl() as ProxyBaseActivity<T, IRootViewIFS, BasePresenter<IRootViewIFS>>
+    override val proxy: ProxyBaseActivity<T, *, BasePresenter<*>> by lazy {
+        injectProxyImpl() as ProxyBaseActivity<T, *, BasePresenter<*>>
     }
 
     private val transaction by lazy { supportFragmentManager.beginTransaction() }

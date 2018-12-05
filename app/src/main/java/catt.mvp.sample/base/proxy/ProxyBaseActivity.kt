@@ -9,7 +9,6 @@ import catt.mvp.sample.base.function.component.IGlideComponent
 import catt.mvp.sample.base.function.component.ISupportFragmentComponent
 import catt.mvp.sample.base.function.component.IToastyComponent
 import catt.mvp.sample.base.function.helper.PermissionHelper
-import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
@@ -20,7 +19,7 @@ import java.lang.reflect.Type
 /**
  * 泛型注释
  * type T, 需要代理实现的Activity
- * type V, View Interface,所有ViewInterface均需继承IRootViewInterface
+ * type V, View Interface
  * type P, Presenter类,
  *
  * 功能：
@@ -28,7 +27,7 @@ import java.lang.reflect.Type
  * 对代理Activity类进行弱引用处理
  * 获取Presenter类的对象
  */
-abstract class ProxyBaseActivity<T : AppCompatActivity, V : IRootViewIFS, P: BasePresenter<V>>
+abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
     : ILifecycle<T>, PermissionHelper.OnPermissionListener,
     IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
