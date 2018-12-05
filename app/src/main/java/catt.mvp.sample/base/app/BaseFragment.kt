@@ -7,15 +7,13 @@ import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutFragment
 import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.proxy.IProxyLifecycle
-import catt.mvp.sample.base.mvp.view.IRootViewIFS
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
-    IProxyLifecycle<T>,
-    IRootViewIFS {
+    IProxyLifecycle<T> {
 
     var isPaused:Boolean = false
 
@@ -26,8 +24,8 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
 
     abstract fun injectLayoutId(): Int
 
-    override val proxy: ProxyBaseFragment<T, IRootViewIFS, BasePresenter<IRootViewIFS>>by lazy {
-        injectProxyImpl() as ProxyBaseFragment<T, IRootViewIFS, BasePresenter<IRootViewIFS>>
+    override val proxy: ProxyBaseFragment<T, *, BasePresenter<*>>by lazy {
+        injectProxyImpl() as ProxyBaseFragment<T, *, BasePresenter<*>>
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,14 +1,11 @@
 package catt.mvp.sample.app.interfaces
 
-import catt.mvp.sample.base.mvp.view.IRootPresenterIFS
-import catt.mvp.sample.base.mvp.view.IRootViewIFS
-
 interface IMainFragmentInterIFS {
-    interface View : IRootViewIFS {
+    interface View {
         fun onContent(content: String)
     }
 
-    interface Presenter : IRootPresenterIFS {
+    interface Presenter {
         fun setContent()
     }
 }
