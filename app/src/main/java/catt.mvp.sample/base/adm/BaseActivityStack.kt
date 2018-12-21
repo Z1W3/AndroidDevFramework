@@ -1,5 +1,6 @@
 package catt.mvp.sample.base.adm
 
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.util.Log.e
 import catt.mvp.sample.base.app.BaseActivity
@@ -43,7 +44,7 @@ internal class BaseActivityStack : IStack<BaseActivity<*>> {
         }
     }
 
-    fun <T> search(clazz:Class<T>): T? {
+    fun <T:AppCompatActivity> search(clazz:Class<T>): T? {
         for (index in stack.indices.reversed()){
         }
 
