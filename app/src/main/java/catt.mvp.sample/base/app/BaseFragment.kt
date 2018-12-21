@@ -64,6 +64,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
 
     override fun onDestroyView() {
         this.clearFindViewByIdCache()
+        proxy.onDestroyView()
         super.onDestroyView()
         BaseFragmentStack.get().remove(this)
         System.runFinalization()

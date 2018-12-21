@@ -62,8 +62,8 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
 
     override fun onDestroyView() {
         this.clearFindViewByIdCache()
-        super.onDestroyView()
         proxy.onDestroyView()
+        super.onDestroyView()
         isShowing = false
         BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
         System.runFinalization()
