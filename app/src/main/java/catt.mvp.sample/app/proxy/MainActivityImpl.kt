@@ -1,6 +1,5 @@
 package catt.mvp.sample.app.proxy
 
-import android.os.Bundle
 import android.util.Log.e
 import android.widget.ImageView
 import catt.mvp.sample.R
@@ -19,10 +18,10 @@ class MainActivityImpl :
 
     private val _TAG: String by lazy { MainActivityImpl::class.java.simpleName }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        e(_TAG, "onCreate: ${R.id.container_layout}")
-        target?.supportFragmentManager!!.beginTransaction().commitFragment(R.id.container_layout, MainFragment())
+    override fun onCreate() {
+        super.onCreate()
+        e(_TAG, "onCreate: ${R.id.container_layout}, lifecycle.state = $currentLifecycleState")
+        fragmentTransaction?.commitFragment(R.id.container_layout, MainFragment())
         EventBus.getDefault().register(this)
     }
 
@@ -39,12 +38,12 @@ class MainActivityImpl :
     }
 
     override fun onGrantedPermissionCompleted() {
+        e(_TAG, "onGrantedPermissionCompleted: ")
         target?.toastSuccess("权限已全部授权")
     }
 
-
     override fun onViewLoadCompleted() {
-        e(_TAG, "onViewLoadCompleted: ")
+        e(_TAG, "onViewLoadCompleted: lifecycle.state = $currentLifecycleState")
     }
 
     override fun onDestroy() {

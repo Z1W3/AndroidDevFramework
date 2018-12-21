@@ -1,5 +1,7 @@
 package catt.mvp.sample.base.app
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleRegistry
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,8 @@ import kotlinx.android.synthetic.*
 abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayoutDialogFragment(),
     IProxyLifecycle<T> {
 
+    private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
+
     var isPaused:Boolean = false
 
     var isShowing: Boolean = false
@@ -29,9 +33,13 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
     override val proxy: ProxyBaseDialogFragment<T, *, BasePresenter<*>>
             by lazy { injectProxyImpl() as ProxyBaseDialogFragment<T, *, BasePresenter<*>> }
 
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        proxy.onCreate(savedInstanceState)
+        lifecycleRegistry.addObserver(proxy)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -61,33 +69,23 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
         System.runFinalization()
     }
 
-    override fun onStart() {
-        super.onStart()
-        proxy.onStart()
-    }
 
     override fun onResume() {
         super.onResume()
         isPaused = false
-        proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
         isPaused = true
-        proxy.onPause()
         MobclickAgent.onPageEnd(pageLabel())
     }
 
-    override fun onStop() {
-        super.onStop()
-        proxy.onStop()
-    }
 
     override fun onDestroy() {
         super.onDestroy()
-        proxy.onDestroy()
+        lifecycleRegistry.removeObserver(proxy)
     }
 
     private fun View.postOnViewLoadCompleted():View {

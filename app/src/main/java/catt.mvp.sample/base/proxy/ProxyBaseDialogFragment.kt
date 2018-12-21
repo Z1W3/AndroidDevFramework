@@ -1,9 +1,12 @@
 package catt.mvp.sample.base.proxy
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentTransaction
 import android.view.View
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.function.component.IDialogComponent
@@ -30,6 +33,11 @@ import java.lang.reflect.Type
 abstract class ProxyBaseDialogFragment<T: DialogFragment, V, P: BasePresenter<V>>
     : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
+    private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
+
+    override val currentLifecycleState: Lifecycle.State
+        get() = lifecycleState
+
     private val declaredClazz: Array<Type>
         get() {
             val genType = javaClass.genericSuperclass
@@ -54,8 +62,10 @@ abstract class ProxyBaseDialogFragment<T: DialogFragment, V, P: BasePresenter<V>
     override val context: Context?
         get() = reference?.get()?.context
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-    }
+    internal val fragmentTransaction: FragmentTransaction?
+        get() = target?.childFragmentManager?.beginTransaction()
+
+    override fun onCreate() {}
 
     open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         presenter.onAttach(this as V)
@@ -79,5 +89,11 @@ abstract class ProxyBaseDialogFragment<T: DialogFragment, V, P: BasePresenter<V>
 
     override fun onStop() {}
 
+    override fun onAny(owner: LifecycleOwner) {
+        lifecycleState = owner.lifecycle.currentState
+    }
+
+
     override fun onDestroy() {}
+
 }

@@ -1,7 +1,9 @@
 package catt.mvp.sample.base.proxy
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
-import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.IDialogComponent
@@ -31,6 +33,11 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
     : ILifecycle<T>, PermissionHelper.OnPermissionListener,
     IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
 
+    private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
+
+    override val currentLifecycleState: Lifecycle.State
+        get() = lifecycleState
+
     private val declaredClazz: Array<Type>
         get() {
             val genType = javaClass.genericSuperclass
@@ -53,19 +60,27 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
     override val context: Context?
         get() = reference?.get()?.applicationContext
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    internal val fragmentTransaction:FragmentTransaction?
+        get() = target?.supportFragmentManager?.beginTransaction()
+
+    override fun onCreate() {
         presenter.onAttach(this as V)
     }
+
+    open fun onRestart(){}
 
     override fun onStart() {}
 
     override fun onResume() {}
 
-    open fun onRestart() {}
-
     override fun onPause() {}
 
     override fun onStop() {}
+
+    override fun onAny(owner: LifecycleOwner) {
+        lifecycleState = owner.lifecycle.currentState
+    }
+
 
     override fun onDestroy() {
         presenter.onDetach()
