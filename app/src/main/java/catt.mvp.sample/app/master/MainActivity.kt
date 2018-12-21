@@ -2,6 +2,7 @@ package catt.mvp.sample.app.master
 
 import catt.mvp.sample.app.proxy.MainActivityImpl
 import catt.mvp.sample.R
+import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.app.BaseActivity
 import catt.mvp.sample.base.proxy.ILifecycle
 
@@ -12,5 +13,10 @@ class MainActivity : BaseActivity<MainActivity>(){
 
     override fun injectProxyImpl(): ILifecycle<MainActivity> {
         return MainActivityImpl()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        BaseActivityStack.get().killMyPid()
     }
 }

@@ -98,7 +98,9 @@ dependencies {
     /*网络框架*/implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     /*网络框架*/implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     /*网络框架*/implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-
+    /*帧动画框架*/implementation ('com.github.LuckyCattZW:SurfaceFrameAnimationDrawable:1.0.12'){
+        exclude group: "com.android.support"
+    }
 
     /*图片加载框架*/implementation('com.github.bumptech.glide:okhttp3-integration:4.8.0') {
         exclude group: "com.android.support"

@@ -62,7 +62,6 @@ internal class BaseActivityStack : IStack<BaseActivity<*>> {
             aty.finish()
         }
         android.os.Process.killProcess(android.os.Process.myPid())
-        System.exit(1)
     }
 
     companion object {
