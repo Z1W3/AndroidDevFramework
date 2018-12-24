@@ -35,6 +35,9 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
 
+    override val patronsClass: Class<T>
+        get() = (declaredClazz[0] as Class<T>)
+
     override val currentLifecycleState: Lifecycle.State
         get() = lifecycleState
 

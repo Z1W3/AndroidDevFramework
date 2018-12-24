@@ -35,6 +35,9 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
 
+    override val patronsClass: Class<T>
+        get() = (declaredClazz[0] as Class<T>)
+
     override val currentLifecycleState: Lifecycle.State
         get() = lifecycleState
 
@@ -72,7 +75,7 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
         presenter.onAttach(this as V)
     }
 
-    open fun onActivityCreated(savedInstanceState: Bundle?) {
+    open fun onActivityCreated(savedInstanceState: Bundle?, arguments: Bundle?) {
 
     }
 

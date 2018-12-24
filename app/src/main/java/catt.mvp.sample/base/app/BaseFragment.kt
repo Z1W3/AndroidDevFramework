@@ -55,7 +55,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        proxy.onActivityCreated(savedInstanceState)
+        proxy.onActivityCreated(savedInstanceState, arguments)
     }
 
     override fun onHiddenChanged(hidden: Boolean){

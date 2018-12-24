@@ -57,7 +57,7 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        proxy.onActivityCreated(savedInstanceState)
+        proxy.onActivityCreated(savedInstanceState, arguments)
     }
 
     override fun onDestroyView() {
