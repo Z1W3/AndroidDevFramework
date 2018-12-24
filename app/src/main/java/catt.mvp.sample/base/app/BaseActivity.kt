@@ -1,11 +1,12 @@
 package catt.mvp.sample.base.app
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import catt.compat.layout.app.CompatLayoutActivity
 import catt.mvp.sample.R
-import catt.mvp.sample.base.proxy.IProxyLifecycle
+import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.IPermissionComponent
 import catt.mvp.sample.base.function.helper.PermissionHelper
@@ -13,10 +14,13 @@ import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
+import android.arch.lifecycle.LifecycleRegistry
 
 
 abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
-    IProxyLifecycle<T>, PermissionHelper.OnPermissionListener {
+    IProxy<T>, PermissionHelper.OnPermissionListener {
+
+    private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 
     var isPaused:Boolean = false
 
@@ -28,13 +32,15 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
         injectProxyImpl() as ProxyBaseActivity<T, *, BasePresenter<*>>
     }
 
-    private val transaction by lazy { supportFragmentManager.beginTransaction() }
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         BaseActivityStack.get().push(this@BaseActivity)
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        proxy.onCreate(savedInstanceState)
+        lifecycleRegistry.addObserver(proxy)
         setContentView(injectLayoutId())
         permission.scan()
         window.decorView.postOnViewLoadCompleted()
@@ -43,36 +49,29 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
     override fun onGrantedPermissionCompleted() =
         proxy.onGrantedPermissionCompleted()
 
+    override fun onRestart() {
+        super.onRestart()
+        proxy.onRestart()
+    }
+
     override fun onResume() {
         super.onResume()
         isPaused = false
-        proxy.onResume()
         MobclickAgent.onResume(this)
     }
 
     override fun onPause() {
         super.onPause()
         isPaused = true
-        proxy.onPause()
         MobclickAgent.onPause(this)
     }
 
     override fun onDestroy() {
         this.clearFindViewByIdCache()
         super.onDestroy()
-        proxy.onDestroy()
         BaseActivityStack.get().remove(this@BaseActivity)
+        lifecycleRegistry.removeObserver(proxy)
         System.runFinalization()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        proxy.onStart()
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        proxy.onRestart()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

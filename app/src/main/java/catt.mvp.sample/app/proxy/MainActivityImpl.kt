@@ -1,12 +1,11 @@
 package catt.mvp.sample.app.proxy
 
-import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.util.Log.e
 import android.widget.ImageView
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainActivityIFS
 import catt.mvp.sample.app.master.MainActivity
-import catt.mvp.sample.app.master.MainFragment
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import catt.mvp.sample.model.User
 import catt.mvp.sample.presenter.MainActivityPresenter
@@ -19,10 +18,11 @@ class MainActivityImpl :
 
     private val _TAG: String by lazy { MainActivityImpl::class.java.simpleName }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        e(_TAG, "onCreate: ${R.id.container_layout}")
-        target?.supportFragmentManager!!.beginTransaction().commitFragment(R.id.container_layout, MainFragment())
+    override fun onCreate() {
+        super.onCreate()
+        e(_TAG, "onCreate: ${R.id.container_layout}, lifecycle.state = $currentLifecycleState")
+        fragmentTransaction?.commitFragment(R.id.container_layout,
+            MainFragmentImpl::class.java.generatedActualTypeObject(0, Fragment::class.java))
         EventBus.getDefault().register(this)
     }
 
@@ -39,12 +39,12 @@ class MainActivityImpl :
     }
 
     override fun onGrantedPermissionCompleted() {
+        e(_TAG, "onGrantedPermissionCompleted: ")
         target?.toastSuccess("权限已全部授权")
     }
 
-
     override fun onViewLoadCompleted() {
-        e(_TAG, "onViewLoadCompleted: ")
+        e(_TAG, "onViewLoadCompleted: lifecycle.state = $currentLifecycleState")
     }
 
     override fun onDestroy() {

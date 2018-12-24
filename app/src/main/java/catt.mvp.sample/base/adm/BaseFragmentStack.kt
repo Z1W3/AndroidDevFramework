@@ -1,5 +1,6 @@
 package catt.mvp.sample.base.adm
 
+import android.support.v4.app.Fragment
 import android.util.Log
 import catt.mvp.sample.base.app.BaseFragment
 import java.util.*
@@ -41,7 +42,7 @@ internal class BaseFragmentStack : IStack<BaseFragment<*>> {
         }
     }
 
-    fun <T> search(clazz:Class<T>): T? {
+    fun <T:Fragment> search(clazz:Class<T>): T? {
         for (index in stack.indices.reversed()) {
             Log.e("FragmentStack", "search name=${stack[index]::class.java.name}, isPaused=${stack[index].isPaused}, hashCode=${stack[index].hashCode()}")
             if(!stack[index].isPaused && stack[index]::class.java.name == clazz.name){

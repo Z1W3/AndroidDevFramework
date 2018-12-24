@@ -1,13 +1,12 @@
 package catt.mvp.sample.base.proxy
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
-import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import catt.mvp.sample.base.adm.BaseActivityStack
-import catt.mvp.sample.base.function.component.IDialogComponent
-import catt.mvp.sample.base.function.component.IGlideComponent
-import catt.mvp.sample.base.function.component.ISupportFragmentComponent
-import catt.mvp.sample.base.function.component.IToastyComponent
+import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.function.helper.PermissionHelper
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
@@ -29,7 +28,12 @@ import java.lang.reflect.Type
  */
 abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
     : ILifecycle<T>, PermissionHelper.OnPermissionListener,
-    IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
+    IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent, ISuperClassComponent {
+
+    private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
+
+    override val currentLifecycleState: Lifecycle.State
+        get() = lifecycleState
 
     private val declaredClazz: Array<Type>
         get() {
@@ -53,19 +57,27 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
     override val context: Context?
         get() = reference?.get()?.applicationContext
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    internal val fragmentTransaction:FragmentTransaction?
+        get() = target?.supportFragmentManager?.beginTransaction()
+
+    override fun onCreate() {
         presenter.onAttach(this as V)
     }
+
+    open fun onRestart(){}
 
     override fun onStart() {}
 
     override fun onResume() {}
 
-    open fun onRestart() {}
-
     override fun onPause() {}
 
     override fun onStop() {}
+
+    override fun onAny(owner: LifecycleOwner) {
+        lifecycleState = owner.lifecycle.currentState
+    }
+
 
     override fun onDestroy() {
         presenter.onDetach()

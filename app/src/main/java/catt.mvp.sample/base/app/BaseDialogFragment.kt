@@ -1,11 +1,13 @@
 package catt.mvp.sample.base.app
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleRegistry
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutDialogFragment
-import catt.mvp.sample.base.proxy.IProxyLifecycle
+import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
@@ -13,7 +15,9 @@ import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayoutDialogFragment(),
-    IProxyLifecycle<T> {
+    IProxy<T> {
+
+    private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
 
     var isPaused:Boolean = false
 
@@ -26,12 +30,17 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
 
     abstract fun injectLayoutId(): Int
 
-    override val proxy: ProxyBaseDialogFragment<T, *, BasePresenter<*>>
-            by lazy { injectProxyImpl() as ProxyBaseDialogFragment<T, *, BasePresenter<*>> }
+    override val proxy: ProxyBaseDialogFragment<T, *, BasePresenter<*>> by lazy {
+        injectProxyImpl() as ProxyBaseDialogFragment<T, *, BasePresenter<*>>
+    }
+
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        proxy.onCreate(savedInstanceState)
+        lifecycleRegistry.addObserver(proxy)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -49,45 +58,35 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        proxy.onActivityCreated(savedInstanceState)
+        proxy.onActivityCreated(savedInstanceState, arguments)
     }
 
     override fun onDestroyView() {
         this.clearFindViewByIdCache()
-        super.onDestroyView()
         proxy.onDestroyView()
+        super.onDestroyView()
         isShowing = false
         BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
         System.runFinalization()
     }
 
-    override fun onStart() {
-        super.onStart()
-        proxy.onStart()
-    }
 
     override fun onResume() {
         super.onResume()
         isPaused = false
-        proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
         isPaused = true
-        proxy.onPause()
         MobclickAgent.onPageEnd(pageLabel())
     }
 
-    override fun onStop() {
-        super.onStop()
-        proxy.onStop()
-    }
 
     override fun onDestroy() {
         super.onDestroy()
-        proxy.onDestroy()
+        lifecycleRegistry.removeObserver(proxy)
     }
 
     private fun View.postOnViewLoadCompleted():View {

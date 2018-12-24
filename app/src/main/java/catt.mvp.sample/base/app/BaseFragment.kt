@@ -1,22 +1,26 @@
 package catt.mvp.sample.base.app
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleRegistry
 import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutFragment
 import catt.mvp.sample.base.adm.BaseFragmentStack
-import catt.mvp.sample.base.proxy.IProxyLifecycle
+import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
-    IProxyLifecycle<T> {
+    IProxy<T> {
+
+    private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseFragment) }
 
     var isPaused:Boolean = false
-
     /**
      * 友盟记录
      */
@@ -28,9 +32,16 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
         injectProxyImpl() as ProxyBaseFragment<T, *, BasePresenter<*>>
     }
 
+    val fragmentTransaction: FragmentTransaction
+        get() = childFragmentManager.beginTransaction()
+
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        proxy.onCreate(savedInstanceState)
+        lifecycleRegistry.addObserver(proxy)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -44,7 +55,7 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        proxy.onActivityCreated(savedInstanceState)
+        proxy.onActivityCreated(savedInstanceState, arguments)
     }
 
     override fun onHiddenChanged(hidden: Boolean){
@@ -53,39 +64,29 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
 
     override fun onDestroyView() {
         this.clearFindViewByIdCache()
-        super.onDestroyView()
         proxy.onDestroyView()
+        super.onDestroyView()
         BaseFragmentStack.get().remove(this)
         System.runFinalization()
     }
 
-    override fun onStart() {
-        super.onStart()
-        proxy.onStart()
-    }
 
     override fun onResume() {
         super.onResume()
         isPaused = false
-        proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
         isPaused = true
-        proxy.onPause()
         MobclickAgent.onPageEnd(pageLabel())
     }
 
-    override fun onStop() {
-        super.onStop()
-        proxy.onStop()
-    }
 
     override fun onDestroy() {
         super.onDestroy()
-        proxy.onDestroy()
+        lifecycleRegistry.removeObserver(proxy)
     }
 
     private fun View.postOnViewLoadCompleted():View {

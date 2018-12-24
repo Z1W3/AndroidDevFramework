@@ -86,7 +86,7 @@ android {
 dependencies {
     /*彩色Toast提示框架*/implementation project(':ToastyLibs')
     /*基于androidOS的事件总线框架*/implementation project(':AndroidEventBusLibs')
-    /*system*/implementation fileTree(include: ['*.jar'], dir: 'libs')
+    /*system*/implementation fileTree(include: ['*.jar'], dir: '../.libs')
     /*system-kotlin*/implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     /*system-kotlinX*/implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
 
@@ -98,7 +98,9 @@ dependencies {
     /*网络框架*/implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     /*网络框架*/implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     /*网络框架*/implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-
+    /*帧动画框架*/implementation ('com.github.LuckyCattZW:SurfaceFrameAnimationDrawable:1.0.12'){
+        exclude group: "com.android.support"
+    }
 
     /*图片加载框架*/implementation('com.github.bumptech.glide:okhttp3-integration:4.8.0') {
         exclude group: "com.android.support"

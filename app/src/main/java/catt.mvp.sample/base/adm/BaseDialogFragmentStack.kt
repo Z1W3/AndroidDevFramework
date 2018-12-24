@@ -44,7 +44,7 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
         }
     }
 
-    fun <T> search(clazz:Class<T>): T? {
+    fun <T:DialogFragment> search(clazz:Class<T>): T? {
         for (index in stack.indices.reversed()) {
             Log.e("DialogFragmentStack", "search name=${stack[index]::class.java.name}, isPaused=${stack[index].isPaused}, hashCode=${stack[index].hashCode()}")
             if(!stack[index].isPaused && stack[index]::class.java.name == clazz.name){

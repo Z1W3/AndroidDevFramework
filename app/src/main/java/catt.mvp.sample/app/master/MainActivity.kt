@@ -1,16 +1,23 @@
 package catt.mvp.sample.app.master
 
+import android.arch.lifecycle.LifecycleOwner
 import catt.mvp.sample.app.proxy.MainActivityImpl
 import catt.mvp.sample.R
+import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.app.BaseActivity
 import catt.mvp.sample.base.proxy.ILifecycle
 
-class MainActivity : BaseActivity<MainActivity>(){
+class MainActivity : BaseActivity<MainActivity>(), LifecycleOwner {
     private val _TAG : String by lazy { MainActivity::class.java.simpleName }
 
     override fun injectLayoutId(): Int = R.layout.activity_main
 
     override fun injectProxyImpl(): ILifecycle<MainActivity> {
         return MainActivityImpl()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        BaseActivityStack.get().killMyPid()
     }
 }
