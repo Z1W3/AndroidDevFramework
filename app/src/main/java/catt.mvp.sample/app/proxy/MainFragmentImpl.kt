@@ -26,8 +26,8 @@ class MainFragmentImpl :
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?, arguments: Bundle?) {
+        super.onActivityCreated(savedInstanceState, arguments)
     }
 
     override fun onViewLoadCompleted() {

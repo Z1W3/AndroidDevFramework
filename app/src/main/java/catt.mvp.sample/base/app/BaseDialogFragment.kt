@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutDialogFragment
-import catt.mvp.sample.base.proxy.IProxyLifecycle
+import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
@@ -15,7 +15,7 @@ import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayoutDialogFragment(),
-    IProxyLifecycle<T> {
+    IProxy<T> {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
 
@@ -30,8 +30,9 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
 
     abstract fun injectLayoutId(): Int
 
-    override val proxy: ProxyBaseDialogFragment<T, *, BasePresenter<*>>
-            by lazy { injectProxyImpl() as ProxyBaseDialogFragment<T, *, BasePresenter<*>> }
+    override val proxy: ProxyBaseDialogFragment<T, *, BasePresenter<*>> by lazy {
+        injectProxyImpl() as ProxyBaseDialogFragment<T, *, BasePresenter<*>>
+    }
 
     override fun getLifecycle(): Lifecycle {
         return lifecycleRegistry

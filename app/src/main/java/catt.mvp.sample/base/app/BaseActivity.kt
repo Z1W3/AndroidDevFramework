@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import catt.compat.layout.app.CompatLayoutActivity
 import catt.mvp.sample.R
-import catt.mvp.sample.base.proxy.IProxyLifecycle
+import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.IPermissionComponent
 import catt.mvp.sample.base.function.helper.PermissionHelper
@@ -18,7 +18,7 @@ import android.arch.lifecycle.LifecycleRegistry
 
 
 abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
-    IProxyLifecycle<T>, PermissionHelper.OnPermissionListener {
+    IProxy<T>, PermissionHelper.OnPermissionListener {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 

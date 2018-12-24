@@ -9,14 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutFragment
 import catt.mvp.sample.base.adm.BaseFragmentStack
-import catt.mvp.sample.base.proxy.IProxyLifecycle
+import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
 abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
-    IProxyLifecycle<T> {
+    IProxy<T> {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseFragment) }
 
