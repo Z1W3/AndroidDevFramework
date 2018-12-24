@@ -9,10 +9,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import catt.mvp.sample.base.adm.BaseFragmentStack
-import catt.mvp.sample.base.function.component.IDialogComponent
-import catt.mvp.sample.base.function.component.IGlideComponent
-import catt.mvp.sample.base.function.component.ISupportFragmentComponent
-import catt.mvp.sample.base.function.component.IToastyComponent
+import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.mvp.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
@@ -31,12 +28,10 @@ import java.lang.reflect.Type
  * 获取Presenter类的对象
  */
 abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
-    : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent {
+    : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent,
+    ISuperClassComponent {
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
-
-    override val patronsClass: Class<T>
-        get() = (declaredClazz[0] as Class<T>)
 
     override val currentLifecycleState: Lifecycle.State
         get() = lifecycleState

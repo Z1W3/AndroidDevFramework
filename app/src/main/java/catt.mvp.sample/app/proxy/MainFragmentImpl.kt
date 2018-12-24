@@ -1,12 +1,12 @@
 package catt.mvp.sample.app.proxy
 
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.util.Log.e
 import android.view.View
 import android.widget.Button
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainFragmentInterIFS
-import catt.mvp.sample.app.master.MainDialogFragment
 import catt.mvp.sample.app.master.MainFragment
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import catt.mvp.sample.presenter.MainFragmentPresenter
@@ -21,7 +21,8 @@ class MainFragmentImpl :
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<Button>(R.id.dialog_btn).setOnClickListener {
             target?.apply {
-                MainDialogFragment().show(childFragmentManager, MainDialogFragment::class.java.simpleName)
+                MainDialogFragmentImpl::class.java.generatedActualTypeObject(0, DialogFragment::class.java)
+                    .show(childFragmentManager, MainDialogFragmentImpl::class.java.simpleName)
             }
         }
     }

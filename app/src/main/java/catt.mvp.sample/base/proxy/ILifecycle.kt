@@ -11,8 +11,6 @@ import java.lang.ref.Reference
 interface ILifecycle<T> : LifecycleObserver {
     val reference: Reference<T>?
 
-    val patronsClass: Class<T>
-
     val currentLifecycleState: Lifecycle.State
 
     val target: T?

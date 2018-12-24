@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.util.Log.w
 import android.widget.FrameLayout
-import catt.mvp.sample.base.app.BaseFragment
 
 interface ISupportFragmentComponent {
     /**
@@ -29,7 +28,7 @@ interface ISupportFragmentComponent {
      * @code FragmentTransaction.add(Int,Fragment)
      * @code FragmentTransaction.replace(Int,Fragment)
      */
-    fun FragmentTransaction.commitFragment(id: Int, fragment: BaseFragment<*>, addToBackStack:Boolean = false, name: String? = null) {
+    fun FragmentTransaction.commitFragment(id: Int, fragment: Fragment, addToBackStack:Boolean = false, name: String? = null) {
         if (id <= 0) IllegalArgumentException("id cannot be less than or equal to 0.")
         synchronized(this) {
             if (fragment.isAdded) replace(id, fragment).addToBackStack(addToBackStack, name).compatCommit()
@@ -41,7 +40,7 @@ interface ISupportFragmentComponent {
     /**
      * @link #commitFragment(Int, BaseFragment)
      */
-    fun FragmentTransaction.commitFragment(layout: FrameLayout, fragment: BaseFragment<*>) {
+    fun FragmentTransaction.commitFragment(layout: FrameLayout, fragment: Fragment) {
         commitFragment(layout.id, fragment)
     }
 
@@ -50,7 +49,7 @@ interface ISupportFragmentComponent {
      * 不进行实例操作，仅隐藏
      * PS: 如果Fragment未添加，不会主动进行添加
      */
-    fun FragmentTransaction.commitSwitchFragment(from: BaseFragment<*>, to: BaseFragment<*>) {
+    fun FragmentTransaction.commitSwitchFragment(from: Fragment, to: Fragment) {
         synchronized(this) {
             if (to.isAdded) hide(from).show(to).compatCommit()
             else w(FragmentTransaction::class.java.simpleName, "destination not added.")
