@@ -1,15 +1,16 @@
 package catt.mvp.sample.presenter
 
-import android.util.Log.e
-import android.util.Log.i
 import catt.mvp.sample.app.interfaces.IMainActivityIFS
-import catt.mvp.sample.base.mvp.model.network.OkRft
-import catt.mvp.sample.base.mvp.presenter.BasePresenter
+import catt.mvp.sample.base.model.network.base.OkRft
+import catt.mvp.sample.base.model.network.callback.SimpleCallResult
+import catt.mvp.sample.base.model.network.component.callResponseForArray
+import catt.mvp.sample.base.model.network.component.callResponseForObject
+import catt.mvp.sample.base.presenter.BasePresenter
 import catt.mvp.sample.model.network.IDggStoreService
-import kotlinx.coroutines.*
+import catt.mvp.sample.model.network.response.LotteryListBean
+import catt.mvp.sample.model.network.response.LotteryTypesBean
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Response
 
 class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActivityIFS.Presenter {
 
@@ -26,17 +27,41 @@ class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActiv
 
     override fun setContent() {
         val call: Call<ResponseBody> = dggService.getLotteryTypes()
-        call.enqueue(object : retrofit2.Callback<ResponseBody> {
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                e(_TAG, "onFailure", t)
+        call.callResponseForArray(result = object : SimpleCallResult<Array<LotteryTypesBean>>(){
+            override fun onAfterFailure(code: Int, call: Call<ResponseBody>, ex: Throwable) {
+                super.onAfterFailure(code, call, ex)
             }
 
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                i(_TAG, "onResponse: code=${response.code()}, message=${response.message()}")
-                val string = response.body()?.string()
-                launch(Dispatchers.Main, CoroutineStart.UNDISPATCHED) {
-                    viewIFS?.onContent(string!!)
-                }
+            override fun onCheckLocalWifi() {
+            }
+
+            override fun onFailure2(code: Int, ex: Throwable) {
+                super.onFailure2(code, ex)
+            }
+
+            override fun onResponse(response: Array<LotteryTypesBean>) {
+                println("response.size = ${response.size}")
+            }
+        }, coroutine = this)
+
+
+        call.callResponseForObject(result = object : SimpleCallResult<LotteryListBean>(){
+
+            override fun onAfterFailure(code: Int, call: Call<ResponseBody>, ex: Throwable) {
+                super.onAfterFailure(code, call, ex)
+            }
+
+            override fun onCheckLocalWifi() {
+                super.onCheckLocalWifi()
+            }
+
+            override fun onFailure2(code: Int, ex: Throwable) {
+                super.onFailure2(code, ex)
+            }
+
+
+            override fun onResponse(response: LotteryListBean) {
+
             }
         })
     }

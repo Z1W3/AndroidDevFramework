@@ -3,6 +3,7 @@ package catt.mvp.sample.base.proxy
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
@@ -10,7 +11,7 @@ import android.support.v4.app.FragmentTransaction
 import android.view.View
 import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.mvp.presenter.BasePresenter
+import catt.mvp.sample.base.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -27,9 +28,10 @@ import java.lang.reflect.Type
  * 对代理Fragment类进行弱引用处理
  * 获取Presenter类的对象
  */
-abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
-    : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent,
-    ISuperClassComponent {
+abstract class ProxyBaseFragment<T : Fragment, V, P : BasePresenter<V>>
+    : ILifecycle<T>, IDialogComponent {
+
+    abstract val tag: String
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
 
@@ -42,7 +44,7 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
             return (genType as ParameterizedType).actualTypeArguments
         }
 
-    private val fragment : T?
+    private val fragment: T?
         get() = BaseFragmentStack.get().search(declaredClazz[0] as Class<T>)
 
     val presenter: P by lazy { (declaredClazz[declaredClazz.size - 1] as Class<P>).getConstructor().newInstance() }
@@ -54,7 +56,7 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
     override val target: T?
         get() = reference?.get()
 
-    val activity:FragmentActivity?
+    val activity: FragmentActivity?
         get() = target?.activity
 
     override val context: Context?
@@ -74,11 +76,15 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+    }
+
     open fun onDestroyView() {
         presenter.onDetach()
     }
 
-    open fun onHiddenChanged(hidden: Boolean){}
+    open fun onHiddenChanged(hidden: Boolean) {}
 
     override fun onStart() {}
 

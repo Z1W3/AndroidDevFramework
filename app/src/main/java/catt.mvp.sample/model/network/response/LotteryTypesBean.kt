@@ -1,5 +1,10 @@
-package catt.mvp.sample.model.network.response.model
+package catt.mvp.sample.model.network.response
 
+import catt.mvp.sample.base.model.network.resopnse.JsonField
+import catt.mvp.sample.base.model.network.resopnse.JsonTargetDataField
+
+@JsonField
+@JsonTargetDataField(hierarchy = "appTicketTypeVos")
 class LotteryTypesBean {
     /**
      * 彩种id

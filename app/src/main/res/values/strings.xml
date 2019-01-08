@@ -14,4 +14,8 @@
     <string name="dangerous_permission_group_sms">访问用户的短信相关的运行时权限</string>
     <string name="dangerous_permission_group_storage">访问共享外部存储相关的运行时权限</string>
     <string name="no_dangerous_permission">需要激活相应的权限</string>
+
+    <string name="net_local_wifi_error">请检查本地网络</string>
+    <string name="net_network_connection_not_smooth">网络连接不畅通</string>
+    <string name="net_server_api_abnormal">后台功能异常</string>
 </resources>

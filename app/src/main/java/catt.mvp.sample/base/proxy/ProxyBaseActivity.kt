@@ -3,12 +3,13 @@ package catt.mvp.sample.base.proxy
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
+import android.content.Intent
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.function.helper.PermissionHelper
-import catt.mvp.sample.base.mvp.presenter.BasePresenter
+import catt.mvp.sample.base.presenter.BasePresenter
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -27,8 +28,7 @@ import java.lang.reflect.Type
  * 获取Presenter类的对象
  */
 abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
-    : ILifecycle<T>, PermissionHelper.OnPermissionListener,
-    IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent, ISuperClassComponent {
+    : ILifecycle<T>, PermissionHelper.OnPermissionListener, IDialogComponent {
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
 
@@ -62,6 +62,10 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
 
     override fun onCreate() {
         presenter.onAttach(this as V)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
     }
 
     open fun onRestart(){}

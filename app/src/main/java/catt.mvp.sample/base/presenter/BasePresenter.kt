@@ -1,11 +1,11 @@
-package catt.mvp.sample.base.mvp.presenter
+package catt.mvp.sample.base.presenter
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-abstract class BasePresenter<V>: CoroutineScope {
+abstract class BasePresenter<V>: CoroutineScope{
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main

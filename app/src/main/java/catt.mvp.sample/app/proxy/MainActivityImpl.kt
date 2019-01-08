@@ -1,11 +1,13 @@
 package catt.mvp.sample.app.proxy
 
-import android.support.v4.app.Fragment
 import android.util.Log.e
 import android.widget.ImageView
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainActivityIFS
 import catt.mvp.sample.app.master.MainActivity
+import catt.mvp.sample.base.function.component.commitFragment
+import catt.mvp.sample.base.function.component.newInstance
+import catt.mvp.sample.base.function.component.toastSuccess
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import catt.mvp.sample.model.User
 import catt.mvp.sample.presenter.MainActivityPresenter
@@ -21,8 +23,7 @@ class MainActivityImpl :
     override fun onCreate() {
         super.onCreate()
         e(_TAG, "onCreate: ${R.id.container_layout}, lifecycle.state = $currentLifecycleState")
-        fragmentTransaction?.commitFragment(R.id.container_layout,
-            MainFragmentImpl::class.java.generatedActualTypeObject(0, Fragment::class.java))
+        fragmentTransaction?.commitFragment(R.id.container_layout, MainFragmentImpl::class.java.newInstance(0))
         EventBus.getDefault().register(this)
     }
 

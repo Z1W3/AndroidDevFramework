@@ -15,6 +15,7 @@ class GlobalApplication : Application() {
     private val _TAG by lazy { GlobalApplication::class.java.simpleName }
     override fun onCreate() {
         super.onCreate()
+        GlobalContext.applicationContext = applicationContext
         initializeFrameworks(applicationContext)
     }
 

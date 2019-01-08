@@ -1,7 +1,7 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainDialogFragmentIFS
-import catt.mvp.sample.base.mvp.presenter.BasePresenter
+import catt.mvp.sample.base.presenter.BasePresenter
 
 class MainDialogPresenter : BasePresenter<IMainDialogFragmentIFS.View>(), IMainDialogFragmentIFS.Presenter {
     init {
