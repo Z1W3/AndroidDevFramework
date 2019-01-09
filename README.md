@@ -1,4 +1,6 @@
 # AndroidDevelopmentFramework
+### [LICENSE](https://github.com/LuckyCattZW/AndroidDevelopmentFramework/blob/add-license-1/LICENSE)
+
 ### 简介
 - 采用代理类的形式实现Activity、Fragment、DialogFragment
 - 每个代理类均采用MVP的设计模式

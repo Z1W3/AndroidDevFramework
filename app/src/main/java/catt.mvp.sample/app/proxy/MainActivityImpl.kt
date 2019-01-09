@@ -1,6 +1,5 @@
 package catt.mvp.sample.app.proxy
 
-import android.os.Bundle
 import android.util.Log.e
 import android.widget.ImageView
 import catt.mvp.sample.R
