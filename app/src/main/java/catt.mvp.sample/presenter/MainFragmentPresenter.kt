@@ -1,9 +1,9 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainFragmentInterIFS
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.presenter.BasePresenter2
 
-class MainFragmentPresenter : BasePresenter<IMainFragmentInterIFS.View>(), IMainFragmentInterIFS.Presenter {
+class MainFragmentPresenter : BasePresenter2(), IMainFragmentInterIFS.Presenter {
 
     init {
         Thread{
@@ -13,7 +13,7 @@ class MainFragmentPresenter : BasePresenter<IMainFragmentInterIFS.View>(), IMain
     }
 
     override fun setContent() {
-        viewIFS?.onContent("This is MainFragmentPresenter")
+        getViewInterface<IMainFragmentInterIFS.View>().onContent("This is MainFragmentPresenter")
     }
 
     override fun onDestroy() {

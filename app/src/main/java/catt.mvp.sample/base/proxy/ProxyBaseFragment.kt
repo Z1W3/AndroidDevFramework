@@ -11,7 +11,10 @@ import android.support.v4.app.FragmentTransaction
 import android.view.View
 import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.presenter.BasePresenter2
+import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
+import catt.mvp.sample.base.proxy.annotations.InjectPresenter
+import catt.mvp.sample.base.proxy.throwables.ProxyArgumentException
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -28,8 +31,25 @@ import java.lang.reflect.Type
  * 对代理Fragment类进行弱引用处理
  * 获取Presenter类的对象
  */
-abstract class ProxyBaseFragment<T : Fragment, V, P : BasePresenter<V>>
+abstract class ProxyBaseFragment<T : Fragment>
     : ILifecycle<T>, IDialogComponent {
+
+    private val injectPresenter: InjectPresenter by lazy {
+        val annotation = this@ProxyBaseFragment::class.java.getAnnotation(InjectPresenter::class.java)
+        annotation?: throw ProxyArgumentException("Must be declaration annotation class InjectPresenter")
+        annotation
+    }
+
+    val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter2 }
+
+    private val viewClass: Class<out Any> by lazy {
+        this@ProxyBaseFragment::class.java.interfaces.forEach {
+            it.getAnnotation(DeclaredViewInterface::class.java)?.apply {
+                return@lazy this@ProxyBaseFragment::class.java.asSubclass(it)
+            }
+        }
+        throw ProxyArgumentException("Must be declaration annotation class DeclaredViewInterface")
+    }
 
     abstract val tag: String
 
@@ -46,8 +66,6 @@ abstract class ProxyBaseFragment<T : Fragment, V, P : BasePresenter<V>>
 
     private val fragment: T?
         get() = BaseFragmentStack.get().search(declaredClazz[0] as Class<T>)
-
-    val presenter: P by lazy { (declaredClazz[declaredClazz.size - 1] as Class<P>).getConstructor().newInstance() }
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(fragment)
@@ -69,7 +87,7 @@ abstract class ProxyBaseFragment<T : Fragment, V, P : BasePresenter<V>>
     }
 
     open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        presenter.onAttach(this as V)
+        presenter.onAttach(viewClass, this@ProxyBaseFragment)
     }
 
     open fun onActivityCreated(savedInstanceState: Bundle?, arguments: Bundle?) {

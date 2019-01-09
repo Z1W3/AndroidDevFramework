@@ -6,7 +6,7 @@ import catt.mvp.sample.base.app.BaseDialogFragment
 
 interface IDialogComponent {
 
-    fun peekCurrentDialog():BaseDialogFragment<*>? =
+    fun peekCurrentDialog():BaseDialogFragment? =
         BaseDialogFragmentStack.get().peek()
 
     fun popDismissDialog()=
@@ -16,7 +16,7 @@ interface IDialogComponent {
      * 销毁dialog
      * return, true 销毁成功, false销毁不成功，堆栈中没有该记录
      */
-    fun dismissTargetDialog(target: BaseDialogFragment<*>): Boolean =
+    fun dismissTargetDialog(target: BaseDialogFragment): Boolean =
         BaseDialogFragmentStack.get().dismissTarget(target)
 
     /**

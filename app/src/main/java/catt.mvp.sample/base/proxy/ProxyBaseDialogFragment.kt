@@ -12,7 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.presenter.BasePresenter2
+import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
+import catt.mvp.sample.base.proxy.annotations.InjectPresenter
+import catt.mvp.sample.base.proxy.throwables.ProxyArgumentException
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -29,8 +32,24 @@ import java.lang.reflect.Type
  * 对代理DialogFragment类进行弱引用处理
  * 获取Presenter类的对象
  */
-abstract class ProxyBaseDialogFragment<T: DialogFragment, V, P: BasePresenter<V>>
-    : ILifecycle<T>, IDialogComponent{
+abstract class ProxyBaseDialogFragment<T: DialogFragment> : ILifecycle<T>, IDialogComponent{
+
+    private val injectPresenter: InjectPresenter by lazy {
+        val annotation = this@ProxyBaseDialogFragment::class.java.getAnnotation(InjectPresenter::class.java)
+        annotation?: throw ProxyArgumentException("Must be declaration annotation class InjectPresenter")
+        annotation
+    }
+
+    val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter2 }
+
+    private val viewClass: Class<out Any> by lazy {
+        this@ProxyBaseDialogFragment::class.java.interfaces.forEach {
+            it.getAnnotation(DeclaredViewInterface::class.java)?.apply {
+                return@lazy this@ProxyBaseDialogFragment::class.java.asSubclass(it)
+            }
+        }
+        throw ProxyArgumentException("Must be declaration annotation class DeclaredViewInterface")
+    }
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
 
@@ -51,8 +70,6 @@ abstract class ProxyBaseDialogFragment<T: DialogFragment, V, P: BasePresenter<V>
     private val dialog : T?
         get() = BaseDialogFragmentStack.get().search(declaredClazz[0] as Class<T>)
 
-    val presenter: P by lazy { (declaredClazz[declaredClazz.size - 1] as Class<P>).getConstructor().newInstance() }
-
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(dialog)
     }
@@ -72,7 +89,7 @@ abstract class ProxyBaseDialogFragment<T: DialogFragment, V, P: BasePresenter<V>
     override fun onCreate() {}
 
     open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        presenter.onAttach(this as V)
+        presenter.onAttach(viewClass, this@ProxyBaseDialogFragment)
     }
 
     open fun onActivityCreated(savedInstanceState: Bundle?, arguments: Bundle?) {

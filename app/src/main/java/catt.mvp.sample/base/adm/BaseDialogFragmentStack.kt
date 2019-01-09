@@ -6,9 +6,9 @@ import catt.mvp.sample.base.app.BaseDialogFragment
 import java.util.*
 import kotlin.collections.ArrayList
 
-internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
-    private val stack: Stack<BaseDialogFragment<*>> by lazy { Stack<BaseDialogFragment<*>>() }
-    override fun push(target: BaseDialogFragment<*>) {
+internal class BaseDialogFragmentStack : IStack<BaseDialogFragment> {
+    private val stack: Stack<BaseDialogFragment> by lazy { Stack<BaseDialogFragment>() }
+    override fun push(target: BaseDialogFragment) {
         synchronized(target) {
             stack.remove(target)
             Log.e("DialogFragmentStack", "push name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
@@ -24,19 +24,19 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
         }
     }
 
-    override fun remove(target: BaseDialogFragment<*>) {
+    override fun remove(target: BaseDialogFragment) {
         Log.e("DialogFragmentStack", "remove name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
         stack.remove(target)
     }
 
-    override fun peek(): BaseDialogFragment<*>? {
+    override fun peek(): BaseDialogFragment? {
         if(empty()) return null
         return stack.peek()
     }
 
     override fun empty(): Boolean = stack.empty()
 
-    override fun search(target: BaseDialogFragment<*>): BaseDialogFragment<*>? {
+    override fun search(target: BaseDialogFragment): BaseDialogFragment? {
         val absoluteIndex = stack.search(target)
         return when (!stack.empty() && absoluteIndex != -1) {
             true -> stack[absoluteIndex - 1]
@@ -81,7 +81,7 @@ internal class BaseDialogFragmentStack : IStack<BaseDialogFragment<*>> {
         return list.toArray(arrayOf())
     }
 
-    internal fun dismissTarget(target: BaseDialogFragment<*>):Boolean {
+    internal fun dismissTarget(target: BaseDialogFragment):Boolean {
         search(target)?.apply {
             dismissAllowingStateLoss()
             remove(target)

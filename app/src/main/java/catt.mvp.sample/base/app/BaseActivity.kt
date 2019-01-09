@@ -6,21 +6,20 @@ import android.os.Bundle
 import android.view.View
 import catt.compat.layout.app.CompatLayoutActivity
 import catt.mvp.sample.R
-import catt.mvp.sample.base.proxy.IProxy
-import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.IPermissionComponent
 import catt.mvp.sample.base.function.helper.PermissionHelper
-import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 import android.arch.lifecycle.LifecycleRegistry
 import android.support.v4.app.DialogFragment
+import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.proxy.IProxy
+import catt.mvp.sample.base.proxy.ProxyBaseActivity
 
 
-abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
-    IProxy<T>, PermissionHelper.OnPermissionListener {
+abstract class BaseActivity : CompatLayoutActivity(),
+    IProxy, PermissionHelper.OnPermissionListener {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 
@@ -30,8 +29,8 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
 
     abstract fun injectLayoutId():Int
 
-    override val proxy: ProxyBaseActivity<T, *, BasePresenter<*>> by lazy {
-        injectProxyImpl() as ProxyBaseActivity<T, *, BasePresenter<*>>
+    override val proxy:ProxyBaseActivity<*> by lazy {
+        injectProxyImpl() as ProxyBaseActivity<*>
     }
 
     override fun getLifecycle(): Lifecycle {

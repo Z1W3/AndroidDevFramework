@@ -6,9 +6,9 @@ import android.util.Log.e
 import catt.mvp.sample.base.app.BaseActivity
 import java.util.*
 
-internal class BaseActivityStack : IStack<BaseActivity<*>> {
-    private val stack: Stack<BaseActivity<*>> by lazy { Stack<BaseActivity<*>>() }
-    override fun push(target: BaseActivity<*>) {
+internal class BaseActivityStack : IStack<BaseActivity> {
+    private val stack: Stack<BaseActivity> by lazy { Stack<BaseActivity>() }
+    override fun push(target: BaseActivity) {
         synchronized(target) {
             stack.remove(target)
             Log.e("ActivityStack", "push name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
@@ -24,19 +24,19 @@ internal class BaseActivityStack : IStack<BaseActivity<*>> {
         }
     }
 
-    override fun remove(target: BaseActivity<*>) {
+    override fun remove(target: BaseActivity) {
         Log.e("ActivityStack", "remove name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
         stack.remove(target)
     }
 
-    override fun peek(): BaseActivity<*>? {
+    override fun peek(): BaseActivity? {
         if (empty()) return null
         return stack.peek()
     }
 
     override fun empty(): Boolean = stack.empty()
 
-    override fun search(target: BaseActivity<*>): BaseActivity<*>? {
+    override fun search(target: BaseActivity): BaseActivity? {
         val absoluteIndex = stack.search(target)
         return when (!stack.empty() && absoluteIndex != -1) {
             true -> stack[absoluteIndex - 1]

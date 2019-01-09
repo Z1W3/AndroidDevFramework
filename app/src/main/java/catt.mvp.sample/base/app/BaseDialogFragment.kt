@@ -8,16 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutDialogFragment
-import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 import org.android.eventbus.EventBus
 
-abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayoutDialogFragment(),
-    IProxy<T> {
+abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
 
@@ -40,8 +38,8 @@ abstract class BaseDialogFragment<T : CompatLayoutDialogFragment> : CompatLayout
         get() = proxy.heightLayoutSize
 
 
-    override val proxy: ProxyBaseDialogFragment<T, *, BasePresenter<*>>by lazy {
-        injectProxyImpl() as ProxyBaseDialogFragment<T, *, BasePresenter<*>>
+    override val proxy: ProxyBaseDialogFragment<*>by lazy {
+        injectProxyImpl() as ProxyBaseDialogFragment<*>
     }
 
     override fun getLifecycle(): Lifecycle {

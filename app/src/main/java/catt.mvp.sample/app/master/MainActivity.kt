@@ -7,7 +7,7 @@ import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.app.BaseActivity
 import catt.mvp.sample.base.proxy.ILifecycle
 
-class MainActivity : BaseActivity<MainActivity>(), LifecycleOwner {
+class MainActivity : BaseActivity(), LifecycleOwner {
     private val _TAG : String by lazy { MainActivity::class.java.simpleName }
 
     override fun injectLayoutId(): Int = R.layout.activity_main

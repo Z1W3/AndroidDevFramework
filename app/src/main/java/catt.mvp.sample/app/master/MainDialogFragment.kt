@@ -6,7 +6,7 @@ import catt.mvp.sample.base.app.BaseDialogFragment
 import catt.mvp.sample.base.proxy.ILifecycle
 
 
-class MainDialogFragment : BaseDialogFragment<MainDialogFragment>() {
+class MainDialogFragment : BaseDialogFragment() {
 
     override fun pageLabel(): String = "演示DialogFragment"
 

@@ -1,34 +1,37 @@
 package catt.mvp.sample.app.proxy
 
+import android.support.v4.app.Fragment
 import android.util.Log.e
 import android.widget.ImageView
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainActivityIFS
 import catt.mvp.sample.app.master.MainActivity
-import catt.mvp.sample.base.function.component.commitFragment
-import catt.mvp.sample.base.function.component.newInstance
-import catt.mvp.sample.base.function.component.toastSuccess
+import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
+import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 import catt.mvp.sample.model.User
-import catt.mvp.sample.presenter.MainActivityPresenter
 import org.android.eventbus.EventBus
 import org.android.eventbus.Subscriber
 
-class MainActivityImpl :
-    ProxyBaseActivity<MainActivity, IMainActivityIFS.View, MainActivityPresenter>(),
-    IMainActivityIFS.View {
+@InjectPresenter(value = "catt.mvp.sample.presenter.MainActivityPresenter")
+class MainActivityImpl : ProxyBaseActivity<MainActivity>(), IMainActivityIFS.View {
 
     private val _TAG: String by lazy { MainActivityImpl::class.java.simpleName }
 
     override fun onCreate() {
         super.onCreate()
         e(_TAG, "onCreate: ${R.id.container_layout}, lifecycle.state = $currentLifecycleState")
-        fragmentTransaction?.commitFragment(R.id.container_layout, MainFragmentImpl::class.java.newInstance(0))
+        val newInstanceOrigin = MainFragmentImpl::class.java.newInstanceOrigin<Fragment>()
+
+
+        e(_TAG, "newInstanceOrigin::class.java=${newInstanceOrigin::class.java}")
+
+        fragmentTransaction?.commitFragment(R.id.container_layout, MainFragmentImpl::class.java.newInstanceOrigin())
         EventBus.getDefault().register(this)
     }
 
     override fun onContent(content: String) {
-        e(_TAG, "content = $content")
+        e(_TAG, "######   content = $content")
         val imageView: ImageView? = null
         context?.toastSuccess("aAAAA")
     }
