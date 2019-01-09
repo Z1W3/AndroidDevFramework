@@ -4,6 +4,7 @@
 - 每个代理类均采用MVP的设计模式
 - 每个代理类绑定的Presenter以注解的形式注入代理类中
 - 网络通信采用retrofit2
+- 集成像素比例适配方案
 
 ### 1 委托类
 #### 1.1 创建委托类
@@ -302,3 +303,8 @@ class HeaderInterceptor : Interceptor {
 ```
 #### 4.2 retrofit2访问网络日志拦截
 修改位置 catt.mvp.sample.base.model.network.interceptor.LoggingInterceptor
+
+
+### 5 其他
+#### 5.1 [@像素比适配方案](https://github.com/LuckyCattZW/CompatLayoutAdapter)
+#### 5.2 彩色、可快速替换的[@Toast](https://github.com/LuckyCattZW/Toasty)
