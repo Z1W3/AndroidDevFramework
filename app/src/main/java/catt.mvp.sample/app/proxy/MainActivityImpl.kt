@@ -1,5 +1,6 @@
 package catt.mvp.sample.app.proxy
 
+import android.os.Bundle
 import android.util.Log.e
 import android.widget.ImageView
 import catt.mvp.sample.R
@@ -43,7 +44,6 @@ class MainActivityImpl : ProxyBaseActivity<MainActivity>(), IMainActivity.View {
 
     override fun onViewLoadCompleted() {
         e(_TAG, "onViewLoadCompleted: lifecycle.state = $currentLifecycleState")
-
         getPresenterInterface<IMainActivity.Presenter>().setContent()
     }
 
