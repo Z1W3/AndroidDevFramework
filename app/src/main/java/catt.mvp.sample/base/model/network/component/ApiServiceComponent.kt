@@ -195,8 +195,7 @@ private fun <T, A : Annotation> Class<T>.getJsonAnnotation(annotation: Class<A>)
 
 private fun <T> onFailure(code:Int, call: Call<ResponseBody>, result: ICallResult<T>, t: Throwable) {
     try {
-        result.onFailure2(code, t)
-        result.onFailure(t)
+        result.onFailure(code, t)
     } finally {
         if(BuildConfig.DEBUG){
             Log.w("Http:onFailure", "Call_____$call")

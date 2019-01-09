@@ -14,12 +14,8 @@ open class SimpleCallResult<T> : ICallResult<T>{
 
     }
 
-    override fun onFailure2(code: Int, ex: Throwable) {
-        super.onFailure2(code, ex)
-    }
-
-    override fun onFailure(ex: Throwable) {
-        super.onFailure(ex)
+    override fun onFailure(code: Int, ex: Throwable) {
+        super.onFailure(code, ex)
     }
 
     override fun onBeforeResponse() {

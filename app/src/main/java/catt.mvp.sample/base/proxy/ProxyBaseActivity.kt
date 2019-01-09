@@ -7,12 +7,15 @@ import android.content.Intent
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import catt.mvp.sample.base.adm.BaseActivityStack
+import catt.mvp.sample.base.app.BaseActivity
 import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.function.helper.PermissionHelper
 import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.proxy.annotations.DeclaredPresenterInterface
 import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
 import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 import catt.mvp.sample.base.proxy.throwables.ProxyArgumentException
+import java.lang.ClassCastException
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -20,17 +23,10 @@ import java.lang.reflect.Type
 
 
 /**
- * 泛型注释
- * type T, 需要代理实现的Activity
- * type V, View Interface
- * type P, Presenter类,
  *
- * 功能：
- * 获取代理Activity类的对象
- * 对代理Activity类进行弱引用处理
- * 获取Presenter类的对象
+ * 泛型T，需要被代理的Activity
  */
-abstract class ProxyBaseActivity<T : AppCompatActivity> : ILifecycle<T>, PermissionHelper.OnPermissionListener, IDialogComponent {
+abstract class ProxyBaseActivity<T : BaseActivity> : ILifecycle<T>, PermissionHelper.OnPermissionListener, IDialogComponent {
 
     private val injectPresenter:InjectPresenter by lazy {
         val annotation = this@ProxyBaseActivity::class.java.getAnnotation(InjectPresenter::class.java)
@@ -38,10 +34,24 @@ abstract class ProxyBaseActivity<T : AppCompatActivity> : ILifecycle<T>, Permiss
         annotation
     }
 
-    private val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter }
+    private val presenterInstance by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter }
 
+    private val presenterClazz by lazy {
+        presenterInstance::class.java.interfaces.forEach {
+            it.getAnnotation(DeclaredPresenterInterface::class.java)?.apply {
+                return@lazy presenterInstance::class.java.asSubclass(it)
+            }
+        }
+        throw ProxyArgumentException("Must be declaration annotation class DeclaredViewInterface")
+    }
 
+    private val castPresenter by lazy {
+        val cast = presenterClazz.cast(presenterInstance)
+        cast ?: throw ClassCastException("View convert error.")
+        cast!!
+    }
 
+    fun <T> getPresenterInterface(): T = castPresenter as T
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseActivity::class.java.interfaces.forEach {
@@ -80,7 +90,7 @@ abstract class ProxyBaseActivity<T : AppCompatActivity> : ILifecycle<T>, Permiss
         get() = target?.supportFragmentManager?.beginTransaction()
 
     override fun onCreate() {
-        presenter.onAttach(viewClass, this@ProxyBaseActivity)
+        presenterInstance.onAttach(viewClass, this@ProxyBaseActivity)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -106,6 +116,6 @@ abstract class ProxyBaseActivity<T : AppCompatActivity> : ILifecycle<T>, Permiss
 
 
     override fun onDestroy() {
-        presenter.onDetach()
+        presenterInstance.onDetach()
     }
 }

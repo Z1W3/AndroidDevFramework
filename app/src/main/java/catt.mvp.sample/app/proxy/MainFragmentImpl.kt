@@ -6,14 +6,14 @@ import android.util.Log.e
 import android.view.View
 import android.widget.Button
 import catt.mvp.sample.R
-import catt.mvp.sample.app.interfaces.IMainFragmentInterIFS
+import catt.mvp.sample.app.interfaces.IMainFragment
 import catt.mvp.sample.app.master.MainFragment
 import catt.mvp.sample.base.function.component.newInstanceOrigin
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 
 @InjectPresenter("catt.mvp.sample.presenter.MainFragmentPresenter")
-class MainFragmentImpl : ProxyBaseFragment<MainFragment>(), IMainFragmentInterIFS.View {
+class MainFragmentImpl : ProxyBaseFragment<MainFragment>(), IMainFragment.View {
     override val tag: String get() = MainFragmentImpl::class.java.name
 
     private val _TAG: String by lazy { MainFragmentImpl::class.java.simpleName }

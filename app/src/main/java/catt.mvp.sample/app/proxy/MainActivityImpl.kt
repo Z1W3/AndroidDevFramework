@@ -1,10 +1,9 @@
 package catt.mvp.sample.app.proxy
 
-import android.support.v4.app.Fragment
 import android.util.Log.e
 import android.widget.ImageView
 import catt.mvp.sample.R
-import catt.mvp.sample.app.interfaces.IMainActivityIFS
+import catt.mvp.sample.app.interfaces.IMainActivity
 import catt.mvp.sample.app.master.MainActivity
 import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
@@ -14,18 +13,13 @@ import org.android.eventbus.EventBus
 import org.android.eventbus.Subscriber
 
 @InjectPresenter(value = "catt.mvp.sample.presenter.MainActivityPresenter")
-class MainActivityImpl : ProxyBaseActivity<MainActivity>(), IMainActivityIFS.View {
+class MainActivityImpl : ProxyBaseActivity<MainActivity>(), IMainActivity.View {
 
     private val _TAG: String by lazy { MainActivityImpl::class.java.simpleName }
 
     override fun onCreate() {
         super.onCreate()
         e(_TAG, "onCreate: ${R.id.container_layout}, lifecycle.state = $currentLifecycleState")
-        val newInstanceOrigin = MainFragmentImpl::class.java.newInstanceOrigin<Fragment>()
-
-
-        e(_TAG, "newInstanceOrigin::class.java=${newInstanceOrigin::class.java}")
-
         fragmentTransaction?.commitFragment(R.id.container_layout, MainFragmentImpl::class.java.newInstanceOrigin())
         EventBus.getDefault().register(this)
     }
@@ -49,6 +43,8 @@ class MainActivityImpl : ProxyBaseActivity<MainActivity>(), IMainActivityIFS.Vie
 
     override fun onViewLoadCompleted() {
         e(_TAG, "onViewLoadCompleted: lifecycle.state = $currentLifecycleState")
+
+        getPresenterInterface<IMainActivity.Presenter>().setContent()
     }
 
     override fun onDestroy() {

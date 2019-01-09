@@ -15,8 +15,7 @@ import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
-abstract class BaseFragment : CompatLayoutFragment(),
-    IProxy {
+abstract class BaseFragment : CompatLayoutFragment(), IProxy {
 
     private val _TAG by lazy { BaseFragment::class.java.simpleName }
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseFragment) }

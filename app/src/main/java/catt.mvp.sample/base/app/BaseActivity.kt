@@ -18,8 +18,7 @@ import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 
 
-abstract class BaseActivity : CompatLayoutActivity(),
-    IProxy, PermissionHelper.OnPermissionListener {
+abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.OnPermissionListener {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 
