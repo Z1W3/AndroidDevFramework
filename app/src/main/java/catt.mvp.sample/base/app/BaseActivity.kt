@@ -1,6 +1,7 @@
 package catt.mvp.sample.base.app
 
 import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -18,7 +19,7 @@ import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.proxy.ProxyBaseActivity
 
 
-abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.OnPermissionListener {
+abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.OnPermissionListener, LifecycleOwner {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 
