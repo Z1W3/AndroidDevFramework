@@ -36,6 +36,7 @@ class MainDialogFragmentImpl : ProxyBaseDialogFragment<MainDialogFragment>(), IM
             EventBus.getDefault().post(User("LuckyCatt", 30, 110101209900000019),
                 EVENT_BUS_TAG
             )
+            getPresenterInterface<IMainDialogFragment.Presenter>().setContent()
         }
     }
 

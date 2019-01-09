@@ -9,6 +9,7 @@ import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainFragment
 import catt.mvp.sample.app.master.MainFragment
 import catt.mvp.sample.base.function.component.newInstanceOrigin
+import catt.mvp.sample.base.function.component.show
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 
@@ -23,8 +24,7 @@ class MainFragmentImpl : ProxyBaseFragment<MainFragment>(), IMainFragment.View {
         e(_TAG, "onViewCreated:")
         view.findViewById<Button>(R.id.dialog_btn).setOnClickListener {
             target?.apply {
-                MainDialogFragmentImpl::class.java.newInstanceOrigin<DialogFragment>()
-                    .show(childFragmentManager, MainDialogFragmentImpl::class.java.simpleName)
+                MainDialogFragmentImpl::class.java.newInstanceOrigin<DialogFragment>().show(fragmentTransaction!!)
             }
         }
     }
