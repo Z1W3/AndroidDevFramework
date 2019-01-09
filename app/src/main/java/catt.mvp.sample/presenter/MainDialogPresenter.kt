@@ -1,9 +1,9 @@
 package catt.mvp.sample.presenter
 
-import catt.mvp.sample.app.interfaces.IMainDialogFragmentIFS
-import catt.mvp.sample.base.mvp.presenter.BasePresenter
+import catt.mvp.sample.app.interfaces.IMainDialogFragment
+import catt.mvp.sample.base.presenter.BasePresenter
 
-class MainDialogPresenter : BasePresenter<IMainDialogFragmentIFS.View>(), IMainDialogFragmentIFS.Presenter {
+class MainDialogPresenter : BasePresenter(), IMainDialogFragment.Presenter {
     init {
         Thread{
             Thread.sleep(1000L)
@@ -12,7 +12,7 @@ class MainDialogPresenter : BasePresenter<IMainDialogFragmentIFS.View>(), IMainD
     }
 
     override fun setContent() {
-        viewIFS?.onContent("This is MainDialogPresenter")
+        getViewInterface<IMainDialogFragment.View>().onContent("This is MainDialogPresenter")
     }
 
     override fun onDestroy() {

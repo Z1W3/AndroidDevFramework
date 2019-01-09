@@ -6,19 +6,19 @@ import android.os.Bundle
 import android.view.View
 import catt.compat.layout.app.CompatLayoutActivity
 import catt.mvp.sample.R
-import catt.mvp.sample.base.proxy.IProxy
-import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.IPermissionComponent
 import catt.mvp.sample.base.function.helper.PermissionHelper
-import catt.mvp.sample.base.mvp.presenter.BasePresenter
-import catt.mvp.sample.base.proxy.ProxyBaseActivity
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 import android.arch.lifecycle.LifecycleRegistry
+import android.support.v4.app.DialogFragment
+import catt.mvp.sample.base.adm.BaseActivityStack
+import catt.mvp.sample.base.adm.BaseDialogFragmentStack
+import catt.mvp.sample.base.proxy.IProxy
+import catt.mvp.sample.base.proxy.ProxyBaseActivity
 
 
-abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
-    IProxy<T>, PermissionHelper.OnPermissionListener {
+abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.OnPermissionListener {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 
@@ -28,8 +28,8 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
 
     abstract fun injectLayoutId():Int
 
-    override val proxy: ProxyBaseActivity<T, *, BasePresenter<*>> by lazy {
-        injectProxyImpl() as ProxyBaseActivity<T, *, BasePresenter<*>>
+    override val proxy:ProxyBaseActivity<*> by lazy {
+        injectProxyImpl() as ProxyBaseActivity<*>
     }
 
     override fun getLifecycle(): Lifecycle {
@@ -38,6 +38,7 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         BaseActivityStack.get().push(this@BaseActivity)
+//        hideSystemUI()
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         lifecycleRegistry.addObserver(proxy)
@@ -58,6 +59,7 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
         super.onResume()
         isPaused = false
         MobclickAgent.onResume(this)
+        hideSystemUI()
     }
 
     override fun onPause() {
@@ -76,10 +78,34 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        proxy.onActivityResult(requestCode, resultCode, data)
         permission.onActivityResultForPermissions(requestCode, resultCode, data)
-        for (fragment in supportFragmentManager.fragments) {
-            fragment.onActivityResult(requestCode, resultCode, data)
+
+        when(isContainDialogFragment()){
+            true->{
+                for (fragment in supportFragmentManager.fragments) {
+                    fragment.onActivityResult(requestCode, resultCode, data)
+                }
+            }
+            false->{
+                for (fragment in supportFragmentManager.fragments) {
+                    fragment.onActivityResult(requestCode, resultCode, data)
+                }
+                val statisticsShowingArray = BaseDialogFragmentStack.get().statisticsShowingDialog()
+                for(index:Int in statisticsShowingArray.indices){
+                    statisticsShowingArray[index].onActivityResult(requestCode, resultCode, data)
+                }
+            }
         }
+    }
+
+    private fun isContainDialogFragment():Boolean{
+        for(fragment in supportFragmentManager.fragments){
+            if(fragment is DialogFragment){
+                return true
+            }
+        }
+        return false
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -89,5 +115,23 @@ abstract class BaseActivity<T : CompatLayoutActivity> : CompatLayoutActivity(),
 
     private fun View.postOnViewLoadCompleted() {
         post { proxy.onViewLoadCompleted() }
+    }
+
+    fun hideSystemUI() {
+        val decorView = window.decorView
+        val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        decorView.systemUiVisibility = flags
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus){
+            hideSystemUI()
+        }
     }
 }

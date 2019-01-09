@@ -1,4 +1,4 @@
-package catt.mvp.sample.base.mvp.model.network
+package catt.mvp.sample.base.model.network.interceptor
 
 import android.util.Log.i
 import okhttp3.Interceptor

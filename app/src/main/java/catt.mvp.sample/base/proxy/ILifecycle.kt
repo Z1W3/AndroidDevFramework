@@ -5,10 +5,12 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Context
+import android.content.Intent
 import java.lang.ref.Reference
 
 
 interface ILifecycle<T> : LifecycleObserver {
+
     val reference: Reference<T>?
 
     val currentLifecycleState: Lifecycle.State
@@ -16,6 +18,8 @@ interface ILifecycle<T> : LifecycleObserver {
     val target: T?
 
     val context: Context?
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate()

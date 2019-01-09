@@ -1,6 +1,10 @@
-package catt.mvp.sample.base.mvp.model.network
+package catt.mvp.sample.base.model.network.base
 
 import catt.mvp.sample.BuildConfig
+import catt.mvp.sample.base.model.network.interceptor.HeaderInterceptor
+import catt.mvp.sample.base.model.network.interceptor.LoggingInterceptor
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,4 +34,9 @@ object OkRft {
 
     @JvmStatic
     fun <T> create(service:Class<T>) : T = apiRetrofit.create(service)
+
+
+    @JvmStatic
+    val gson:Gson by lazy { GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create() }
+
 }

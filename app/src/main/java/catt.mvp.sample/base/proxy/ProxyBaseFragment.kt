@@ -3,14 +3,16 @@ package catt.mvp.sample.base.proxy
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import catt.mvp.sample.base.adm.BaseFragmentStack
+import catt.mvp.sample.base.app.BaseFragment
 import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.mvp.presenter.BasePresenter
+import catt.mvp.sample.base.proxy.annotations.InjectPresenter
+import catt.mvp.sample.base.proxy.component.ProxyAnalyticalComponent
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -18,18 +20,31 @@ import java.lang.reflect.Type
 
 /**
  * 泛型注释
- * type T, 需要代理实现的Fragment
- * type V, View Interface
- * type P, Presenter类,
- *
- * 功能：
- * 获取代理Fragment类的对象
- * 对代理Fragment类进行弱引用处理
- * 获取Presenter类的对象
+ * type T, 需要被代理的Fragment
  */
-abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
-    : ILifecycle<T>, IGlideComponent, IToastyComponent, ISupportFragmentComponent, IDialogComponent,
-    ISuperClassComponent {
+abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, ProxyAnalyticalComponent, IDialogComponent {
+    private val injectPresenter: InjectPresenter by lazy {
+        this@ProxyBaseFragment::class.java.getInjectPresenter()
+    }
+
+    private val presenterInstance by lazy {
+        newInstancePresenter(injectPresenter) }
+
+    private val presenterClazz by lazy {
+        presenterInstance::class.java.getDeclaredPresenterClass()
+    }
+
+    private val castPresenter by lazy {
+        presenterClazz.castPresenter(presenterInstance)
+    }
+
+    override fun <T> getPresenterInterface(): T = castPresenter as T
+
+    private val viewClass: Class<out Any> by lazy {
+        this@ProxyBaseFragment::class.java.getDeclaredViewClass()
+    }
+
+    abstract val tag: String
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
 
@@ -42,10 +57,8 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
             return (genType as ParameterizedType).actualTypeArguments
         }
 
-    private val fragment : T?
+    private val fragment: T?
         get() = BaseFragmentStack.get().search(declaredClazz[0] as Class<T>)
-
-    val presenter: P by lazy { (declaredClazz[declaredClazz.size - 1] as Class<P>).getConstructor().newInstance() }
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(fragment)
@@ -54,7 +67,7 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
     override val target: T?
         get() = reference?.get()
 
-    val activity:FragmentActivity?
+    val activity: FragmentActivity?
         get() = target?.activity
 
     override val context: Context?
@@ -67,18 +80,22 @@ abstract class ProxyBaseFragment<T: Fragment, V, P: BasePresenter<V>>
     }
 
     open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        presenter.onAttach(this as V)
+        presenterInstance.onAttach(viewClass, this@ProxyBaseFragment)
     }
 
     open fun onActivityCreated(savedInstanceState: Bundle?, arguments: Bundle?) {
 
     }
 
-    open fun onDestroyView() {
-        presenter.onDetach()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
     }
 
-    open fun onHiddenChanged(hidden: Boolean){}
+    open fun onDestroyView() {
+        presenterInstance.onDetach()
+    }
+
+    open fun onHiddenChanged(hidden: Boolean) {}
 
     override fun onStart() {}
 
