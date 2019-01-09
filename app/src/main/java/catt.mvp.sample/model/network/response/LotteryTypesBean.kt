@@ -1,10 +1,10 @@
 package catt.mvp.sample.model.network.response
 
-import catt.mvp.sample.base.model.network.resopnse.JsonField
-import catt.mvp.sample.base.model.network.resopnse.JsonTargetDataField
+import catt.mvp.sample.base.model.network.resopnse.JsonCallField
+import catt.mvp.sample.base.model.network.resopnse.JsonCallDataTargetField
 
-@JsonField
-@JsonTargetDataField(hierarchy = "appTicketTypeVos")
+@JsonCallField
+@JsonCallDataTargetField(hierarchy = "appTicketTypeVos")
 class LotteryTypesBean {
     /**
      * 彩种id
@@ -30,4 +30,8 @@ class LotteryTypesBean {
      * 彩种货币种类
      */
     var currencyType: String = ""
+
+    override fun toString(): String {
+        return "LotteryTypesBean(id='$id', logo='$logo', label='$label', parValue=$parValue, currencyType='$currencyType')"
+    }
 }

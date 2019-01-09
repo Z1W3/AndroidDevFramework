@@ -3,7 +3,7 @@ package catt.mvp.sample.base.model.network.resopnse
 
 @Target(AnnotationTarget.CLASS)
 @MustBeDocumented
-annotation class JsonField(
+annotation class JsonCallField(
     val code: String = "code",
     val msg: String = "msg",
     val timestamp: String = "timestamp",
@@ -22,4 +22,4 @@ annotation class JsonField(
  *      // 追中获取字段nameVo
  * </pre>
  */
-annotation class JsonTargetDataField(val hierarchy: String = "")
+annotation class JsonCallDataTargetField(val hierarchy: String = "")

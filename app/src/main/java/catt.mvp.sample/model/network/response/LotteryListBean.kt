@@ -1,13 +1,10 @@
 package catt.mvp.sample.model.network.response
 
-import catt.mvp.sample.base.model.network.resopnse.JsonTargetDataField
-import catt.mvp.sample.base.model.network.resopnse.JsonField
+import catt.mvp.sample.base.model.network.resopnse.JsonCallField
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
-@JsonField
-//parent data
-//data
-@JsonTargetDataField("accountVo/userVo/nameVos")
+@JsonCallField
 class LotteryListBean{
 
 
@@ -27,4 +24,9 @@ class LotteryListBean{
      */
     @SerializedName("ticketList")
     var list: Array<String> = arrayOf()
+
+
+    override fun toString(): String {
+        return "LotteryListBean(verticalImage='$verticalImage', parValue=$parValue, list=${Arrays.toString(list)})"
+    }
 }

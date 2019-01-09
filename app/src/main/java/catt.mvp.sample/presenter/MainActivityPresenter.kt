@@ -3,8 +3,8 @@ package catt.mvp.sample.presenter
 import catt.mvp.sample.app.interfaces.IMainActivityIFS
 import catt.mvp.sample.base.model.network.base.OkRft
 import catt.mvp.sample.base.model.network.callback.SimpleCallResult
-import catt.mvp.sample.base.model.network.component.callResponseForArray
-import catt.mvp.sample.base.model.network.component.callResponseForObject
+import catt.mvp.sample.base.model.network.component.callJsonArrayResponse
+import catt.mvp.sample.base.model.network.component.callJsonObjectResponse
 import catt.mvp.sample.base.presenter.BasePresenter
 import catt.mvp.sample.model.network.IDggStoreService
 import catt.mvp.sample.model.network.response.LotteryListBean
@@ -26,8 +26,7 @@ class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActiv
     }
 
     override fun setContent() {
-        val call: Call<ResponseBody> = dggService.getLotteryTypes()
-        call.callResponseForArray(result = object : SimpleCallResult<Array<LotteryTypesBean>>(){
+        dggService.getLotteryTypes().callJsonArrayResponse(result = object : SimpleCallResult<Array<LotteryTypesBean>>(){
             override fun onAfterFailure(code: Int, call: Call<ResponseBody>, ex: Throwable) {
                 super.onAfterFailure(code, call, ex)
             }
@@ -42,17 +41,11 @@ class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActiv
             override fun onResponse(response: Array<LotteryTypesBean>) {
                 println("response.size = ${response.size}")
             }
-        }, coroutine = this)
+        }, coroutine = this@MainActivityPresenter)
 
 
-        call.callResponseForObject(result = object : SimpleCallResult<LotteryListBean>(){
-
-            override fun onAfterFailure(code: Int, call: Call<ResponseBody>, ex: Throwable) {
-                super.onAfterFailure(code, call, ex)
-            }
-
+        dggService.getLotteryList("1", 0).callJsonObjectResponse(result = object : SimpleCallResult<LotteryListBean>(){
             override fun onCheckLocalWifi() {
-                super.onCheckLocalWifi()
             }
 
             override fun onFailure2(code: Int, ex: Throwable) {
@@ -61,9 +54,9 @@ class MainActivityPresenter : BasePresenter<IMainActivityIFS.View>(), IMainActiv
 
 
             override fun onResponse(response: LotteryListBean) {
-
+                println("onResponse: $response")
             }
-        })
+        }, coroutine = this@MainActivityPresenter)
     }
 
 
