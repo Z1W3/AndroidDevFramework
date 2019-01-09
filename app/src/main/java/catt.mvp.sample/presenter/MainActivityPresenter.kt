@@ -4,11 +4,11 @@ import catt.mvp.sample.app.interfaces.IMainActivityIFS
 import catt.mvp.sample.base.model.network.base.OkRft
 import catt.mvp.sample.base.model.network.callback.SimpleCallResult
 import catt.mvp.sample.base.model.network.component.callJsonObjectResponse
-import catt.mvp.sample.base.presenter.BasePresenter2
+import catt.mvp.sample.base.presenter.BasePresenter
 import catt.mvp.sample.model.network.IDggStoreService
 import catt.mvp.sample.model.network.response.LotteryListBean
 
-class MainActivityPresenter : BasePresenter2(), IMainActivityIFS.Presenter {
+class MainActivityPresenter : BasePresenter(), IMainActivityIFS.Presenter {
 
     private val _TAG:String by lazy { MainActivityPresenter::class.java.simpleName }
 

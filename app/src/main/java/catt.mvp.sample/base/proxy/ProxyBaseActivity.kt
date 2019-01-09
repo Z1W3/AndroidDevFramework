@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import catt.mvp.sample.base.adm.BaseActivityStack
 import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.function.helper.PermissionHelper
-import catt.mvp.sample.base.presenter.BasePresenter2
+import catt.mvp.sample.base.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
 import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 import catt.mvp.sample.base.proxy.throwables.ProxyArgumentException
@@ -38,7 +38,10 @@ abstract class ProxyBaseActivity<T : AppCompatActivity> : ILifecycle<T>, Permiss
         annotation
     }
 
-    val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter2 }
+    private val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter }
+
+
+
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseActivity::class.java.interfaces.forEach {

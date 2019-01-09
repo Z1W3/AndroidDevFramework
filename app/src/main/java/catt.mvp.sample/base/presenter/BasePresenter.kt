@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 import java.lang.ClassCastException
 import kotlin.coroutines.CoroutineContext
 
-abstract class BasePresenter2: CoroutineScope{
+abstract class BasePresenter: CoroutineScope{
     private val job: Job by lazy { Job() }
 
     override val coroutineContext: CoroutineContext by lazy { job + Dispatchers.Main }

@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentTransaction
 import android.view.View
 import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.presenter.BasePresenter2
+import catt.mvp.sample.base.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
 import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 import catt.mvp.sample.base.proxy.throwables.ProxyArgumentException
@@ -40,7 +40,7 @@ abstract class ProxyBaseFragment<T : Fragment>
         annotation
     }
 
-    val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter2 }
+    val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter }
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseFragment::class.java.interfaces.forEach {

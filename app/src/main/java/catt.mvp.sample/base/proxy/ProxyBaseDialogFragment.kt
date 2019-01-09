@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import catt.mvp.sample.base.adm.BaseDialogFragmentStack
 import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.presenter.BasePresenter2
+import catt.mvp.sample.base.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
 import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 import catt.mvp.sample.base.proxy.throwables.ProxyArgumentException
@@ -40,7 +40,7 @@ abstract class ProxyBaseDialogFragment<T: DialogFragment> : ILifecycle<T>, IDial
         annotation
     }
 
-    val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter2 }
+    val presenter by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter }
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseDialogFragment::class.java.interfaces.forEach {

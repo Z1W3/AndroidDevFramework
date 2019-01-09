@@ -1,9 +1,9 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainFragmentInterIFS
-import catt.mvp.sample.base.presenter.BasePresenter2
+import catt.mvp.sample.base.presenter.BasePresenter
 
-class MainFragmentPresenter : BasePresenter2(), IMainFragmentInterIFS.Presenter {
+class MainFragmentPresenter : BasePresenter(), IMainFragmentInterIFS.Presenter {
 
     init {
         Thread{
