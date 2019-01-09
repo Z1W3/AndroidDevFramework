@@ -64,19 +64,9 @@ interface ICallResult<T> {
      *
      * @param ex
      */
-    fun onFailure2(code: Int, ex: Throwable) {
+    fun onFailure(code: Int, ex: Throwable) {
         displayToast(code, ex)
     }
-
-    /**
-     * 请求失败时的处理
-     *
-     * @param ex
-     */
-    fun onFailure(ex: Throwable) {
-
-    }
-
 
     private fun displayToast(code: Int, ex: Throwable){
         when  {

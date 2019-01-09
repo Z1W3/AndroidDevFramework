@@ -1,6 +1,6 @@
 package catt.mvp.sample.model.network.response
 
-import catt.mvp.sample.base.model.network.resopnse.JsonCallField
+import catt.mvp.sample.base.model.network.annotations.JsonCallField
 import com.google.gson.annotations.SerializedName
 import java.util.*
 

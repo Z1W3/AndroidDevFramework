@@ -4,7 +4,7 @@ import java.lang.reflect.GenericArrayType
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-fun <T> Class<*>.newInstance(indexType: Int = 0): T =
+fun <T> Class<*>.newInstanceOrigin(indexType: Int = 0): T =
     ((this.genericSuperclass as ParameterizedType).actualTypeArguments[indexType] as Class<*>).newInstance() as T
 
 

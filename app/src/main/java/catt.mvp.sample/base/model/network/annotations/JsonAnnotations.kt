@@ -1,4 +1,4 @@
-package catt.mvp.sample.base.model.network.resopnse
+package catt.mvp.sample.base.model.network.annotations
 
 
 @Target(AnnotationTarget.CLASS)

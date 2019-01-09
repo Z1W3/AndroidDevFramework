@@ -5,16 +5,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import catt.mvp.sample.R
-import catt.mvp.sample.app.interfaces.IMainDialogFragmentIFS
+import catt.mvp.sample.app.interfaces.IMainDialogFragment
 import catt.mvp.sample.app.master.MainDialogFragment
 import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
+import catt.mvp.sample.base.proxy.annotations.InjectPresenter
 import catt.mvp.sample.model.User
-import catt.mvp.sample.presenter.MainDialogPresenter
 import org.android.eventbus.EventBus
 
-class MainDialogFragmentImpl
-    : ProxyBaseDialogFragment<MainDialogFragment, IMainDialogFragmentIFS.View, MainDialogPresenter>(),
-    IMainDialogFragmentIFS.View {
+@InjectPresenter("catt.mvp.sample.presenter.MainDialogPresenter")
+class MainDialogFragmentImpl : ProxyBaseDialogFragment<MainDialogFragment>(), IMainDialogFragment.View {
 
 
     private val _TAG : String by lazy { MainFragmentImpl::class.java.simpleName }
@@ -34,7 +33,9 @@ class MainDialogFragmentImpl
 //                flags = Intent.FLAG_ACTIVITY_NEW_TASK
 //            })
 
-            EventBus.getDefault().post(User("LuckyCatt", 30, 110101209900000019), EVENT_BUS_TAG)
+            EventBus.getDefault().post(User("LuckyCatt", 30, 110101209900000019),
+                EVENT_BUS_TAG
+            )
         }
     }
 

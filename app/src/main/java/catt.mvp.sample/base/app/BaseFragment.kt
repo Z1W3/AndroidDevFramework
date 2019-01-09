@@ -10,14 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutFragment
 import catt.mvp.sample.base.adm.BaseFragmentStack
-import catt.mvp.sample.base.presenter.BasePresenter
 import catt.mvp.sample.base.proxy.IProxy
 import catt.mvp.sample.base.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
-abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
-    IProxy<T> {
+abstract class BaseFragment : CompatLayoutFragment(), IProxy {
 
     private val _TAG by lazy { BaseFragment::class.java.simpleName }
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseFragment) }
@@ -30,8 +28,8 @@ abstract class BaseFragment<T : CompatLayoutFragment> : CompatLayoutFragment(),
 
     abstract fun injectLayoutId(): Int
 
-    override val proxy: ProxyBaseFragment<T, *, BasePresenter<*>>by lazy {
-        injectProxyImpl() as ProxyBaseFragment<T, *, BasePresenter<*>>
+    override val proxy: ProxyBaseFragment<*>by lazy {
+        injectProxyImpl() as ProxyBaseFragment<*>
     }
 
     val fragmentTransaction: FragmentTransaction

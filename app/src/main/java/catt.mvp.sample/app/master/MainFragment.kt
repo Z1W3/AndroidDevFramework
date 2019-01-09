@@ -5,7 +5,7 @@ import catt.mvp.sample.app.proxy.MainFragmentImpl
 import catt.mvp.sample.base.app.BaseFragment
 import catt.mvp.sample.base.proxy.ILifecycle
 
-class MainFragment : BaseFragment<MainFragment>() {
+class MainFragment : BaseFragment() {
     override fun pageLabel(): String = "演示DialogFragment"
     override fun injectLayoutId(): Int = R.layout.fragment_main
 

@@ -5,9 +5,9 @@ import android.util.Log
 import catt.mvp.sample.base.app.BaseFragment
 import java.util.*
 
-internal class BaseFragmentStack : IStack<BaseFragment<*>> {
-    private val stack: Stack<BaseFragment<*>> by lazy { Stack<BaseFragment<*>>() }
-    override fun push(target: BaseFragment<*>) {
+internal class BaseFragmentStack : IStack<BaseFragment> {
+    private val stack: Stack<BaseFragment> by lazy { Stack<BaseFragment>() }
+    override fun push(target: BaseFragment) {
         synchronized(target) {
             stack.remove(target)
             Log.e("FragmentStack", "push name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
@@ -22,19 +22,19 @@ internal class BaseFragmentStack : IStack<BaseFragment<*>> {
         }
     }
 
-    override fun remove(target: BaseFragment<*>) {
+    override fun remove(target: BaseFragment) {
         Log.e("FragmentStack", "remove name=${target::class.java.name}, isPaused=${target.isPaused}, hashCode=${target.hashCode()}")
         stack.remove(target)
     }
 
-    override fun peek(): BaseFragment<*>? {
+    override fun peek(): BaseFragment? {
         if (empty()) return null
         return stack.peek()
     }
 
     override fun empty(): Boolean = stack.empty()
 
-    override fun search(target: BaseFragment<*>): BaseFragment<*>? {
+    override fun search(target: BaseFragment): BaseFragment? {
         val absoluteIndex = stack.search(target)
         return when (!stack.empty() && absoluteIndex != -1) {
             true -> stack[absoluteIndex - 1]

@@ -5,11 +5,12 @@ import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AppCompatActivity
 import catt.mvp.sample.base.adm.BaseActivityStack
+import catt.mvp.sample.base.app.BaseActivity
 import catt.mvp.sample.base.function.component.*
 import catt.mvp.sample.base.function.helper.PermissionHelper
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.sample.base.proxy.annotations.InjectPresenter
+import catt.mvp.sample.base.proxy.component.ProxyAnalyticalComponent
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -17,18 +18,31 @@ import java.lang.reflect.Type
 
 
 /**
- * 泛型注释
- * type T, 需要代理实现的Activity
- * type V, View Interface
- * type P, Presenter类,
  *
- * 功能：
- * 获取代理Activity类的对象
- * 对代理Activity类进行弱引用处理
- * 获取Presenter类的对象
+ * 泛型T，需要被代理的Activity
  */
-abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
-    : ILifecycle<T>, PermissionHelper.OnPermissionListener, IDialogComponent {
+abstract class ProxyBaseActivity<T : BaseActivity> : ILifecycle<T>, ProxyAnalyticalComponent, PermissionHelper.OnPermissionListener, IDialogComponent {
+
+    private val injectPresenter: InjectPresenter by lazy {
+        this@ProxyBaseActivity::class.java.getInjectPresenter()
+    }
+
+    private val presenterInstance by lazy {
+        newInstancePresenter(injectPresenter) }
+
+    private val presenterClazz by lazy {
+        presenterInstance::class.java.getDeclaredPresenterClass()
+    }
+
+    private val castPresenter by lazy {
+        presenterClazz.castPresenter(presenterInstance)
+    }
+
+    override fun <T> getPresenterInterface(): T = castPresenter as T
+
+    private val viewClass: Class<out Any> by lazy {
+        this@ProxyBaseActivity::class.java.getDeclaredViewClass()
+    }
 
     private var lifecycleState: Lifecycle.State = Lifecycle.State.INITIALIZED
 
@@ -44,9 +58,6 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
     private val activity : T?
         get() = BaseActivityStack.get().search(declaredClazz[0] as Class<T>)
 
-
-    val presenter : P by lazy { (declaredClazz[declaredClazz.size - 1]as Class<P>).getConstructor().newInstance() }
-
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(activity)
     }
@@ -61,11 +72,14 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
         get() = target?.supportFragmentManager?.beginTransaction()
 
     override fun onCreate() {
-        presenter.onAttach(this as V)
+        presenterInstance.onAttach(viewClass, this@ProxyBaseActivity)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
+    }
+
+    override fun onViewLoadCompleted() {
     }
 
     open fun onRestart(){}
@@ -84,6 +98,6 @@ abstract class ProxyBaseActivity<T : AppCompatActivity, V, P: BasePresenter<V>>
 
 
     override fun onDestroy() {
-        presenter.onDetach()
+        presenterInstance.onDetach()
     }
 }

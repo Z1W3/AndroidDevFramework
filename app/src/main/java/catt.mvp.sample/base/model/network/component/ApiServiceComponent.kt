@@ -6,8 +6,8 @@ import catt.mvp.sample.base.function.component.generatedArrayTypeClass
 import catt.mvp.sample.base.function.component.generatedTypeClass
 import catt.mvp.sample.base.model.network.base.OkRft
 import catt.mvp.sample.base.model.network.callback.ICallResult
-import catt.mvp.sample.base.model.network.resopnse.JsonCallDataTargetField
-import catt.mvp.sample.base.model.network.resopnse.JsonCallField
+import catt.mvp.sample.base.model.network.annotations.JsonCallDataTargetField
+import catt.mvp.sample.base.model.network.annotations.JsonCallField
 import catt.mvp.sample.base.model.network.throwables.ResponseBodyException
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
@@ -195,8 +195,7 @@ private fun <T, A : Annotation> Class<T>.getJsonAnnotation(annotation: Class<A>)
 
 private fun <T> onFailure(code:Int, call: Call<ResponseBody>, result: ICallResult<T>, t: Throwable) {
     try {
-        result.onFailure2(code, t)
-        result.onFailure(t)
+        result.onFailure(code, t)
     } finally {
         if(BuildConfig.DEBUG){
             Log.w("Http:onFailure", "Call_____$call")

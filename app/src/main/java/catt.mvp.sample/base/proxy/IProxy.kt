@@ -1,7 +1,9 @@
 package catt.mvp.sample.base.proxy
 
-interface IProxy<T> {
-    fun injectProxyImpl(): ILifecycle<T>
+interface IProxy {
+    fun injectProxyImpl(): ILifecycle<*>
 
-    val proxy: ILifecycle<T>
+//    fun <T> getProxy() : ILifecycle<T>
+
+    val proxy: ILifecycle<*>
 }
