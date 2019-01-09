@@ -5,19 +5,14 @@ import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import catt.mvp.sample.base.adm.BaseFragmentStack
 import catt.mvp.sample.base.app.BaseFragment
 import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.presenter.BasePresenter
-import catt.mvp.sample.base.proxy.annotations.DeclaredPresenterInterface
-import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
 import catt.mvp.sample.base.proxy.annotations.InjectPresenter
-import catt.mvp.sample.base.proxy.throwables.ProxyArgumentException
-import java.lang.ClassCastException
+import catt.mvp.sample.base.proxy.component.ProxyAnalyticalComponent
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -27,40 +22,26 @@ import java.lang.reflect.Type
  * 泛型注释
  * type T, 需要被代理的Fragment
  */
-abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, IDialogComponent {
-
+abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, ProxyAnalyticalComponent, IDialogComponent {
     private val injectPresenter: InjectPresenter by lazy {
-        val annotation = this@ProxyBaseFragment::class.java.getAnnotation(InjectPresenter::class.java)
-        annotation?: throw ProxyArgumentException("Must be declaration annotation class InjectPresenter")
-        annotation
+        this@ProxyBaseFragment::class.java.getInjectPresenter()
     }
 
-    private val presenterInstance by lazy { Class.forName(injectPresenter.value).newInstance() as BasePresenter }
+    private val presenterInstance by lazy {
+        newInstancePresenter(injectPresenter) }
 
     private val presenterClazz by lazy {
-        presenterInstance::class.java.interfaces.forEach {
-            it.getAnnotation(DeclaredPresenterInterface::class.java)?.apply {
-                return@lazy presenterInstance::class.java.asSubclass(it)
-            }
-        }
-        throw ProxyArgumentException("Must be declaration annotation class DeclaredViewInterface")
+        presenterInstance::class.java.getDeclaredPresenterClass()
     }
 
     private val castPresenter by lazy {
-        val cast = presenterClazz.cast(presenterInstance)
-        cast ?: throw ClassCastException("View convert error.")
-        cast!!
+        presenterClazz.castPresenter(presenterInstance)
     }
 
-    fun <T> getPresenterInterface(): T = castPresenter as T
+    override fun <T> getPresenterInterface(): T = castPresenter as T
 
     private val viewClass: Class<out Any> by lazy {
-        this@ProxyBaseFragment::class.java.interfaces.forEach {
-            it.getAnnotation(DeclaredViewInterface::class.java)?.apply {
-                return@lazy this@ProxyBaseFragment::class.java.asSubclass(it)
-            }
-        }
-        throw ProxyArgumentException("Must be declaration annotation class DeclaredViewInterface")
+        this@ProxyBaseFragment::class.java.getDeclaredViewClass()
     }
 
     abstract val tag: String
