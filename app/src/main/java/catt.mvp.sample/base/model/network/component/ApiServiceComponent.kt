@@ -4,7 +4,7 @@ import android.util.Log
 import catt.mvp.sample.BuildConfig
 import catt.mvp.sample.base.function.component.generatedArrayTypeClass
 import catt.mvp.sample.base.function.component.generatedTypeClass
-import catt.mvp.sample.base.model.network.base.OkRft
+import catt.mvp.sample.base.model.network.base.OkRetrofit
 import catt.mvp.sample.base.model.network.callback.ICallResult
 import catt.mvp.sample.base.model.network.annotations.JsonCallDataTargetField
 import catt.mvp.sample.base.model.network.annotations.JsonCallField
@@ -59,7 +59,7 @@ fun <B> Call<ResponseBody>.callJsonArrayResponse(result: ICallResult<Array<B>>, 
 
                         val list = arrayListOf<B>()
                         for (index: Int in 0 until jsonArray.size()) {
-                            list.add(OkRft.gson.fromJson(jsonArray[index], clazz))
+                            list.add(OkRetrofit.gson.fromJson(jsonArray[index], clazz))
                         }
                         withContext(Dispatchers.Main){
                             result.onResponse(
@@ -120,7 +120,7 @@ fun <B> Call<ResponseBody>.callJsonObjectResponse(result: ICallResult<B>, corout
                             if(!targetDataElement.isJsonObject){
                                 throw JsonParseException("Json field must be JsonObject")
                             }
-                            val fromJson = OkRft.gson.fromJson(targetDataElement, clazz)
+                            val fromJson = OkRetrofit.gson.fromJson(targetDataElement, clazz)
                             withContext(Dispatchers.Main){
                                 result.onResponse(fromJson)
                             }

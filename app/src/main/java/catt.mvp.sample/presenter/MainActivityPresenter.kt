@@ -1,7 +1,7 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainActivity
-import catt.mvp.sample.base.model.network.base.OkRft
+import catt.mvp.sample.base.model.network.base.OkRetrofit
 import catt.mvp.sample.base.model.network.callback.SimpleCallResult
 import catt.mvp.sample.base.model.network.component.callJsonArrayResponse
 import catt.mvp.sample.base.model.network.component.callJsonObjectResponse
@@ -17,7 +17,7 @@ class MainActivityPresenter : BasePresenter(), IMainActivity.Presenter {
 
     private val _TAG:String by lazy { MainActivityPresenter::class.java.simpleName }
 
-    private val dggService:IDggStoreService by lazy { OkRft.create(IDggStoreService::class.java) }
+    private val dggService:IDggStoreService by lazy { OkRetrofit.create(IDggStoreService::class.java) }
 
     override fun setContent() {
         dggService.getLotteryTypes().callJsonArrayResponse(result = object : SimpleCallResult<Array<LotteryTypesBean>>(){

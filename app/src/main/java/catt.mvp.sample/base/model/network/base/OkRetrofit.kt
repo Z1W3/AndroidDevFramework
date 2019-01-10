@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-object OkRft {
+object OkRetrofit {
 
     @JvmStatic
     private val okHttpClient:OkHttpClient by lazy {
