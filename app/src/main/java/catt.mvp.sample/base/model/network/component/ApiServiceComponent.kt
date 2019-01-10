@@ -8,6 +8,7 @@ import catt.mvp.sample.base.model.network.base.OkRft
 import catt.mvp.sample.base.model.network.callback.ICallResult
 import catt.mvp.sample.base.model.network.annotations.JsonCallDataTargetField
 import catt.mvp.sample.base.model.network.annotations.JsonCallField
+import catt.mvp.sample.base.model.network.base.EmptyJsonData
 import catt.mvp.sample.base.model.network.throwables.ResponseBodyException
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
@@ -105,7 +106,7 @@ fun <B> Call<ResponseBody>.callJsonObjectResponse(result: ICallResult<B>, corout
                     }
                     val clazz: Class<B> = result::class.java.generatedTypeClass()
                     val root = JsonParser().parse(jsonStr).asJsonObject
-                    val dataElement = clazz.getJsonAnnotation(JsonCallField::class.java).run json@{
+                    val dataElement:JsonElement? = clazz.getJsonAnnotation(JsonCallField::class.java).run json@{
                         code = root.getAsJsonPrimitive(this@json.code).asInt
                         if (root.has(this@json.msg)) {
                             msg = root.getAsJsonPrimitive(this@json.msg).asString
@@ -114,19 +115,20 @@ fun <B> Call<ResponseBody>.callJsonObjectResponse(result: ICallResult<B>, corout
                         root.get(this@json.data)
                     }
                     if (code == 1) {
-                        if(dataElement.isJsonNull){
-                            throw JsonParseException("json field must not be null")
+                        if(dataElement != null && !dataElement.isJsonNull){
+                            val targetDataElement = getJsonCallDataTargetElement(clazz, dataElement)
+                            if(!targetDataElement.isJsonObject){
+                                throw JsonParseException("Json field must be JsonObject")
+                            }
+                            val fromJson = OkRft.gson.fromJson(targetDataElement, clazz)
+                            withContext(Dispatchers.Main){
+                                result.onResponse(fromJson)
+                            }
                         }
-                        val targetDataElement = getJsonCallDataTargetElement(clazz, dataElement)
-                        if(targetDataElement.isJsonNull){
-                            throw JsonParseException("json field must not be null")
-                        }
-                        if(!dataElement.isJsonObject){
-                            throw JsonParseException("Json field must be JsonObject")
-                        }
-                        val fromJson = OkRft.gson.fromJson(dataElement, clazz)
-                        withContext(Dispatchers.Main){
-                            result.onResponse(fromJson)
+                        else {
+                            withContext(Dispatchers.Main){
+                                result.onResponse(EmptyJsonData() as B)
+                            }
                         }
                     }
                     else throw ResponseBodyException(msg)
@@ -190,7 +192,7 @@ private fun <T, A : Annotation> Class<T>.getJsonAnnotation(annotation: Class<A>)
             any::class.java.getAnnotation(annotation)
         }
         false -> this.getAnnotation(annotation)
-    }) ?: throw NullPointerException("Need JsonCallField annotation.")
+    }) ?: throw NullPointerException("Need ${annotation.simpleName} annotation.")
 }
 
 private fun <T> onFailure(code:Int, call: Call<ResponseBody>, result: ICallResult<T>, t: Throwable) {
