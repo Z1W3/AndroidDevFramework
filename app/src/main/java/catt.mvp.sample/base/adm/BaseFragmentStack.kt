@@ -42,10 +42,20 @@ internal class BaseFragmentStack : IStack<BaseFragment> {
         }
     }
 
-    fun <T:Fragment> search(clazz:Class<T>): T? {
+    fun <T: Fragment> search(clazz:Class<T>): T? {
         for (index in stack.indices.reversed()) {
             Log.e("FragmentStack", "search name=${stack[index]::class.java.name}, isPaused=${stack[index].isPaused}, hashCode=${stack[index].hashCode()}")
             if(!stack[index].isPaused && stack[index]::class.java.name == clazz.name){
+                return stack[index] as T
+            }
+        }
+        return null
+    }
+
+    fun <T: Fragment> search(clazzName: String): T? {
+        for (index in stack.indices.reversed()) {
+            Log.e("FragmentStack", "search name=${stack[index]::class.java.name}, isPaused=${stack[index].isPaused}, hashCode=${stack[index].hashCode()}")
+            if(!stack[index].isPaused && stack[index]::class.java.name == clazzName){
                 return stack[index] as T
             }
         }
