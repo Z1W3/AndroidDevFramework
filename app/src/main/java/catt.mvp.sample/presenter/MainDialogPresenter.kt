@@ -4,6 +4,10 @@ import catt.mvp.sample.app.interfaces.IMainDialogFragment
 import catt.mvp.sample.base.presenter.BasePresenter
 
 class MainDialogPresenter : BasePresenter(), IMainDialogFragment.Presenter {
+    override fun onCreate() {
+
+    }
+
     init {
         Thread{
             Thread.sleep(1000L)

@@ -4,6 +4,9 @@ import catt.mvp.sample.app.interfaces.IMainFragment
 import catt.mvp.sample.base.presenter.BasePresenter
 
 class MainFragmentPresenter : BasePresenter(), IMainFragment.Presenter {
+    override fun onCreate() {
+
+    }
 
     init {
         Thread{

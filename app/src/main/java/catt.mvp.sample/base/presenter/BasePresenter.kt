@@ -19,12 +19,15 @@ abstract class BasePresenter: CoroutineScope{
         val cast = viewClass.cast(o)
         cast?:throw ClassCastException("View convert error.")
         this.view = cast
+        onCreate()
     }
 
     fun onDetach() {
         job.cancel()
         onDestroy()
     }
+
+    abstract fun onCreate()
 
     /**
      * 调用此方法后，应该销毁所有操作

@@ -11,6 +11,9 @@ import catt.mvp.sample.model.network.response.LotteryListBean
 import catt.mvp.sample.model.network.response.LotteryTypesBean
 
 class MainActivityPresenter : BasePresenter(), IMainActivity.Presenter {
+    override fun onCreate() {
+
+    }
 
     private val _TAG:String by lazy { MainActivityPresenter::class.java.simpleName }
 
