@@ -1,4 +1,4 @@
-package catt.mvp.framework.model.network.interceptor
+package catt.mvp.sample.model.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response

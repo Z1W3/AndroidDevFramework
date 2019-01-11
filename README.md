@@ -8,6 +8,30 @@
 - 网络通信采用retrofit2
 - 集成像素比例适配方案
 
+### 初始化
+```kotlin
+    import catt.mvp.framework.initializeDevelopmentFrameworks
+    import catt.mvp.framework.initializeNetwork
+
+    class GlobalApplication : Application() {
+        override fun onCreate() {
+            super.onCreate()
+            /*
+               第一个参数，传入上下文
+               第二个参数传入适配的像素
+             */
+            initializeDevelopmentFrameworks(applicationContext, "1920x1080,2046x1536")
+            
+            
+            initializeNetwork(
+                            headerInterceptor = HeaderInterceptor(),
+                            loggingInterceptor = LoggingInterceptor()
+                        )
+        }
+    }
+```
+
+
 ### 1 委托类
 #### 1.1 创建委托类
 委托类(Activity、Fragment、DialogFragment)均需分别继承相应的Base类
@@ -281,31 +305,6 @@ umeng_channel=
 produce_base_url=http://www.xxx.zzz.com/
 test_base_url=http://dev.xxx.zzz.com/
 ```
-
-#### 4.2 retrofit2访问网络追加头部内容
-修改位置 catt.mvp.framework.model.network.interceptor.HeaderInterceptor
-
-```kotlin
-class HeaderInterceptor : Interceptor {
-
-    override fun intercept(chain: Interceptor.Chain): Response =
-        chain.proceed(
-            chain.request()
-                .newBuilder()
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                .addHeader("Connection", "keep-alive")
-                .addHeader("authorization" /*认证用户token*/, "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJ1c2VyUm9sZVwiOlwibm9ybWFsXCIsXCJ1c2VySWRcIjpcIjRjNDM2MjdhMmYwYTRkZWFiNTg3NmY5YTdjZGJlZWY0XCJ9IiwiZXhwIjoxNTc0NzU2NzEzfQ.ix-1aaIbQh9pyDO2ZxK2sENy9u6iaAd4BhxpKxi8XGs")
-                .addHeader("beginTime"/*请求开始时间*/, System.currentTimeMillis().toString())
-                .addHeader("appId"/*客户端APP编号*/, "5b1754733cb3f37bb05bb0f5")
-                .addHeader("terminal"/*客户端版本*/, "")
-                .addHeader("deviceNo"/*设备号*/, "D428D53116A0616")
-                .build()
-        )
-}
-```
-#### 4.2 retrofit2访问网络日志拦截
-修改位置 catt.mvp.framework.model.network.interceptor.LoggingInterceptor
-
 
 ### 5 其他
 #### 5.1 [@像素比适配方案](https://github.com/LuckyCattZW/CompatLayoutAdapter)

@@ -32,9 +32,6 @@ android {
             /*签名配置*/signingConfig signingConfigs.config
             /*包名后缀*/applicationIdSuffix ""
             /*版本后缀*/versionNameSuffix "-re-kt"
-            /*友盟统计框架,安全码*/ buildConfigField "String", "UMENG_SECRET_KEY", "\"${umeng_secret_key}\""
-            /*友盟统计框架,应用ID*/ buildConfigField "String", "UMENG_APP_IDENTITY", "\"${umeng_app_identity}\""
-            /*友盟统计框架,渠道号*/ buildConfigField "String", "UMENG_CHANNEL", "\"${umeng_channel}\""
             /*AndroidManifest.xml配置项*/ manifestPlaceholders = [
                     /*桌面启动图标，显示图标*/ CATEGORY_LAUNCHER: "none"
             ]
@@ -43,9 +40,6 @@ android {
             /*签名配置*/signingConfig signingConfigs.config
             /*包名后缀*/applicationIdSuffix ".debug"
             /*版本后缀*/versionNameSuffix "-de-kt"
-            /*友盟统计框架,安全码*/ buildConfigField "String", "UMENG_SECRET_KEY", "\"${umeng_secret_key}\""
-            /*友盟统计框架,应用ID*/ buildConfigField "String", "UMENG_APP_IDENTITY", "\"${umeng_app_identity}\""
-            /*友盟统计框架,渠道号*/ buildConfigField "String", "UMENG_CHANNEL", "\"${umeng_channel}\""
             /*AndroidManifest.xml配置项*/manifestPlaceholders = [
                     /*桌面启动图标，显示图标*/CATEGORY_LAUNCHER: "android.intent.category.LAUNCHER"
             ]
@@ -82,8 +76,6 @@ dependencies {
 
     /*system-android*/implementation 'com.android.support:appcompat-v7:28.0.0'
     /*system-android*/implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-
-    /*兼容适配布局*/implementation 'com.github.LuckyCattZW:CompatLayoutAdapter:1.0.9'
 
     /*网络框架*/implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     /*网络框架*/implementation 'com.squareup.retrofit2:retrofit:2.5.0'

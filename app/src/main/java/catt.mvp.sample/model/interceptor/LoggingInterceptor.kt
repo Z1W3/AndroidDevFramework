@@ -1,4 +1,4 @@
-package catt.mvp.framework.model.network.interceptor
+package catt.mvp.sample.model.interceptor
 
 import android.util.Log.i
 import catt.mvp.framework.BuildConfig
