@@ -17,14 +17,13 @@ import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseActivity
 import kotlinx.android.synthetic.*
 
-
 abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.OnPermissionListener, LifecycleOwner {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 
     var isPaused:Boolean = false
 
-    private val permission : IPermissionComponent by lazy { PermissionHelper(this, this) }
+    private val permission : IPermissionComponent by lazy { PermissionHelper(this@BaseActivity, this@BaseActivity) }
 
     abstract fun injectLayoutId():Int
 

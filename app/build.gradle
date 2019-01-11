@@ -57,17 +57,19 @@ android {
 }
 
 dependencies {
-    /*框架*/implementation ( project(':DevelopmentFramwork')){
+    /*框架*/ implementation(project(':DevelopmentFramework')) {
         exclude group: "com.android.support"
         exclude group: "com.github.bumptech.glide"
         exclude group: "org.jetbrains.kotlin"
         exclude group: "org.jetbrains.kotlinx"
-        exclude group: "com.github.LuckyCattZW"
         exclude group: "com.squareup.okhttp3"
         exclude group: "com.squareup.retrofit2"
         exclude group: "com.umeng.sdk"
         exclude group: "com.google.code.gson"
+        exclude group: "com.github.LuckyCattZW"
     }
+
+    /*兼容适配布局*/ implementation 'com.github.LuckyCattZW:CompatLayoutAdapter:1.0.9'
 
     /*彩色Toast提示框架*/implementation project(':ToastyLibs')
     /*基于androidOS的事件总线框架*/implementation project(':AndroidEventBusLibs')
