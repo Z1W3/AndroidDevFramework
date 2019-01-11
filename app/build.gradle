@@ -66,8 +66,9 @@ dependencies {
         exclude group: "com.squareup.okhttp3"
         exclude group: "com.squareup.retrofit2"
         exclude group: "com.umeng.sdk"
-
+        exclude group: "com.google.code.gson"
     }
+
     /*彩色Toast提示框架*/implementation project(':ToastyLibs')
     /*基于androidOS的事件总线框架*/implementation project(':AndroidEventBusLibs')
     /*system*/implementation fileTree(include: ['*.jar'], dir: '../.libs')
@@ -95,4 +96,7 @@ dependencies {
 
     /*友盟统计框架*/implementation 'com.umeng.sdk:common:1.5.0'
     /*友盟统计框架*/implementation 'com.umeng.sdk:analytics:7.5.0'
+
+    /*Gson解析框架*/
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
