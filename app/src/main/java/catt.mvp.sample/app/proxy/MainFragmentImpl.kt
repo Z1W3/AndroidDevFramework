@@ -8,10 +8,10 @@ import android.widget.Button
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainFragment
 import catt.mvp.sample.app.master.MainFragment
-import catt.mvp.sample.base.function.component.newInstanceOrigin
-import catt.mvp.sample.base.function.component.show
-import catt.mvp.sample.base.proxy.ProxyBaseFragment
-import catt.mvp.sample.base.proxy.annotations.InjectPresenter
+import catt.mvp.framework.function.component.newInstanceOrigin
+import catt.mvp.framework.function.component.show
+import catt.mvp.framework.proxy.ProxyBaseFragment
+import catt.mvp.framework.proxy.annotations.InjectPresenter
 
 @InjectPresenter("catt.mvp.sample.presenter.MainFragmentPresenter")
 class MainFragmentImpl : ProxyBaseFragment<MainFragment>(), IMainFragment.View {

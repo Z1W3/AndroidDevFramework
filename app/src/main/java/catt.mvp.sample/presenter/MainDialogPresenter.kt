@@ -1,7 +1,7 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainDialogFragment
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.framework.presenter.BasePresenter
 
 class MainDialogPresenter : BasePresenter(), IMainDialogFragment.Presenter {
     override fun onCreate() {

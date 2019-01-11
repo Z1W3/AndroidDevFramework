@@ -5,9 +5,9 @@ import android.widget.ImageView
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainActivity
 import catt.mvp.sample.app.master.MainActivity
-import catt.mvp.sample.base.function.component.*
-import catt.mvp.sample.base.proxy.ProxyBaseActivity
-import catt.mvp.sample.base.proxy.annotations.InjectPresenter
+import catt.mvp.framework.function.component.*
+import catt.mvp.framework.proxy.ProxyBaseActivity
+import catt.mvp.framework.proxy.annotations.InjectPresenter
 import catt.mvp.sample.model.User
 import org.android.eventbus.EventBus
 import org.android.eventbus.Subscriber

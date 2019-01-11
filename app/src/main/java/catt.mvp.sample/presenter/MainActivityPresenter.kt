@@ -1,11 +1,11 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainActivity
-import catt.mvp.sample.base.model.network.base.OkRetrofit
-import catt.mvp.sample.base.model.network.callback.SimpleCallResult
-import catt.mvp.sample.base.model.network.component.callJsonArrayResponse
-import catt.mvp.sample.base.model.network.component.callJsonObjectResponse
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.framework.model.network.base.OkRetrofit
+import catt.mvp.framework.model.network.callback.SimpleCallResult
+import catt.mvp.framework.model.network.component.callJsonArrayResponse
+import catt.mvp.framework.model.network.component.callJsonObjectResponse
+import catt.mvp.framework.presenter.BasePresenter
 import catt.mvp.sample.model.network.IDggStoreService
 import catt.mvp.sample.model.network.response.LotteryListBean
 import catt.mvp.sample.model.network.response.LotteryTypesBean

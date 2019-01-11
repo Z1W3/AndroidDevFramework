@@ -2,8 +2,8 @@ package catt.mvp.sample.app.master
 
 import catt.mvp.sample.R
 import catt.mvp.sample.app.proxy.MainDialogFragmentImpl
-import catt.mvp.sample.base.app.BaseDialogFragment
-import catt.mvp.sample.base.proxy.ILifecycle
+import catt.mvp.framework.app.BaseDialogFragment
+import catt.mvp.framework.proxy.ILifecycle
 
 
 class MainDialogFragment : BaseDialogFragment() {

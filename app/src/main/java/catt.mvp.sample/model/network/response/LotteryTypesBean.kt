@@ -1,7 +1,7 @@
 package catt.mvp.sample.model.network.response
 
-import catt.mvp.sample.base.model.network.annotations.JsonCallField
-import catt.mvp.sample.base.model.network.annotations.JsonCallDataTargetField
+import catt.mvp.framework.model.network.annotations.JsonCallField
+import catt.mvp.framework.model.network.annotations.JsonCallDataTargetField
 
 @JsonCallField
 @JsonCallDataTargetField(hierarchy = "appTicketTypeVos")

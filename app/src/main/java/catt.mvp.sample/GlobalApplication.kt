@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import catt.compat.layout.internal.TargetScreenMetrics
+import catt.mvp.framework.globalContext
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 import es.dmoral.toasty.Toasty
@@ -15,7 +16,7 @@ class GlobalApplication : Application() {
     private val _TAG by lazy { GlobalApplication::class.java.simpleName }
     override fun onCreate() {
         super.onCreate()
-        GlobalContext.applicationContext = applicationContext
+        globalContext = applicationContext
         initializeFrameworks(applicationContext)
     }
 

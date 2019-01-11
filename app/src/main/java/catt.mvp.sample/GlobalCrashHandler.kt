@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.util.Log.e
-import catt.mvp.sample.base.adm.BaseActivityStack
+import catt.mvp.framework.adm.BaseActivityStack
 import java.text.SimpleDateFormat
 import com.google.gson.GsonBuilder
 import com.umeng.analytics.MobclickAgent
