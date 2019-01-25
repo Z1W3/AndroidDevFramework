@@ -1,6 +1,7 @@
 package catt.mvp.framework.app
 
 import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.content.Intent
 import android.os.Bundle
@@ -15,7 +16,7 @@ import catt.mvp.framework.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
-abstract class BaseFragment : CompatLayoutFragment(), IProxy {
+abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
 
     private val _TAG by lazy { BaseFragment::class.java.simpleName }
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseFragment) }
@@ -81,6 +82,7 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy {
     override fun onResume() {
         super.onResume()
         isPaused = false
+        proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
         hideSystemUI()
     }
@@ -88,7 +90,13 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy {
     override fun onPause() {
         super.onPause()
         isPaused = true
+        proxy.onPause()
         MobclickAgent.onPageEnd(pageLabel())
+    }
+
+    override fun onStop() {
+        super.onStop()
+        proxy.onStop()
     }
 
     override fun onDestroy() {

@@ -1,6 +1,7 @@
 package catt.mvp.framework.app
 
 import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.content.Intent
 import android.os.Bundle
@@ -15,7 +16,7 @@ import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 import org.android.eventbus.EventBus
 
-abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy {
+abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, LifecycleOwner {
 
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
 
@@ -96,6 +97,7 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy {
     override fun onResume() {
         super.onResume()
         isPaused = false
+        proxy.onResume()
         hideSystemUI()
         MobclickAgent.onPageStart(pageLabel())
     }
@@ -103,9 +105,14 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy {
     override fun onPause() {
         super.onPause()
         isPaused = true
+        proxy.onPause()
         MobclickAgent.onPageEnd(pageLabel())
     }
 
+    override fun onStop() {
+        super.onStop()
+        proxy.onStop()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
