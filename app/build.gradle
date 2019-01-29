@@ -17,7 +17,7 @@ android {
     }
 
     signingConfigs {
-        /*签名配置*/config {
+        /*签名配置*/ config {
             storeFile file(JKS_STORE_FILE)
             keyAlias JKS_ALIAS
             storePassword JKS_STORE_PASSWORD
@@ -26,32 +26,29 @@ android {
     }
 
     buildTypes {
-        /*生产环境*/release {
+        /*生产环境*/ release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            /*签名配置*/signingConfig signingConfigs.config
-            /*包名后缀*/applicationIdSuffix ""
-            /*版本后缀*/versionNameSuffix "-re-kt"
+            /*签名配置*/ signingConfig signingConfigs.config
+            /*包名后缀*/ applicationIdSuffix ""
+            /*版本后缀*/ versionNameSuffix "-re-kt"
             /*AndroidManifest.xml配置项*/ manifestPlaceholders = [
                     /*桌面启动图标，显示图标*/ CATEGORY_LAUNCHER: "none"
             ]
         }
-        /*测试环境*/debug {
-            /*签名配置*/signingConfig signingConfigs.config
-            /*包名后缀*/applicationIdSuffix ".debug"
-            /*版本后缀*/versionNameSuffix "-de-kt"
-            /*AndroidManifest.xml配置项*/manifestPlaceholders = [
-                    /*桌面启动图标，显示图标*/CATEGORY_LAUNCHER: "android.intent.category.LAUNCHER"
+        /*测试环境*/ debug {
+            /*签名配置*/ signingConfig signingConfigs.config
+            /*包名后缀*/ applicationIdSuffix ".debug"
+            /*版本后缀*/ versionNameSuffix "-de-kt"
+            /*AndroidManifest.xml配置项*/ manifestPlaceholders = [
+                    /*桌面启动图标，显示图标*/ CATEGORY_LAUNCHER: "android.intent.category.LAUNCHER"
             ]
         }
     }
 
     android.applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def file = output.outputFile
-            if (file != null && file.name.endsWith('.apk')) {
-                outputFileName = "AndroidFrameworks_v${defaultConfig.versionName}_${variant.buildType.name}.apk"
-            }
+        variant.outputs.all { _ ->
+            outputFileName = "AndroidFrameworks_v${defaultConfig.versionName}_${variant.buildType.name}.apk"
         }
     }
 }
@@ -71,33 +68,33 @@ dependencies {
 
     /*兼容适配布局*/ implementation 'com.github.LuckyCattZW:CompatLayoutAdapter:1.0.9'
 
-    /*彩色Toast提示框架*/implementation project(':ToastyLibs')
-    /*基于androidOS的事件总线框架*/implementation project(':AndroidEventBusLibs')
-    /*system*/implementation fileTree(include: ['*.jar'], dir: '../.libs')
-    /*system-kotlin*/implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    /*system-kotlinX*/implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+    /*彩色Toast提示框架*/ implementation project(':ToastyLibs')
+    /*基于androidOS的事件总线框架*/ implementation project(':AndroidEventBusLibs')
+    /*system*/ implementation fileTree(include: ['*.jar'], dir: '../.libs')
+    /*system-kotlin*/ implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    /*system-kotlinX*/ implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
 
-    /*system-android*/implementation 'com.android.support:appcompat-v7:28.0.0'
-    /*system-android*/implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    /*system-android*/ implementation 'com.android.support:appcompat-v7:28.0.0'
+    /*system-android*/ implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
-    /*网络框架*/implementation 'com.squareup.okhttp3:okhttp:3.12.0'
-    /*网络框架*/implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    /*网络框架*/implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    /*帧动画框架*/implementation ('com.github.LuckyCattZW:SurfaceFrameAnimationDrawable:1.0.12'){
+    /*网络框架*/ implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    /*网络框架*/ implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    /*网络框架*/ implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    /*帧动画框架*/ implementation('com.github.LuckyCattZW:SurfaceFrameAnimationDrawable:1.0.12') {
         exclude group: "com.android.support"
     }
 
-    /*图片加载框架*/implementation('com.github.bumptech.glide:okhttp3-integration:4.8.0') {
+    /*图片加载框架*/ implementation('com.github.bumptech.glide:okhttp3-integration:4.8.0') {
         exclude group: "com.android.support"
         exclude group: "com.squareup.okhttp3"
     }
-    /*图片加载框架*/implementation('com.github.bumptech.glide:glide:4.8.0') {
+    /*图片加载框架*/ implementation('com.github.bumptech.glide:glide:4.8.0') {
         exclude group: "com.android.support"
     }
-    /*图片加载框架*/kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    /*图片加载框架*/ kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
-    /*友盟统计框架*/implementation 'com.umeng.sdk:common:1.5.0'
-    /*友盟统计框架*/implementation 'com.umeng.sdk:analytics:7.5.0'
+    /*友盟统计框架*/ implementation 'com.umeng.sdk:common:1.5.0'
+    /*友盟统计框架*/ implementation 'com.umeng.sdk:analytics:7.5.0'
 
     /*Gson解析框架*/
     implementation 'com.google.code.gson:gson:2.8.5'
