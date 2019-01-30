@@ -13,7 +13,7 @@ abstract class BasePresenter: CoroutineScope{
 
     private lateinit var view:Any
 
-    fun <T> getViewInterface(): T = view as T
+    fun <V> getViewInterface(): V = view as V
 
     fun onAttach(viewClass: Class<out Any>, o: Any) {
         val cast = viewClass.cast(o)

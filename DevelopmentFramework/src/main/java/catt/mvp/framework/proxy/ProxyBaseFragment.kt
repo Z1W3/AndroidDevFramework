@@ -38,7 +38,7 @@ abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, ProxyAnalyti
         presenterClazz.castPresenter(presenterInstance)
     }
 
-    override fun <T> getPresenterInterface(): T = castPresenter as T
+    override fun <P> getPresenterInterface(): P = castPresenter as P
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseFragment::class.java.getDeclaredViewClass()
