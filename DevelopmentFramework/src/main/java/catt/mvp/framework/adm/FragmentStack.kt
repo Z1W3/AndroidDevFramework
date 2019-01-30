@@ -5,8 +5,10 @@ import android.util.Log
 import catt.mvp.framework.app.BaseFragment
 import java.util.*
 
-class BaseFragmentStack : IStack<BaseFragment> {
+class FragmentStack : IStack<BaseFragment> {
     private val stack: Stack<BaseFragment> by lazy { Stack<BaseFragment>() }
+
+    @Synchronized
     override fun push(target: BaseFragment) {
         synchronized(target) {
             stack.remove(target)
@@ -64,10 +66,10 @@ class BaseFragmentStack : IStack<BaseFragment> {
 
     companion object {
         private object Single {
-            val INSTANCE: BaseFragmentStack by lazy { BaseFragmentStack() }
+            val INSTANCE: FragmentStack by lazy { FragmentStack() }
         }
 
         @JvmStatic
-        fun get(): BaseFragmentStack = Single.INSTANCE
+        fun get(): FragmentStack = Single.INSTANCE
     }
 }

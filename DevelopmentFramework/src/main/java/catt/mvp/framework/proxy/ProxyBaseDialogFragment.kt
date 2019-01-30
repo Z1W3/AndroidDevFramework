@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.view.ViewGroup
-import catt.mvp.framework.adm.BaseDialogFragmentStack
+import catt.mvp.framework.adm.DialogFragmentStack
 import catt.mvp.framework.app.BaseDialogFragment
 import catt.mvp.framework.function.component.*
 import catt.mvp.framework.proxy.annotations.InjectPresenter
@@ -63,7 +63,7 @@ abstract class ProxyBaseDialogFragment<T: BaseDialogFragment> : ILifecycle<T>, P
 
 
     private val dialog : T?
-        get() = BaseDialogFragmentStack.get().search(declaredClazz[0] as Class<T>)
+        get() = DialogFragmentStack.get().search(declaredClazz[0] as Class<T>)
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(dialog)

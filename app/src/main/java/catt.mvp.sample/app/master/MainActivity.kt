@@ -2,7 +2,7 @@ package catt.mvp.sample.app.master
 
 import catt.mvp.sample.app.proxy.MainActivityImpl
 import catt.mvp.sample.R
-import catt.mvp.framework.adm.BaseActivityStack
+import catt.mvp.framework.adm.ActivityStack
 import catt.mvp.framework.app.BaseActivity
 import catt.mvp.framework.proxy.ILifecycle
 
@@ -21,6 +21,6 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        BaseActivityStack.get().killMyPid()
+        ActivityStack.get().killMyPid()
     }
 }

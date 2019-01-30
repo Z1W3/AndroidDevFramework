@@ -11,8 +11,8 @@ import catt.mvp.framework.function.helper.PermissionHelper
 import com.umeng.analytics.MobclickAgent
 import android.arch.lifecycle.LifecycleRegistry
 import android.support.v4.app.DialogFragment
-import catt.mvp.framework.adm.BaseActivityStack
-import catt.mvp.framework.adm.BaseDialogFragmentStack
+import catt.mvp.framework.adm.ActivityStack
+import catt.mvp.framework.adm.DialogFragmentStack
 import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseActivity
 import kotlinx.android.synthetic.*
@@ -38,7 +38,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
     abstract val injectStyleTheme:Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseActivityStack.get().push(this@BaseActivity)
+        ActivityStack.get().push(this@BaseActivity)
 //        hideSystemUI()
         setTheme(injectStyleTheme)
         super.onCreate(savedInstanceState)
@@ -72,7 +72,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
     override fun onDestroy() {
         this.clearFindViewByIdCache()
         super.onDestroy()
-        BaseActivityStack.get().remove(this@BaseActivity)
+        ActivityStack.get().remove(this@BaseActivity)
         lifecycleRegistry.removeObserver(proxy)
         System.runFinalization()
     }
@@ -92,7 +92,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
                 for (fragment in supportFragmentManager.fragments) {
                     fragment.onActivityResult(requestCode, resultCode, data)
                 }
-                val statisticsShowingArray = BaseDialogFragmentStack.get().statisticsShowingDialog()
+                val statisticsShowingArray = DialogFragmentStack.get().statisticsShowingDialog()
                 for(index:Int in statisticsShowingArray.indices){
                     statisticsShowingArray[index].onActivityResult(requestCode, resultCode, data)
                 }

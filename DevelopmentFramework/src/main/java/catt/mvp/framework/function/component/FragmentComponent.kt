@@ -29,16 +29,37 @@ fun FragmentManager.findFragmentByFrameLayout(layout: FrameLayout): Fragment? = 
  * @code FragmentTransaction.add(Int,Fragment)
  * @code FragmentTransaction.replace(Int,Fragment)
  */
+@Synchronized
 fun FragmentTransaction.commitFragment(
     id: Int,
     fragment: Fragment,
-    addToBackStack: Boolean = false,
-    name: String? = null
+    name: String = fragment::class.java.name,
+    addToBackStack: Boolean = false
 ) {
     if (id <= 0) IllegalArgumentException("position cannot be less than or equal to 0.")
     synchronized(this) {
         if (fragment.isAdded) remove(fragment).replace(id, fragment).addToBackStack(addToBackStack, name).compatCommit()
         else replace(id, fragment).addToBackStack(addToBackStack, name).compatCommit(allowingStateLoss = false)
+        return@synchronized
+    }
+}
+
+/**
+ * 如果该Fragment未添加，则添加Fragment
+ *
+ * @code FragmentTransaction.add(Int,Fragment)
+ */
+@Synchronized
+fun FragmentTransaction.commitFragment(
+    fragment: Fragment,
+    name: String = fragment::class.java.name,
+    addToBackStack: Boolean = false
+) {
+    synchronized(this) {
+        if (fragment.isAdded) {
+            remove(fragment)
+        }
+        add(fragment, name).addToBackStack(addToBackStack, name).compatCommit()
         return@synchronized
     }
 }
@@ -55,6 +76,7 @@ fun FragmentTransaction.commitFragment(layout: FrameLayout, fragment: Fragment) 
  * 不进行实例操作，仅隐藏
  * PS: 如果Fragment未添加，不会主动进行添加
  */
+@Synchronized
 fun FragmentTransaction.commitSwitchFragment(from: Fragment, to: Fragment) {
     synchronized(this) {
         if (to.isAdded) hide(from).show(to).compatCommit()

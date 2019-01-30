@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutFragment
-import catt.mvp.framework.adm.BaseFragmentStack
+import catt.mvp.framework.adm.FragmentStack
 import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
@@ -51,7 +51,7 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        BaseFragmentStack.get().push(this)
+        FragmentStack.get().push(this)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
@@ -74,7 +74,7 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
         this.clearFindViewByIdCache()
         proxy.onDestroyView()
         super.onDestroyView()
-        BaseFragmentStack.get().remove(this)
+        FragmentStack.get().remove(this)
         System.runFinalization()
     }
 

@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutDialogFragment
-import catt.mvp.framework.adm.BaseDialogFragmentStack
+import catt.mvp.framework.adm.DialogFragmentStack
 import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseDialogFragment
 import com.umeng.analytics.MobclickAgent
@@ -68,7 +68,7 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        BaseDialogFragmentStack.get().push(this@BaseDialogFragment)
+        DialogFragmentStack.get().push(this@BaseDialogFragment)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
@@ -89,7 +89,7 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         proxy.onDestroyView()
         super.onDestroyView()
         isShowing = false
-        BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
+        DialogFragmentStack.get().remove(this@BaseDialogFragment)
         System.runFinalization()
     }
 

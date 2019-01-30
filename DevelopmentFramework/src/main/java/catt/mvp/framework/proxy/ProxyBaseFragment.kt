@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.view.View
-import catt.mvp.framework.adm.BaseFragmentStack
+import catt.mvp.framework.adm.FragmentStack
 import catt.mvp.framework.app.BaseFragment
 import catt.mvp.framework.function.component.*
 import catt.mvp.framework.proxy.annotations.InjectPresenter
@@ -58,7 +58,7 @@ abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, ProxyAnalyti
         }
 
     private val fragment: T?
-        get() = BaseFragmentStack.get().search(declaredClazz[0] as Class<T>)
+        get() = FragmentStack.get().search(declaredClazz[0] as Class<T>)
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(fragment)

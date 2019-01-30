@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.util.Log.e
-import catt.mvp.framework.adm.BaseActivityStack
+import catt.mvp.framework.adm.ActivityStack
 import java.text.SimpleDateFormat
 import com.google.gson.GsonBuilder
 import com.umeng.analytics.MobclickAgent
@@ -66,7 +66,7 @@ class GlobalCrashHandler: Thread.UncaughtExceptionHandler {
             // 如果用户没有处理则让系统默认的异常处理器来处理
             defaultHandler!!.uncaughtException(t, ex)
         } else {
-            BaseActivityStack.get().killMyPid()
+            ActivityStack.get().killMyPid()
         }
     }
 
