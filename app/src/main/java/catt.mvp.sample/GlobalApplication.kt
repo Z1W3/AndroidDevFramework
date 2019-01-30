@@ -7,6 +7,7 @@ import catt.mvp.framework.initializeNetwork
 import catt.mvp.sample.model.interceptor.HeaderInterceptor
 import catt.mvp.sample.model.interceptor.LoggingInterceptor
 import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 
 
 @ExperimentalCoroutinesApi
@@ -22,6 +23,9 @@ class GlobalApplication : Application() {
         GlobalScope.async(Dispatchers.IO, CoroutineStart.ATOMIC) {
             GlobalCrashHandler.get().initContext(ctx)
             initializeNetwork(
+                currentTimeout = 10,
+                readTimeout = 10,
+                timeUnit = TimeUnit.SECONDS,
                 headerInterceptor = HeaderInterceptor(),
                 loggingInterceptor = LoggingInterceptor()
             )

@@ -10,16 +10,18 @@ import com.umeng.commonsdk.UMConfigure
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.*
 import okhttp3.Interceptor
+import java.util.concurrent.TimeUnit
 
 lateinit var globalContext: Context
 
 fun initializeNetwork(
-    currentTimeout: Long = 6180L,
-    readTimeout: Long = 6180L,
+    currentTimeout: Long = 10,
+    readTimeout: Long = 10,
+    timeUnit: TimeUnit = TimeUnit.SECONDS,
     headerInterceptor: Interceptor? = null,
     loggingInterceptor: Interceptor? = null
 ) =
-    OkRetrofit.initializeNetwork(currentTimeout, readTimeout, headerInterceptor, loggingInterceptor)
+    OkRetrofit.initializeNetwork(currentTimeout, readTimeout, timeUnit, headerInterceptor, loggingInterceptor)
 
 fun initializeDevelopmentFrameworks(
     ctx: Context,
