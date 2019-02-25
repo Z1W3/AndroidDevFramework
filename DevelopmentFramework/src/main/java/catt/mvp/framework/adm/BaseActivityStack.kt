@@ -6,10 +6,8 @@ import android.util.Log.e
 import catt.mvp.framework.app.BaseActivity
 import java.util.*
 
-class ActivityStack : IStack<BaseActivity> {
+class BaseActivityStack : IStack<BaseActivity> {
     private val stack: Stack<BaseActivity> by lazy { Stack<BaseActivity>() }
-
-    @Synchronized
     override fun push(target: BaseActivity) {
         synchronized(target) {
             stack.remove(target)
@@ -59,6 +57,7 @@ class ActivityStack : IStack<BaseActivity> {
         return null
     }
 
+    @Throws(Exception::class)
     fun killMyPid() {
         for (index in stack.indices.reversed()) {
             val aty = stack[index]
@@ -69,10 +68,10 @@ class ActivityStack : IStack<BaseActivity> {
 
     companion object {
         private object Single {
-            val INSTANCE: ActivityStack by lazy { ActivityStack() }
+            val INSTANCE: BaseActivityStack by lazy { BaseActivityStack() }
         }
 
         @JvmStatic
-        fun get(): ActivityStack = Single.INSTANCE
+        fun get(): BaseActivityStack = Single.INSTANCE
     }
 }

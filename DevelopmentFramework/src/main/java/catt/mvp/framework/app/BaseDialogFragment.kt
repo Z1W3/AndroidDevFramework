@@ -3,21 +3,23 @@ package catt.mvp.framework.app
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutDialogFragment
-import catt.mvp.framework.adm.DialogFragmentStack
+import catt.mvp.framework.adm.BaseDialogFragmentStack
 import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseDialogFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 import org.android.eventbus.EventBus
 
-abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, LifecycleOwner {
-
+abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, LifecycleOwner
+     {
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
 
     var isPaused:Boolean = false
@@ -32,7 +34,7 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
     abstract fun injectLayoutId(): Int
 
     private val widthLayoutSize: Int
-        get() = proxy.widthLayoutSize!!
+        get() = proxy.widthLayoutSize
 
 
     private val heightLayoutSize: Int
@@ -57,7 +59,16 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         super.onStart()
         dialog.window!!.setLayout(widthLayoutSize, heightLayoutSize)
         dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        hideSystemUI()
+        hideSystemUI(dialog.window)
+        dialog.setOnKeyListener(object : DialogInterface.OnKeyListener {
+            override fun onKey(dialog: DialogInterface?, keyCode: Int, event: KeyEvent?): Boolean {
+                return if ( keyCode == KeyEvent.KEYCODE_BACK && event!!.action == KeyEvent.ACTION_DOWN) {
+                    isDisallowUseBackKey()
+                } else {
+                    false
+                }
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -68,7 +79,7 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        DialogFragmentStack.get().push(this@BaseDialogFragment)
+        BaseDialogFragmentStack.get().push(this@BaseDialogFragment)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
@@ -89,7 +100,7 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         proxy.onDestroyView()
         super.onDestroyView()
         isShowing = false
-        DialogFragmentStack.get().remove(this@BaseDialogFragment)
+        BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
         System.runFinalization()
     }
 
@@ -98,14 +109,14 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         super.onResume()
         isPaused = false
         proxy.onResume()
-        hideSystemUI()
+        hideSystemUI(dialog.window)
         MobclickAgent.onPageStart(pageLabel())
     }
 
     override fun onPause() {
         super.onPause()
-        isPaused = true
         proxy.onPause()
+        isPaused = true
         MobclickAgent.onPageEnd(pageLabel())
     }
 
@@ -128,15 +139,6 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         return this
     }
 
-    fun hideSystemUI() {
-        val decorView = dialog.window.decorView
-        val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        decorView.systemUiVisibility = flags
-
-    }
+    abstract fun isDisallowUseBackKey():Boolean
 }
+

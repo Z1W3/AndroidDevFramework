@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.view.ViewGroup
-import catt.mvp.framework.adm.DialogFragmentStack
+import catt.mvp.framework.adm.BaseDialogFragmentStack
 import catt.mvp.framework.app.BaseDialogFragment
 import catt.mvp.framework.function.component.*
 import catt.mvp.framework.proxy.annotations.InjectPresenter
@@ -40,7 +40,7 @@ abstract class ProxyBaseDialogFragment<T: BaseDialogFragment> : ILifecycle<T>, P
         presenterClazz.castPresenter(presenterInstance)
     }
 
-    override fun <P> getPresenterInterface(): P = castPresenter as P
+    override fun <T> getPresenterInterface(): T = castPresenter as T
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseDialogFragment::class.java.getDeclaredViewClass()
@@ -57,13 +57,13 @@ abstract class ProxyBaseDialogFragment<T: BaseDialogFragment> : ILifecycle<T>, P
             return (genType as ParameterizedType).actualTypeArguments
         }
 
-    open val widthLayoutSize:Int?= ViewGroup.LayoutParams.MATCH_PARENT
+    open val widthLayoutSize: Int get() =  ViewGroup.LayoutParams.MATCH_PARENT
 
-    open val heightLayoutSize:Int = ViewGroup.LayoutParams.MATCH_PARENT
+    open val heightLayoutSize: Int get() =  ViewGroup.LayoutParams.MATCH_PARENT
 
 
     private val dialog : T?
-        get() = DialogFragmentStack.get().search(declaredClazz[0] as Class<T>)
+        get() = BaseDialogFragmentStack.get().search(declaredClazz[0] as Class<T>)
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(dialog)

@@ -11,11 +11,13 @@ import catt.mvp.framework.function.helper.PermissionHelper
 import com.umeng.analytics.MobclickAgent
 import android.arch.lifecycle.LifecycleRegistry
 import android.support.v4.app.DialogFragment
-import catt.mvp.framework.adm.ActivityStack
-import catt.mvp.framework.adm.DialogFragmentStack
+import android.util.Log.w
+import catt.mvp.framework.adm.BaseActivityStack
+import catt.mvp.framework.adm.BaseDialogFragmentStack
 import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseActivity
 import kotlinx.android.synthetic.*
+
 
 abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.OnPermissionListener, LifecycleOwner {
 
@@ -23,7 +25,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
 
     var isPaused:Boolean = false
 
-    private val permission : IPermissionComponent by lazy { PermissionHelper(this@BaseActivity, this@BaseActivity) }
+    private val permission : IPermissionComponent by lazy { PermissionHelper(this, this) }
 
     abstract fun injectLayoutId():Int
 
@@ -38,7 +40,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
     abstract val injectStyleTheme:Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        ActivityStack.get().push(this@BaseActivity)
+        BaseActivityStack.get().push(this@BaseActivity)
 //        hideSystemUI()
         setTheme(injectStyleTheme)
         super.onCreate(savedInstanceState)
@@ -58,9 +60,13 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
 
     override fun onResume() {
         super.onResume()
-        isPaused = false
-        MobclickAgent.onResume(this)
-        hideSystemUI()
+        try {
+            isPaused = false
+            MobclickAgent.onResume(this)
+            hideSystemUI(window)
+        } catch (ex: Exception) {
+            w("BaseActivity", "", ex)
+        }
     }
 
     override fun onPause() {
@@ -72,7 +78,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
     override fun onDestroy() {
         this.clearFindViewByIdCache()
         super.onDestroy()
-        ActivityStack.get().remove(this@BaseActivity)
+        BaseActivityStack.get().remove(this@BaseActivity)
         lifecycleRegistry.removeObserver(proxy)
         System.runFinalization()
     }
@@ -92,7 +98,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
                 for (fragment in supportFragmentManager.fragments) {
                     fragment.onActivityResult(requestCode, resultCode, data)
                 }
-                val statisticsShowingArray = DialogFragmentStack.get().statisticsShowingDialog()
+                val statisticsShowingArray = BaseDialogFragmentStack.get().statisticsShowingDialog()
                 for(index:Int in statisticsShowingArray.indices){
                     statisticsShowingArray[index].onActivityResult(requestCode, resultCode, data)
                 }
@@ -118,21 +124,10 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
         post { proxy.onViewLoadCompleted() }
     }
 
-    fun hideSystemUI() {
-        val decorView = window.decorView
-        val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        decorView.systemUiVisibility = flags
-    }
-
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus){
-            hideSystemUI()
+            hideSystemUI(window)
         }
     }
 }

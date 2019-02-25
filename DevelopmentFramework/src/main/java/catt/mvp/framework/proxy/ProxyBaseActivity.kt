@@ -5,7 +5,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.FragmentTransaction
-import catt.mvp.framework.adm.ActivityStack
+import catt.mvp.framework.adm.BaseActivityStack
 import catt.mvp.framework.app.BaseActivity
 import catt.mvp.framework.function.component.*
 import catt.mvp.framework.function.helper.PermissionHelper
@@ -38,7 +38,7 @@ abstract class ProxyBaseActivity<T : BaseActivity> : ILifecycle<T>, ProxyAnalyti
         presenterClazz.castPresenter(presenterInstance)
     }
 
-    override fun <P> getPresenterInterface(): P = castPresenter as P
+    override fun <T> getPresenterInterface(): T = castPresenter as T
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseActivity::class.java.getDeclaredViewClass()
@@ -56,7 +56,7 @@ abstract class ProxyBaseActivity<T : BaseActivity> : ILifecycle<T>, ProxyAnalyti
         }
 
     private val activity : T?
-        get() = ActivityStack.get().search(declaredClazz[0] as Class<T>)
+        get() = BaseActivityStack.get().search(declaredClazz[0] as Class<T>)
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(activity)

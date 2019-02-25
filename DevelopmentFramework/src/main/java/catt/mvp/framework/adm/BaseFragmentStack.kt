@@ -5,10 +5,8 @@ import android.util.Log
 import catt.mvp.framework.app.BaseFragment
 import java.util.*
 
-class FragmentStack : IStack<BaseFragment> {
+class BaseFragmentStack : IStack<BaseFragment> {
     private val stack: Stack<BaseFragment> by lazy { Stack<BaseFragment>() }
-
-    @Synchronized
     override fun push(target: BaseFragment) {
         synchronized(target) {
             stack.remove(target)
@@ -32,6 +30,10 @@ class FragmentStack : IStack<BaseFragment> {
     override fun peek(): BaseFragment? {
         if (empty()) return null
         return stack.peek()
+    }
+
+    fun peekDown(): BaseFragment {
+        return stack.elementAt(stack.size - 2)
     }
 
     override fun empty(): Boolean = stack.empty()
@@ -66,10 +68,10 @@ class FragmentStack : IStack<BaseFragment> {
 
     companion object {
         private object Single {
-            val INSTANCE: FragmentStack by lazy { FragmentStack() }
+            val INSTANCE: BaseFragmentStack by lazy { BaseFragmentStack() }
         }
 
         @JvmStatic
-        fun get(): FragmentStack = Single.INSTANCE
+        fun get(): BaseFragmentStack = Single.INSTANCE
     }
 }

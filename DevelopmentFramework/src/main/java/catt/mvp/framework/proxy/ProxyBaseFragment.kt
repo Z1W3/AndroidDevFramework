@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
 import android.view.View
-import catt.mvp.framework.adm.FragmentStack
+import catt.mvp.framework.adm.BaseFragmentStack
 import catt.mvp.framework.app.BaseFragment
 import catt.mvp.framework.function.component.*
 import catt.mvp.framework.proxy.annotations.InjectPresenter
@@ -38,7 +38,7 @@ abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, ProxyAnalyti
         presenterClazz.castPresenter(presenterInstance)
     }
 
-    override fun <P> getPresenterInterface(): P = castPresenter as P
+    override fun <T> getPresenterInterface(): T = castPresenter as T
 
     private val viewClass: Class<out Any> by lazy {
         this@ProxyBaseFragment::class.java.getDeclaredViewClass()
@@ -58,7 +58,7 @@ abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, ProxyAnalyti
         }
 
     private val fragment: T?
-        get() = FragmentStack.get().search(declaredClazz[0] as Class<T>)
+        get() = BaseFragmentStack.get().search(declaredClazz[0] as Class<T>)
 
     override val reference: Reference<T>? by lazy {
         WeakReference<T>(fragment)
@@ -103,7 +103,10 @@ abstract class ProxyBaseFragment<T : BaseFragment> : ILifecycle<T>, ProxyAnalyti
 
     override fun onPause() {}
 
-    override fun onStop() {}
+    override fun onStop() {
+
+    }
+
 
     override fun onAny(owner: LifecycleOwner) {
         lifecycleState = owner.lifecycle.currentState

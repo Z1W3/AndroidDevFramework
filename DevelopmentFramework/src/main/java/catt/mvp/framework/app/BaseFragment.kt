@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import catt.compat.layout.app.CompatLayoutFragment
-import catt.mvp.framework.adm.FragmentStack
+import catt.mvp.framework.adm.BaseFragmentStack
 import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
@@ -51,7 +51,7 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        FragmentStack.get().push(this)
+        BaseFragmentStack.get().push(this)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
@@ -74,7 +74,7 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
         this.clearFindViewByIdCache()
         proxy.onDestroyView()
         super.onDestroyView()
-        FragmentStack.get().remove(this)
+        BaseFragmentStack.get().remove(this)
         System.runFinalization()
     }
 
@@ -84,19 +84,21 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
         isPaused = false
         proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
-        hideSystemUI()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        isPaused = true
-        proxy.onPause()
-        MobclickAgent.onPageEnd(pageLabel())
+        activity?.apply {
+            hideSystemUI(window)
+        }
     }
 
     override fun onStop() {
         super.onStop()
         proxy.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        proxy.onPause()
+        isPaused = true
+        MobclickAgent.onPageEnd(pageLabel())
     }
 
     override fun onDestroy() {
@@ -107,19 +109,5 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
     private fun View.postOnViewLoadCompleted():View {
         post { proxy.onViewLoadCompleted() }
         return this
-    }
-
-    fun hideSystemUI() {
-        activity?.apply {
-            val decorView = window.decorView
-            val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-            decorView.systemUiVisibility = flags
-
-        }
     }
 }

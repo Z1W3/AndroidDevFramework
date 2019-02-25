@@ -6,10 +6,8 @@ import catt.mvp.framework.app.BaseDialogFragment
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DialogFragmentStack : IStack<BaseDialogFragment> {
+class BaseDialogFragmentStack : IStack<BaseDialogFragment> {
     private val stack: Stack<BaseDialogFragment> by lazy { Stack<BaseDialogFragment>() }
-
-    @Synchronized
     override fun push(target: BaseDialogFragment) {
         synchronized(target) {
             stack.remove(target)
@@ -94,10 +92,10 @@ class DialogFragmentStack : IStack<BaseDialogFragment> {
 
     companion object {
         private object Single {
-            val INSTANCE: DialogFragmentStack by lazy { DialogFragmentStack() }
+            val INSTANCE: BaseDialogFragmentStack by lazy { BaseDialogFragmentStack() }
         }
 
         @JvmStatic
-        fun get(): DialogFragmentStack = Single.INSTANCE
+        fun get(): BaseDialogFragmentStack = Single.INSTANCE
     }
 }

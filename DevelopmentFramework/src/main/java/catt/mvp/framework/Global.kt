@@ -10,18 +10,16 @@ import com.umeng.commonsdk.UMConfigure
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.*
 import okhttp3.Interceptor
-import java.util.concurrent.TimeUnit
 
 lateinit var globalContext: Context
 
 fun initializeNetwork(
-    currentTimeout: Long = 10,
-    readTimeout: Long = 10,
-    timeUnit: TimeUnit = TimeUnit.SECONDS,
+    currentTimeout: Long = 6180L,
+    readTimeout: Long = 6180L,
     headerInterceptor: Interceptor? = null,
     loggingInterceptor: Interceptor? = null
 ) =
-    OkRetrofit.initializeNetwork(currentTimeout, readTimeout, timeUnit, headerInterceptor, loggingInterceptor)
+    OkRetrofit.initializeNetwork(currentTimeout, readTimeout, headerInterceptor, loggingInterceptor)
 
 fun initializeDevelopmentFrameworks(
     ctx: Context,
@@ -35,7 +33,7 @@ fun initializeDevelopmentFrameworks(
     @ColorInt
     success: Int = Color.parseColor("#2EBB7E"),
     @ColorInt
-    erro: Int = Color.parseColor("#F04848")
+    error: Int = Color.parseColor("#F04848")
 ) {
     globalContext = ctx.applicationContext
     /*TargetScreenMetrics 必须在主线程且必须第一个初始化,  否则 java.lang.ArithmeticException: divide by zero*/
@@ -48,7 +46,7 @@ fun initializeDevelopmentFrameworks(
         )
         MobclickAgent.setScenarioType(ctx, MobclickAgent.EScenarioType.E_UM_NORMAL)
         MobclickAgent.setCatchUncaughtExceptions(false)
-        Toasty.Config.getInstance().generatedConfig(normal, info, warning, success, erro).apply()
+        Toasty.Config.getInstance().generatedConfig(normal, info, warning, success, error).apply()
     }
 }
 
