@@ -25,7 +25,6 @@ class GlobalApplication : Application() {
             initializeNetwork(
                 currentTimeout = 10,
                 readTimeout = 10,
-                timeUnit = TimeUnit.SECONDS,
                 headerInterceptor = HeaderInterceptor(),
                 loggingInterceptor = LoggingInterceptor()
             )

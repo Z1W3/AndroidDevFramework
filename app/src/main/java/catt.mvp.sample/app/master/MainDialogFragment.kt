@@ -7,6 +7,9 @@ import catt.mvp.framework.proxy.ILifecycle
 
 
 class MainDialogFragment : BaseDialogFragment() {
+    override fun isDisallowUseBackKey(): Boolean {
+        return false
+    }
 
     override fun pageLabel(): String = "演示DialogFragment"
 
