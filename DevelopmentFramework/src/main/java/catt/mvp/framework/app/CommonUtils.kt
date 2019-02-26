@@ -3,18 +3,27 @@ package catt.mvp.framework.app
 import android.view.View
 import android.view.Window
 
-fun hideSystemUI(window: Window) {
-    val decorView = window.decorView
+private const val HIDE_NAVIGATION = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        or View.SYSTEM_UI_FLAG_FULLSCREEN)
 
-//    val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//            or View.SYSTEM_UI_FLAG_FULLSCREEN
-//            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+private val windowMap : HashMap<Int, Window> = HashMap()
 
-    val flags = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            or View.SYSTEM_UI_FLAG_FULLSCREEN)
-    decorView.systemUiVisibility = flags
+fun Window.setFullScreen() {
+    windowMap[hashCode()] = this
+    decorView.systemUiVisibility = HIDE_NAVIGATION
+}
+
+fun Window.enableAutoFullScreen() {
+    decorView.setOnSystemUiVisibilityChangeListener {
+        if (it != 6) {
+            for(window:Window in windowMap.values){
+                window.decorView.systemUiVisibility = HIDE_NAVIGATION
+            }
+        }
+    }
+}
+
+fun Window.disableAutoFullScreen() {
+    decorView.setOnSystemUiVisibilityChangeListener(null)
 }

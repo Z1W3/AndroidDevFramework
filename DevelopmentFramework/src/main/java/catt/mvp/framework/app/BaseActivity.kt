@@ -21,6 +21,9 @@ import kotlinx.android.synthetic.*
 
 abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.OnPermissionListener, LifecycleOwner {
 
+    open val isEnableFullScreen :Boolean
+        get() = true
+
     private val lifecycleRegistry:LifecycleRegistry by lazy{LifecycleRegistry(this@BaseActivity)}
 
     var isPaused:Boolean = false
@@ -41,13 +44,15 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
 
     override fun onCreate(savedInstanceState: Bundle?) {
         BaseActivityStack.get().push(this@BaseActivity)
-//        hideSystemUI()
         setTheme(injectStyleTheme)
         super.onCreate(savedInstanceState)
         lifecycleRegistry.addObserver(proxy)
         setContentView(injectLayoutId())
         permission.scan()
         window.decorView.postOnViewLoadCompleted()
+        if(isEnableFullScreen){
+            window.enableAutoFullScreen()
+        }
     }
 
     override fun onGrantedPermissionCompleted() =
@@ -63,7 +68,9 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
         try {
             isPaused = false
             MobclickAgent.onResume(this)
-            hideSystemUI(window)
+            if(isEnableFullScreen){
+                window.setFullScreen()
+            }
         } catch (ex: Exception) {
             w("BaseActivity", "", ex)
         }
@@ -78,6 +85,7 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
     override fun onDestroy() {
         this.clearFindViewByIdCache()
         super.onDestroy()
+        window.disableAutoFullScreen()
         BaseActivityStack.get().remove(this@BaseActivity)
         lifecycleRegistry.removeObserver(proxy)
         System.runFinalization()
@@ -122,12 +130,5 @@ abstract class BaseActivity : CompatLayoutActivity(), IProxy, PermissionHelper.O
 
     private fun View.postOnViewLoadCompleted() {
         post { proxy.onViewLoadCompleted() }
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus){
-            hideSystemUI(window)
-        }
     }
 }

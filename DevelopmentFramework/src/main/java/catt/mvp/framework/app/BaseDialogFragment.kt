@@ -18,9 +18,15 @@ import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 import org.android.eventbus.EventBus
 
-abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, LifecycleOwner
-     {
+abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, LifecycleOwner {
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
+
+    open val isEnableFullScreen :Boolean
+        get() {
+            val enableFullScreen = (activity as? BaseActivity)?.isEnableFullScreen
+            enableFullScreen ?: return false
+            return enableFullScreen
+        }
 
     var isPaused:Boolean = false
 
@@ -59,7 +65,6 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         super.onStart()
         dialog.window!!.setLayout(widthLayoutSize, heightLayoutSize)
         dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        hideSystemUI(dialog.window)
         dialog.setOnKeyListener(object : DialogInterface.OnKeyListener {
             override fun onKey(dialog: DialogInterface?, keyCode: Int, event: KeyEvent?): Boolean {
                 return if ( keyCode == KeyEvent.KEYCODE_BACK && event!!.action == KeyEvent.ACTION_DOWN) {
@@ -109,7 +114,9 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         super.onResume()
         isPaused = false
         proxy.onResume()
-        hideSystemUI(dialog.window)
+        if(isEnableFullScreen){
+            dialog?.window?.setFullScreen()
+        }
         MobclickAgent.onPageStart(pageLabel())
     }
 

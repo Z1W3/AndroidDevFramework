@@ -21,6 +21,13 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
     private val _TAG by lazy { BaseFragment::class.java.simpleName }
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseFragment) }
 
+    open val isEnableFullScreen :Boolean
+        get() {
+            val enableFullScreen = (activity as? BaseActivity)?.isEnableFullScreen
+            enableFullScreen ?: return false
+            return enableFullScreen
+        }
+
     var isPaused:Boolean = false
     /**
      * 友盟记录
@@ -84,8 +91,8 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
         isPaused = false
         proxy.onResume()
         MobclickAgent.onPageStart(pageLabel())
-        activity?.apply {
-            hideSystemUI(window)
+        if(isEnableFullScreen){
+            activity?.window?.setFullScreen()
         }
     }
 
