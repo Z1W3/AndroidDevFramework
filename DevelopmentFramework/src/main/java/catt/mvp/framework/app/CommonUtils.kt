@@ -7,7 +7,7 @@ private const val HIDE_NAVIGATION = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         or View.SYSTEM_UI_FLAG_FULLSCREEN)
 
-private val windowMap : HashMap<Int, Window> = HashMap()
+private val windowMap : HashMap<Int, Window> by lazy { HashMap<Int, Window>() }
 
 fun Window.setFullScreen() {
     windowMap[hashCode()] = this
