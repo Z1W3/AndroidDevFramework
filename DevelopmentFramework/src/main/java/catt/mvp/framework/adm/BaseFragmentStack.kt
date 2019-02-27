@@ -7,6 +7,10 @@ import java.util.*
 
 class BaseFragmentStack : IStack<BaseFragment> {
     private val stack: Stack<BaseFragment> by lazy { Stack<BaseFragment>() }
+
+    val size: Int
+        get() = stack.size
+
     override fun push(target: BaseFragment) {
         synchronized(target) {
             stack.remove(target)
@@ -30,10 +34,6 @@ class BaseFragmentStack : IStack<BaseFragment> {
     override fun peek(): BaseFragment? {
         if (empty()) return null
         return stack.peek()
-    }
-
-    fun peekDown(): BaseFragment {
-        return stack.elementAt(stack.size - 2)
     }
 
     override fun empty(): Boolean = stack.empty()
