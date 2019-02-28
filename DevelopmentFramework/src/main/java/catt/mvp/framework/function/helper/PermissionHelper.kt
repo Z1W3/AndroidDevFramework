@@ -14,6 +14,7 @@ import catt.mvp.framework.function.component.IPermissionComponent
 import catt.mvp.framework.function.component.IPermissionComponent.PH.PERMISSION_REQUEST_CODE
 import catt.mvp.framework.function.component.IPermissionComponent.PH.permissionAscriptionGroup
 import catt.mvp.framework.function.component.IPermissionComponent.PH.translatePermission
+import catt.mvp.framework.function.component.isNeedEnablePermission
 
 class PermissionHelper(private val activity: Activity, private val listener: OnPermissionListener) : IPermissionComponent {
     private val _TAG by lazy { PermissionHelper::class.java.simpleName }

@@ -25,21 +25,6 @@ interface IPermissionComponent {
     fun onPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray)
 
     /**
-     * 查询是否有需要激活的权限
-     * @return if `true`, Need to apply for activation permission. if `false`, has been fully activated permission.
-     */
-    fun Activity.isNeedEnablePermission(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            for (permission in requestedPermissions()) {
-                if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(applicationContext, permission)) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    /**
      * 是否重新请求授权
      */
     fun Activity.shouldShowRequestPermissionRationale(): Boolean{
@@ -72,23 +57,6 @@ interface IPermissionComponent {
             data = Uri.fromParts("package", packageName, null)
         }
         ActivityCompat.startActivityForResult(this, it, PERMISSION_REQUEST_CODE, null)
-    }
-
-    private fun Context.requestedPermissions() : Array<String> {
-        val list = mutableListOf<String>()
-        val permissionArray:Array<String> = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions
-        for(index in permissionArray.indices){
-            try {
-                val permission = permissionArray[index]
-                val permissionInfo = packageManager.getPermissionInfo(permission, PackageManager.GET_META_DATA)
-                if(PermissionInfo.PROTECTION_DANGEROUS == PermissionInfoCompat.getProtection(permissionInfo))
-                    list.add(permission)
-            }
-            catch (ex : PackageManager.NameNotFoundException){
-                ex.printStackTrace()
-            }
-        }
-        return list.toTypedArray()
     }
 
 
