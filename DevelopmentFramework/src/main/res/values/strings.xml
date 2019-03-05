@@ -18,6 +18,7 @@
 
     <string name="net_local_wifi_error">请检查本地网络</string>
     <string name="net_network_connection_not_smooth">网络连接不畅通</string>
-    <string name="net_server_api_abnormal">网络发生故障，请稍后尝试</string>
-    <!--<string name="net_server_api_abnormal">后台功能异常</string>-->
+    <string name="net_server_api_abnormal">后台功能异常</string>
+
+    <string name="as_net_server_api_abnormal">当前网络信号弱</string>
 </resources>

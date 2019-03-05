@@ -21,6 +21,8 @@ fun initializeNetwork(
 ) =
     OkRetrofit.initializeNetwork(currentTimeout, readTimeout, headerInterceptor, loggingInterceptor)
 
+internal var isSPT:Boolean = false
+
 fun initializeDevelopmentFrameworks(
     ctx: Context,
     property: String,
@@ -33,8 +35,11 @@ fun initializeDevelopmentFrameworks(
     @ColorInt
     success: Int = Color.parseColor("#2EBB7E"),
     @ColorInt
-    error: Int = Color.parseColor("#F04848")
+    error: Int = Color.parseColor("#F04848"),
+    toastSize : Int = 14,
+    isSimpleResponseToast:Boolean = false
 ) {
+    isSPT = isSimpleResponseToast
     globalContext = ctx.applicationContext
     /*TargetScreenMetrics 必须在主线程且必须第一个初始化,  否则 java.lang.ArithmeticException: divide by zero*/
     TargetScreenMetrics.get().initContent(ctx, property)
@@ -46,20 +51,20 @@ fun initializeDevelopmentFrameworks(
         )
         MobclickAgent.setScenarioType(ctx, MobclickAgent.EScenarioType.E_UM_NORMAL)
         MobclickAgent.setCatchUncaughtExceptions(false)
-        Toasty.Config.getInstance().generatedConfig(normal, info, warning, success, error).apply()
+        Toasty.Config.getInstance().generatedConfig(normal, info, warning, success, error, toastSize).apply()
     }
 }
 
 
 private fun Toasty.Config.generatedConfig(
-    @ColorInt normal: Int, @ColorInt info: Int,
-    @ColorInt warning: Int, @ColorInt success: Int,
-    @ColorInt erro: Int
+    @ColorInt n: Int, @ColorInt i: Int,
+    @ColorInt w: Int, @ColorInt s: Int,
+    @ColorInt e: Int, toastSize:Int
 ): Toasty.Config =
-    setTextColor(normal)
-        .setInfoColor(info)
-        .setWarningColor(warning)
-        .setSuccessColor(success)
-        .setErrorColor(erro)
+    setTextColor(n)
+        .setInfoColor(i)
+        .setWarningColor(w)
+        .setSuccessColor(s)
+        .setErrorColor(e)
         .tintIcon(true)
-        .setTextSize(14)
+        .setTextSize(toastSize)

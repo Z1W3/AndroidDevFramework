@@ -6,7 +6,9 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.widget.Toast
 import catt.mvp.framework.R
+import catt.mvp.framework.function.component.toastError
 import catt.mvp.framework.globalContext
+import catt.mvp.framework.isSPT
 import catt.mvp.framework.model.network.throwables.ResponseBodyException
 import es.dmoral.toasty.Toasty
 import okhttp3.ResponseBody
@@ -72,27 +74,33 @@ interface ICallResult<T> {
         when  {
             ex is SocketTimeoutException || ex is ConnectException -> {
                 when (isNetworkAvailable(ctx)) {
-                    true ->
-                        Toasty.error(ctx, R.string.net_network_connection_not_smooth, Toast.LENGTH_SHORT, true).show()
+                    true -> ctx.toastError(R.string.net_network_connection_not_smooth)
                     false ->{
-                        Toasty.error(ctx, R.string.net_local_wifi_error, Toast.LENGTH_SHORT, true).show()
+                        ctx.toastError(R.string.net_local_wifi_error)
                         onCheckLocalWifi()
                     }
                 }
             }
             ex is UnknownHostException->{
                 when (isNetworkAvailable(ctx)) {
-                    true ->
-                        Toasty.error(ctx, R.string.net_server_api_abnormal, Toast.LENGTH_SHORT, true).show()
+                    true -> ctx.toastError(
+                        when (isSPT) {
+                            true -> R.string.as_net_server_api_abnormal
+                            false -> R.string.net_server_api_abnormal
+                        }
+                    )
                     false ->{
-                        Toasty.error(ctx, R.string.net_local_wifi_error, Toast.LENGTH_SHORT, true).show()
+                        ctx.toastError(R.string.net_local_wifi_error)
                         onCheckLocalWifi()
                     }
                 }
             }
-            code == 0 && ex is ResponseBodyException -> Toasty.error(ctx, ex.message!!, Toast.LENGTH_SHORT, true).show()
+            code == 0 && ex is ResponseBodyException -> ctx.toastError(ex.message!!)
             else -> {
-                Toasty.error(ctx, R.string.net_server_api_abnormal, Toast.LENGTH_SHORT, true).show()
+                when (isSPT) {
+                    true -> R.string.as_net_server_api_abnormal
+                    false -> R.string.net_server_api_abnormal
+                }
             }
         }
     }

@@ -58,7 +58,7 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        BaseFragmentStack.get().push(this)
+        BaseFragmentStack.get().push(this@BaseFragment)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
