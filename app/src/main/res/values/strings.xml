@@ -1,21 +1,3 @@
 <resources>
-    <string name="app_name">TestPresenter</string>
-    <string name="unapply_permission_list_title">等申请权限列表</string>
-    <string name="goto_apply_permission">以下权限需要前往『权限』手动授权.</string>
-    <string name="apply_now">立即申请</string>
-
-    <string name="dangerous_permission_group_calendar">访问日历相关的运行时权限</string>
-    <string name="dangerous_permission_group_camera">访问设备相机相关联的权限</string>
-    <string name="dangerous_permission_group_contacts">访问设备上的通讯录相关的运行时权限</string>
-    <string name="dangerous_permission_group_location">访问设备位置的权限</string>
-    <string name="dangerous_permission_group_microphone">访问设备访问麦克风音频相关联的权限</string>
-    <string name="dangerous_permission_group_phone">访问电话相关的权限</string>
-    <string name="dangerous_permission_group_sensors">访问设备捕获图像视频相关联的权限</string>
-    <string name="dangerous_permission_group_sms">访问用户的短信相关的运行时权限</string>
-    <string name="dangerous_permission_group_storage">访问共享外部存储相关的运行时权限</string>
-    <string name="no_dangerous_permission">需要激活相应的权限</string>
-
-    <string name="net_local_wifi_error">请检查本地网络</string>
-    <string name="net_network_connection_not_smooth">网络连接不畅通</string>
-    <string name="net_server_api_abnormal">后台功能异常</string>
+    <string name="app_name">AndroidDevelopmentFramework</string>
 </resources>

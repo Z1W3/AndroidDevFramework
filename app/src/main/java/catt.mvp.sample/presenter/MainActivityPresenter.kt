@@ -1,20 +1,23 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainActivity
-import catt.mvp.sample.base.model.network.base.OkRft
-import catt.mvp.sample.base.model.network.callback.SimpleCallResult
-import catt.mvp.sample.base.model.network.component.callJsonArrayResponse
-import catt.mvp.sample.base.model.network.component.callJsonObjectResponse
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.framework.model.network.base.OkRetrofit
+import catt.mvp.framework.model.network.callback.SimpleCallResult
+import catt.mvp.framework.model.network.component.callJsonArrayResponse
+import catt.mvp.framework.model.network.component.callJsonObjectResponse
+import catt.mvp.framework.presenter.BasePresenter
 import catt.mvp.sample.model.network.IDggStoreService
 import catt.mvp.sample.model.network.response.LotteryListBean
 import catt.mvp.sample.model.network.response.LotteryTypesBean
 
 class MainActivityPresenter : BasePresenter(), IMainActivity.Presenter {
+    override fun onCreate() {
+
+    }
 
     private val _TAG:String by lazy { MainActivityPresenter::class.java.simpleName }
 
-    private val dggService:IDggStoreService by lazy { OkRft.create(IDggStoreService::class.java) }
+    private val dggService:IDggStoreService by lazy { OkRetrofit.create(IDggStoreService::class.java) }
 
     override fun setContent() {
         dggService.getLotteryTypes().callJsonArrayResponse(result = object : SimpleCallResult<Array<LotteryTypesBean>>(){

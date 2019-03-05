@@ -1,9 +1,12 @@
 package catt.mvp.sample.presenter
 
 import catt.mvp.sample.app.interfaces.IMainFragment
-import catt.mvp.sample.base.presenter.BasePresenter
+import catt.mvp.framework.presenter.BasePresenter
 
 class MainFragmentPresenter : BasePresenter(), IMainFragment.Presenter {
+    override fun onCreate() {
+
+    }
 
     init {
         Thread{

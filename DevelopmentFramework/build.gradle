@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        /*生产环境*/ release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            /*图片加载框架,缓存路径*/ buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
+            /*图片加载框架,缓存大小*/ buildConfigField "Long", "GLIDE_CACHE_MEMORY", "${glide_cache_memory}"
+            /*网络框架,生产环境服务器地址*/ buildConfigField "String", "SERVICE_BASE_URL", "\"${produce_base_url}\""
+            /*友盟统计框架,安全码*/ buildConfigField "String", "UMENG_SECRET_KEY", "\"${umeng_secret_key}\""
+            /*友盟统计框架,应用ID*/ buildConfigField "String", "UMENG_APP_IDENTITY", "\"${umeng_app_identity}\""
+            /*友盟统计框架,渠道号*/ buildConfigField "String", "UMENG_CHANNEL", "\"${umeng_channel}\""
+        }
+        /*测试环境*/ debug {
+            /*图片加载框架,缓存路径*/ buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
+            /*图片加载框架,缓存大小*/ buildConfigField "Long", "GLIDE_CACHE_MEMORY", "${glide_cache_memory}"
+            /*网络框架,测试环境服务器地址*/ buildConfigField "String", "SERVICE_BASE_URL", "\"${test_base_url}\""
+            /*友盟统计框架,安全码*/ buildConfigField "String", "UMENG_SECRET_KEY", "\"${umeng_secret_key}\""
+            /*友盟统计框架,应用ID*/ buildConfigField "String", "UMENG_APP_IDENTITY", "\"${umeng_app_identity}\""
+            /*友盟统计框架,渠道号*/ buildConfigField "String", "UMENG_CHANNEL", "\"${umeng_channel}\""
+        }
+    }
+}
+
+dependencies {
+    /*system-android*/ implementation 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    /*system-kotlin*/ implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    /*system-kotlinX*/ implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+
+    /*兼容适配布局*/ implementation 'com.github.LuckyCattZW:CompatLayoutAdapter:1.0.9'
+
+    /*彩色Toast提示框架*/ implementation project(':ToastyLibs')
+    /*基于androidOS的事件总线框架*/ implementation project(':AndroidEventBusLibs')
+
+    /*网络框架*/ implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    /*网络框架*/ implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    /*网络框架*/ implementation('com.squareup.retrofit2:converter-gson:2.5.0') {
+        exclude group: "com.google.code.gson"
+    }
+
+    /*图片加载框架*/ implementation('com.github.bumptech.glide:okhttp3-integration:4.8.0') {
+        exclude group: "com.android.support"
+        exclude group: "com.squareup.okhttp3"
+    }
+
+    /*图片加载框架*/ kapt 'com.github.bumptech.glide:compiler:4.8.0'
+
+    /*友盟统计框架*/ implementation 'com.umeng.sdk:common:1.5.0'
+    /*友盟统计框架*/ implementation 'com.umeng.sdk:analytics:7.5.0'
+
+    /*Gson解析框架*/
+    implementation 'com.google.code.gson:gson:2.8.5'
+}

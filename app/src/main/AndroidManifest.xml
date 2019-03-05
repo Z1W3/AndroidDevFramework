@@ -17,7 +17,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Launcher">
         <!--application$android:theme 不要修改-->
-        <!--activity的样式请在代码中修改. Example:catt.mvp.sample.base.app.BaseActivity.onCreate()-->
+        <!--activity的样式请在代码中修改. Example:catt.mvp.framework.app.BaseActivity.onCreate()-->
         <activity
                 android:name=".app.master.MainActivity">
             <intent-filter>

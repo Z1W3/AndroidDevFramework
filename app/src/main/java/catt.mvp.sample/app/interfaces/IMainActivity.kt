@@ -1,7 +1,7 @@
 package catt.mvp.sample.app.interfaces
 
-import catt.mvp.sample.base.proxy.annotations.DeclaredPresenterInterface
-import catt.mvp.sample.base.proxy.annotations.DeclaredViewInterface
+import catt.mvp.framework.proxy.annotations.DeclaredPresenterInterface
+import catt.mvp.framework.proxy.annotations.DeclaredViewInterface
 
 
 interface IMainActivity {

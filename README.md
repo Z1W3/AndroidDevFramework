@@ -8,18 +8,42 @@
 - 网络通信采用retrofit2
 - 集成像素比例适配方案
 
+### 初始化
+```kotlin
+    import catt.mvp.framework.initializeDevelopmentFrameworks
+    import catt.mvp.framework.initializeNetwork
+
+    class GlobalApplication : Application() {
+        override fun onCreate() {
+            super.onCreate()
+            /*
+               第一个参数，传入上下文
+               第二个参数传入适配的像素
+             */
+            initializeDevelopmentFrameworks(applicationContext, "1920x1080,2046x1536")
+            
+            
+            initializeNetwork(
+                            headerInterceptor = HeaderInterceptor(),
+                            loggingInterceptor = LoggingInterceptor()
+                        )
+        }
+    }
+```
+
+
 ### 1 委托类
 #### 1.1 创建委托类
 委托类(Activity、Fragment、DialogFragment)均需分别继承相应的Base类
 ```kotlin
     //Your Activity
-    class MainActivity : catt.mvp.sample.base.app.BaseActivity()
+    class MainActivity : catt.mvp.framework.app.BaseActivity()
     
     //Your Fragment
-    class MainFragment : catt.mvp.sample.base.app.BaseFragment()
+    class MainFragment : catt.mvp.framework.app.BaseFragment()
     
     //Your DialogFragment
-    class MainDialogFragment : catt.mvp.sample.base.app.BaseDialogFragment()
+    class MainDialogFragment : catt.mvp.framework.app.BaseDialogFragment()
 ```
 
 #### 1.2 委托类中的方法
@@ -75,19 +99,19 @@ interface IMainActivity {
 ##### 2.2.2 代理类实现V层接口
 代理类实现V层接口
 ```kotlin
-    class MainActivityImpl : catt.mvp.sample.base.proxy.ProxyBaseActivity<MainActivity>(), IMainActivity.View{
+    class MainActivityImpl : catt.mvp.framework.proxy.ProxyBaseActivity<MainActivity>(), IMainActivity.View{
         //Your View Interface Method
         // ....
     }
 
     //Fragment委托代理的实现类需要继承ProxyBaseFragment, 泛型内传入该Fragment的实际委托类
-    class MainFragmentImpl : catt.mvp.sample.base.proxy.ProxyBaseFragment<MainFragment>(), IMainFragment.View{
+    class MainFragmentImpl : catt.mvp.framework.proxy.ProxyBaseFragment<MainFragment>(), IMainFragment.View{
         //Your View Interface Method
         // ....
     }
 
     //DialogFragment委托代理的实现类需要继承ProxyBaseDialogFragment, 泛型内传入该DialogFragment的实际委托类
-    class MainDialogFragmentImpl : catt.mvp.sample.base.proxy.ProxyBaseDialogFragment<MainDialogFragment>(), IMainDialogFragment.View{
+    class MainDialogFragmentImpl : catt.mvp.framework.proxy.ProxyBaseDialogFragment<MainDialogFragment>(), IMainDialogFragment.View{
         //Your View Interface Method
         // ....
     }
@@ -95,7 +119,7 @@ interface IMainActivity {
 ##### 2.2.3 创建P层类并实现P层接口
 ```kotlin
     //每个Presenter均需继承BasePresenter，并实现2.2.1中的P层接口
-    class MainActivityPresenter : catt.mvp.sample.base.presenter.BasePresenter(), IMainActivity.Presenter{
+    class MainActivityPresenter : catt.mvp.framework.presenter.BasePresenter(), IMainActivity.Presenter{
         //Your Presenter Interface Method
         // ....
     }
@@ -281,31 +305,6 @@ umeng_channel=
 produce_base_url=http://www.xxx.zzz.com/
 test_base_url=http://dev.xxx.zzz.com/
 ```
-
-#### 4.2 retrofit2访问网络追加头部内容
-修改位置 catt.mvp.sample.base.model.network.interceptor.HeaderInterceptor
-
-```kotlin
-class HeaderInterceptor : Interceptor {
-
-    override fun intercept(chain: Interceptor.Chain): Response =
-        chain.proceed(
-            chain.request()
-                .newBuilder()
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                .addHeader("Connection", "keep-alive")
-                .addHeader("authorization" /*认证用户token*/, "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJ1c2VyUm9sZVwiOlwibm9ybWFsXCIsXCJ1c2VySWRcIjpcIjRjNDM2MjdhMmYwYTRkZWFiNTg3NmY5YTdjZGJlZWY0XCJ9IiwiZXhwIjoxNTc0NzU2NzEzfQ.ix-1aaIbQh9pyDO2ZxK2sENy9u6iaAd4BhxpKxi8XGs")
-                .addHeader("beginTime"/*请求开始时间*/, System.currentTimeMillis().toString())
-                .addHeader("appId"/*客户端APP编号*/, "5b1754733cb3f37bb05bb0f5")
-                .addHeader("terminal"/*客户端版本*/, "")
-                .addHeader("deviceNo"/*设备号*/, "D428D53116A0616")
-                .build()
-        )
-}
-```
-#### 4.2 retrofit2访问网络日志拦截
-修改位置 catt.mvp.sample.base.model.network.interceptor.LoggingInterceptor
-
 
 ### 5 其他
 #### 5.1 [@像素比适配方案](https://github.com/LuckyCattZW/CompatLayoutAdapter)

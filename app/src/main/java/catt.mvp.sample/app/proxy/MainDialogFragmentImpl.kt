@@ -7,8 +7,8 @@ import android.widget.Button
 import catt.mvp.sample.R
 import catt.mvp.sample.app.interfaces.IMainDialogFragment
 import catt.mvp.sample.app.master.MainDialogFragment
-import catt.mvp.sample.base.proxy.ProxyBaseDialogFragment
-import catt.mvp.sample.base.proxy.annotations.InjectPresenter
+import catt.mvp.framework.proxy.ProxyBaseDialogFragment
+import catt.mvp.framework.proxy.annotations.InjectPresenter
 import catt.mvp.sample.model.User
 import org.android.eventbus.EventBus
 
