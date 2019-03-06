@@ -4,13 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
-import android.widget.Toast
 import catt.mvp.framework.R
 import catt.mvp.framework.function.component.toastError
 import catt.mvp.framework.globalContext
 import catt.mvp.framework.isSPT
 import catt.mvp.framework.model.network.throwables.ResponseBodyException
-import es.dmoral.toasty.Toasty
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.net.ConnectException
@@ -95,12 +93,15 @@ interface ICallResult<T> {
                     }
                 }
             }
-            code == 0 && ex is ResponseBodyException -> ctx.toastError(ex.message!!)
+            code == 0 && ex is ResponseBodyException -> ctx.toastError(R.string.as_net_server_api_abnormal)
+            code == 401 && ex is ResponseBodyException -> ctx.toastError(ex.message!!)
             else -> {
-                when (isSPT) {
-                    true -> R.string.as_net_server_api_abnormal
-                    false -> R.string.net_server_api_abnormal
-                }
+                ctx.toastError(
+                    when (isSPT) {
+                        true -> R.string.as_net_server_api_abnormal
+                        false -> R.string.net_server_api_abnormal
+                    }
+                )
             }
         }
     }
