@@ -11,10 +11,8 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
     buildTypes {
         /*生产环境*/ release {
             minifyEnabled false
@@ -28,7 +26,6 @@ android {
 
 dependencies {
     /*system-android*/ implementation 'com.android.support:appcompat-v7:28.0.0'
-    testImplementation 'junit:junit:4.12'
     /*system-kotlin*/ implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     /*system-kotlinX*/ implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
 
