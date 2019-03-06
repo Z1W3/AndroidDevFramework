@@ -1,6 +1,6 @@
 package catt.mvp.framework.model.network.base
 
-import catt.mvp.framework.BuildConfig
+import catt.mvp.framework.globalServiceBaseUrl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -42,7 +42,7 @@ object OkRetrofit {
     @JvmStatic
     private val apiRetrofit:Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(BuildConfig.SERVICE_BASE_URL)
+            .baseUrl(globalServiceBaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

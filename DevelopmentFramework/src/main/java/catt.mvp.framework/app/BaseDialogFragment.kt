@@ -16,7 +16,6 @@ import catt.mvp.framework.proxy.IProxy
 import catt.mvp.framework.proxy.ProxyBaseDialogFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
-import org.android.eventbus.EventBus
 
 abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, LifecycleOwner {
     private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
@@ -57,7 +56,6 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(this)
         lifecycleRegistry.addObserver(proxy)
     }
 
@@ -134,7 +132,6 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
 
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().unregister(this)
         lifecycleRegistry.removeObserver(proxy)
 
     }
