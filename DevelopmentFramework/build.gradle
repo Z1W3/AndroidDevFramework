@@ -35,7 +35,6 @@ dependencies {
     /*兼容适配布局*/ implementation 'com.github.LuckyCattZW:CompatLayoutAdapter:1.0.9'
 
     /*彩色Toast提示框架*/ implementation project(':ToastyLibs')
-    /*基于androidOS的事件总线框架*/ implementation project(':AndroidEventBusLibs')
 
     /*网络框架*/ implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     /*网络框架*/ implementation 'com.squareup.retrofit2:retrofit:2.5.0'
