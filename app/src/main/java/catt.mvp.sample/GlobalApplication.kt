@@ -7,7 +7,6 @@ import catt.mvp.framework.initializeNetwork
 import catt.mvp.sample.model.interceptor.HeaderInterceptor
 import catt.mvp.sample.model.interceptor.LoggingInterceptor
 import kotlinx.coroutines.*
-import java.util.concurrent.TimeUnit
 
 
 @ExperimentalCoroutinesApi
@@ -15,7 +14,18 @@ class GlobalApplication : Application() {
     private val _TAG by lazy { GlobalApplication::class.java.simpleName }
     override fun onCreate() {
         super.onCreate()
-        initializeDevelopmentFrameworks(applicationContext, "1920x1080,2046x1536")
+        initializeDevelopmentFrameworks(
+            applicationContext,
+            "1920x1080,2046x1536",
+            BuildConfig.SERVICE_BASE_URL,
+            BuildConfig.UMENG_APP_IDENTITY,
+            BuildConfig.UMENG_CHANNEL,
+            BuildConfig.UMENG_SECRET_KEY,
+            BuildConfig.GLIDE_CACHE_MEMORY,
+            BuildConfig.GLIDE_CACHE_PATH,
+            toastSize = 40,
+            isSimpleResponseToast = true
+        )
         initialize(applicationContext)
     }
 

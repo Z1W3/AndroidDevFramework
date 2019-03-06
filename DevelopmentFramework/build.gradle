@@ -19,20 +19,9 @@ android {
         /*生产环境*/ release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            /*图片加载框架,缓存路径*/ buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
-            /*图片加载框架,缓存大小*/ buildConfigField "Long", "GLIDE_CACHE_MEMORY", "${glide_cache_memory}"
-            /*网络框架,生产环境服务器地址*/ buildConfigField "String", "SERVICE_BASE_URL", "\"${produce_base_url}\""
-            /*友盟统计框架,安全码*/ buildConfigField "String", "UMENG_SECRET_KEY", "\"${umeng_secret_key}\""
-            /*友盟统计框架,应用ID*/ buildConfigField "String", "UMENG_APP_IDENTITY", "\"${umeng_app_identity}\""
-            /*友盟统计框架,渠道号*/ buildConfigField "String", "UMENG_CHANNEL", "\"${umeng_channel}\""
         }
         /*测试环境*/ debug {
-            /*图片加载框架,缓存路径*/ buildConfigField "String", "GLIDE_CACHE_PATH", "\"${glide_cache_path}\""
-            /*图片加载框架,缓存大小*/ buildConfigField "Long", "GLIDE_CACHE_MEMORY", "${glide_cache_memory}"
-            /*网络框架,测试环境服务器地址*/ buildConfigField "String", "SERVICE_BASE_URL", "\"${test_base_url}\""
-            /*友盟统计框架,安全码*/ buildConfigField "String", "UMENG_SECRET_KEY", "\"${umeng_secret_key}\""
-            /*友盟统计框架,应用ID*/ buildConfigField "String", "UMENG_APP_IDENTITY", "\"${umeng_app_identity}\""
-            /*友盟统计框架,渠道号*/ buildConfigField "String", "UMENG_CHANNEL", "\"${umeng_channel}\""
+
         }
     }
 }

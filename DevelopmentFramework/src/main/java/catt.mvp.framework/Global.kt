@@ -23,22 +23,53 @@ fun initializeNetwork(
 
 internal var isSPT:Boolean = false
 
+
+internal lateinit var globalServiceBaseUrl:String
+internal var globalGlideCacheMemory:Long = 0L
+internal var globalGlideCachePath:String = ".OwnGlideCache"
+
+/**
+ * @param ctx:Context                       必填      用户上下文
+ * @param property: String                  必填      适配像素比（example："1920x1080,2046x1536"）
+ * @param serviceBaseUrl: String            必填      网络请求地址 host
+ * @param umengAppId: String                必填      友盟APPID
+ * @param umengChannel: String              必填      友盟渠道
+ * @param umengSecretKey: String            选填      友盟安全KEY
+ * @param glideCacheMemory: Long            选填      glide缓存大小
+ * @param glideCachePath: String            选填      glide缓存地址
+ * @param toastColorNormal: Int             选填      toast颜色
+ * @param toastColorInfo: Int               选填      toast颜色
+ * @param toastColorWarning: Int            选填      toast颜色
+ * @param toastColorSuccess: Int            选填      toast颜色
+ * @param toastColorError: Int              选填      toast颜色
+ * @param toastSize : Int                   选填      toast文字大小
+ * @param isSimpleResponseToast:Boolean     选填      如果true,网络返回的错误信息均提示网络相关问题
+ */
 fun initializeDevelopmentFrameworks(
     ctx: Context,
     property: String,
+    serviceBaseUrl: String,
+    umengAppId: String,
+    umengChannel: String,
+    umengSecretKey: String = "",
+    glideCacheMemory: Long = 1024L * 1024L * 24L,
+    glideCachePath: String = ".OwnGlideCache",
     @ColorInt
-    normal: Int = Color.parseColor("#FFFFFF"),
+    toastColorNormal: Int = Color.parseColor("#FFFFFF"),
     @ColorInt
-    info: Int = Color.parseColor("#2A7DCE"),
+    toastColorInfo: Int = Color.parseColor("#2A7DCE"),
     @ColorInt
-    warning: Int = Color.parseColor("#E39224"),
+    toastColorWarning: Int = Color.parseColor("#E39224"),
     @ColorInt
-    success: Int = Color.parseColor("#2EBB7E"),
+    toastColorSuccess: Int = Color.parseColor("#2EBB7E"),
     @ColorInt
-    error: Int = Color.parseColor("#F04848"),
+    toastColorError: Int = Color.parseColor("#F04848"),
     toastSize : Int = 14,
     isSimpleResponseToast:Boolean = false
 ) {
+    globalServiceBaseUrl = serviceBaseUrl
+    globalGlideCacheMemory = glideCacheMemory
+    globalGlideCachePath = glideCachePath
     isSPT = isSimpleResponseToast
     globalContext = ctx.applicationContext
     /*TargetScreenMetrics 必须在主线程且必须第一个初始化,  否则 java.lang.ArithmeticException: divide by zero*/
@@ -46,12 +77,13 @@ fun initializeDevelopmentFrameworks(
     GlobalScope.launch(Dispatchers.IO, CoroutineStart.ATOMIC) {
         UMConfigure.init(
             ctx,
-            BuildConfig.UMENG_APP_IDENTITY, BuildConfig.UMENG_CHANNEL,
-            UMConfigure.DEVICE_TYPE_PHONE, BuildConfig.UMENG_SECRET_KEY
+            umengAppId, umengChannel,
+            UMConfigure.DEVICE_TYPE_PHONE, umengSecretKey
         )
         MobclickAgent.setScenarioType(ctx, MobclickAgent.EScenarioType.E_UM_NORMAL)
         MobclickAgent.setCatchUncaughtExceptions(false)
-        Toasty.Config.getInstance().generatedConfig(normal, info, warning, success, error, toastSize).apply()
+        Toasty.Config.getInstance().generatedConfig(
+            toastColorNormal, toastColorInfo, toastColorWarning, toastColorSuccess, toastColorError, toastSize).apply()
     }
 }
 

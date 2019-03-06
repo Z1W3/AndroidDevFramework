@@ -2,7 +2,8 @@ package catt.mvp.framework.function.module
 
 import android.content.Context
 import android.util.Log
-import catt.mvp.framework.BuildConfig
+import catt.mvp.framework.globalGlideCacheMemory
+import catt.mvp.framework.globalGlideCachePath
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry
@@ -24,10 +25,10 @@ class GlideConfigure : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         super.applyOptions(context, builder)
         builder.setLogLevel(Log.DEBUG)
-        builder.setMemoryCache(LruResourceCache(BuildConfig.GLIDE_CACHE_MEMORY))
+        builder.setMemoryCache(LruResourceCache(globalGlideCacheMemory))
         builder.setBitmapPool(LruBitmapPool(3))
         builder.setDiskCache(InternalCacheDiskCacheFactory(context,
-            getDiskFileString(context, BuildConfig.GLIDE_CACHE_PATH), BuildConfig.GLIDE_CACHE_MEMORY))
+            getDiskFileString(context, globalGlideCachePath), globalGlideCacheMemory))
         builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565).disallowHardwareConfig())
     }
 
