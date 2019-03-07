@@ -81,6 +81,7 @@ abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
         this.clearFindViewByIdCache()
         proxy.onDestroyView()
         super.onDestroyView()
+        activity?.window?.removeWindowCache()
         BaseFragmentStack.get().remove(this)
         System.runFinalization()
     }

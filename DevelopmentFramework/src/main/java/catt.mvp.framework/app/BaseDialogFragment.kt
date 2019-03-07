@@ -103,6 +103,7 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         proxy.onDestroyView()
         super.onDestroyView()
         isShowing = false
+        activity?.window?.removeWindowCache()
         BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
         System.runFinalization()
     }
