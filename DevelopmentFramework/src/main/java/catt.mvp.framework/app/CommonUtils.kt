@@ -30,11 +30,14 @@ fun Window.removeWindowCache(){
 }
 
 fun Window.enableAutoFullScreen() {
-    decorView.setOnSystemUiVisibilityChangeListener {
-        if (it != 6) {
-            windowMap.values.forEach {soft->
-                soft.get()?.apply own@{
-                    this@own.setSystemUiVisibility(HIDE_NAVIGATION)
+    decorView.setOnSystemUiVisibilityChangeListener { visible ->
+        if (visible != 6) {
+            windowMap.values.forEach { soft ->
+                if(soft.get() == null){
+                    this.setSystemUiVisibility(HIDE_NAVIGATION)
+                }
+                else{
+                    soft.get()?.setSystemUiVisibility(HIDE_NAVIGATION)
                 }
             }
         }
