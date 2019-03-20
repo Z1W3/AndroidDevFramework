@@ -3,22 +3,23 @@ package catt.mvp.framework.app
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
+import android.support.v4.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import catt.compat.layout.app.CompatLayoutDialogFragment
-import catt.mvp.framework.adm.BaseDialogFragmentStack
+import catt.compat.layout.app.CompatLayoutFragment
+import catt.mvp.framework.adm.BaseFragmentStack
 import catt.mvp.framework.proxy.IProxy
-import catt.mvp.framework.proxy.ProxyBaseDialogFragment
+import catt.mvp.framework.proxy.ProxyBaseFragment
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.*
 
-abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, LifecycleOwner {
-    private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseDialogFragment) }
+abstract class BaseFragment : CompatLayoutFragment(), IProxy, LifecycleOwner {
+
+    private val _TAG by lazy { BaseFragment::class.java.simpleName }
+    private val lifecycleRegistry:LifecycleRegistry by lazy{ LifecycleRegistry(this@BaseFragment) }
 
     open val isEnableFullScreen :Boolean
         get() {
@@ -28,9 +29,6 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         }
 
     var isPaused:Boolean = false
-
-    var isShowing: Boolean = false
-
     /**
      * 友盟记录
      */
@@ -38,17 +36,12 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
 
     abstract fun injectLayoutId(): Int
 
-    private val widthLayoutSize: Int
-        get() = proxy.widthLayoutSize
-
-
-    private val heightLayoutSize: Int
-        get() = proxy.heightLayoutSize
-
-
-    override val proxy: ProxyBaseDialogFragment<*>by lazy {
-        injectProxyImpl() as ProxyBaseDialogFragment<*>
+    override val proxy: ProxyBaseFragment<*>by lazy {
+        injectProxyImpl() as ProxyBaseFragment<*>
     }
+
+    val fragmentTransaction: FragmentTransaction
+        get() = childFragmentManager.beginTransaction()
 
     override fun getLifecycle(): Lifecycle {
         return lifecycleRegistry
@@ -59,30 +52,13 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         lifecycleRegistry.addObserver(proxy)
     }
 
-    override fun onStart() {
-        super.onStart()
-        dialog.window!!.setLayout(widthLayoutSize, heightLayoutSize)
-        dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setOnKeyListener(object : DialogInterface.OnKeyListener {
-            override fun onKey(dialog: DialogInterface?, keyCode: Int, event: KeyEvent?): Boolean {
-                return if ( keyCode == KeyEvent.KEYCODE_BACK && event!!.action == KeyEvent.ACTION_DOWN) {
-                    isDisallowUseBackKey()
-                } else {
-                    false
-                }
-            }
-        })
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         compatCreateView(injectLayoutId(), container)?.postOnViewLoadCompleted()
 
-    override fun onHiddenChanged(hidden: Boolean){
-        proxy.onHiddenChanged(hidden)
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        BaseDialogFragmentStack.get().push(this@BaseDialogFragment)
+        BaseFragmentStack.get().push(this@BaseFragment)
         super.onViewCreated(view, savedInstanceState)
         proxy.onViewCreated(view, savedInstanceState)
     }
@@ -97,13 +73,16 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         proxy.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun onHiddenChanged(hidden: Boolean){
+        proxy.onHiddenChanged(hidden)
+    }
 
     override fun onDestroyView() {
         this.clearFindViewByIdCache()
         proxy.onDestroyView()
         super.onDestroyView()
-        isShowing = false
-        BaseDialogFragmentStack.get().remove(this@BaseDialogFragment)
+        activity?.window?.removeWindowCache()
+        BaseFragmentStack.get().remove(this)
         System.runFinalization()
     }
 
@@ -112,10 +91,15 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         super.onResume()
         isPaused = false
         proxy.onResume()
-        if(isEnableFullScreen){
-            dialog?.window?.setFullScreen()
-        }
         MobclickAgent.onPageStart(pageLabel())
+        if(isEnableFullScreen){
+            activity?.window?.setFullScreen()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        proxy.onStop()
     }
 
     override fun onPause() {
@@ -125,24 +109,13 @@ abstract class BaseDialogFragment : CompatLayoutDialogFragment(), IProxy, Lifecy
         MobclickAgent.onPageEnd(pageLabel())
     }
 
-    override fun onStop() {
-        super.onStop()
-        proxy.onStop()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         lifecycleRegistry.removeObserver(proxy)
-
     }
 
     private fun View.postOnViewLoadCompleted():View {
-        post {
-            isShowing = true
-            proxy.onViewLoadCompleted() }
+        post { proxy.onViewLoadCompleted() }
         return this
     }
-
-    abstract fun isDisallowUseBackKey():Boolean
 }
-

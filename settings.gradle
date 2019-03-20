@@ -1,1 +1,4 @@
-include ':app', ':ToastyLibs', ':AndroidEventBusLibs', ':DevelopmentFramework'
+include ':app'
+include ':ToastyLibs'
+include ':AndroidEventBusLibs'
+include ':DevelopmentFramework'
