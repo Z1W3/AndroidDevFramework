@@ -3,7 +3,6 @@ package catt.mvp.sample
 import android.app.Application
 import android.content.Context
 import catt.mvp.framework.initializeDevelopmentFrameworks
-import catt.mvp.framework.initializeNetwork
 import catt.mvp.sample.model.interceptor.HeaderInterceptor
 import catt.mvp.sample.model.interceptor.LoggingInterceptor
 import kotlinx.coroutines.*
@@ -17,12 +16,16 @@ class GlobalApplication : Application() {
         initializeDevelopmentFrameworks(
             applicationContext,
             "1920x1080,2046x1536",
-            BuildConfig.SERVICE_BASE_URL,
-            BuildConfig.UMENG_APP_IDENTITY,
-            BuildConfig.UMENG_CHANNEL,
-            BuildConfig.UMENG_SECRET_KEY,
-            BuildConfig.GLIDE_CACHE_MEMORY,
-            BuildConfig.GLIDE_CACHE_PATH,
+            connectTimeout = 10L * 2,
+            readTimeout = 10L,
+            headerInterceptor = HeaderInterceptor(),
+            loggingInterceptor = LoggingInterceptor(),
+            serviceBaseUrl =  BuildConfig.SERVICE_BASE_URL,
+            umengAppId = BuildConfig.UMENG_APP_IDENTITY,
+            umengChannel = BuildConfig.UMENG_CHANNEL,
+            umengSecretKey = BuildConfig.UMENG_SECRET_KEY,
+            glideCacheMemory = BuildConfig.GLIDE_CACHE_MEMORY,
+            glideCachePath = BuildConfig.GLIDE_CACHE_PATH,
             toastSize = 40,
             isSimpleResponseToast = true
         )
@@ -32,13 +35,6 @@ class GlobalApplication : Application() {
     private fun initialize(ctx: Context) {
         GlobalScope.async(Dispatchers.IO, CoroutineStart.ATOMIC) {
             GlobalCrashHandler.get().initContext(ctx)
-            initializeNetwork(
-                currentTimeout = 10,
-                readTimeout = 10,
-                headerInterceptor = HeaderInterceptor(),
-                loggingInterceptor = LoggingInterceptor()
-            )
-            return@async
         }
     }
 }

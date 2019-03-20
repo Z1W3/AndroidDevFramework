@@ -27,7 +27,7 @@ android {
 dependencies {
     /*system-android*/ implementation 'com.android.support:appcompat-v7:28.0.0'
     /*system-kotlin*/ implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    /*system-kotlinX*/ implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+    /*system-kotlinX*/ implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
 
     /*兼容适配布局*/ implementation 'com.github.LuckyCattZW:CompatLayoutAdapter:1.0.9'
 
@@ -46,8 +46,8 @@ dependencies {
 
     /*图片加载框架*/ kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
-    /*友盟统计框架*/ implementation 'com.umeng.sdk:common:1.5.0'
-    /*友盟统计框架*/ implementation 'com.umeng.sdk:analytics:7.5.0'
+    /*友盟统计框架*/ implementation 'com.umeng.sdk:common:1.5.3'
+    /*友盟统计框架*/ implementation 'com.umeng.sdk:analytics:7.5.3'
 
     /*Gson解析框架*/
     implementation 'com.google.code.gson:gson:2.8.5'

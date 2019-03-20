@@ -12,14 +12,14 @@ import java.util.concurrent.TimeUnit
 
 object OkRetrofit {
 
-    private var currentTimeout:Long = 6180L
+    private var connectTimeout:Long = 6180L
     private var readTimeout:Long = 6180L
     private var headerInterceptor : Interceptor? = null
     private var loggingInterceptor : Interceptor? = null
 
     @JvmStatic
-    internal fun initializeNetwork(currentTimeout:Long = 6180L, readTimeout:Long = 6180L, headerInterceptor : Interceptor? = null, loggingInterceptor : Interceptor? = null){
-        this.currentTimeout = currentTimeout
+    internal fun initializeNetwork(connectTimeout:Long = 6180L, readTimeout:Long = 6180L, headerInterceptor : Interceptor? = null, loggingInterceptor : Interceptor? = null){
+        this.connectTimeout = connectTimeout
         this.readTimeout = readTimeout
         this.headerInterceptor = headerInterceptor
         this.loggingInterceptor = loggingInterceptor
@@ -28,7 +28,7 @@ object OkRetrofit {
     @JvmStatic
     private val okHttpClient:OkHttpClient by lazy {
         val builder = OkHttpClient.Builder()
-        builder.connectTimeout(currentTimeout, TimeUnit.MILLISECONDS)
+        builder.connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
         builder.readTimeout(readTimeout, TimeUnit.MILLISECONDS)
         headerInterceptor?.apply {
             builder.addInterceptor(this@apply)
