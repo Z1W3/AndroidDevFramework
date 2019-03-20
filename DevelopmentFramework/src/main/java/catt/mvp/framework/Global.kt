@@ -23,22 +23,22 @@ internal var globalGlideCachePath:String = ".OwnGlideCache"
 /**
  * @param ctx:Context                       必填      用户上下文
  * @param property: String                  必填      适配像素比（example："1920x1080,2046x1536"）
- * @param serviceBaseUrl: String            必填      网络请求地址 host
- * @param umengAppId: String                必填      友盟APPID
- * @param umengChannel: String              必填      友盟渠道
- * @param umengSecretKey: String            选填      友盟安全KEY
+ * @param umengAppId: String                必填      友盟平台-APP_ID
+ * @param umengChannel: String              必填      友盟平台-渠道
+ * @param umengSecretKey: String            选填      友盟平台-安全KEY
+ * @param serviceBaseUrl: String            必填      OkRetrofit框架-网络请求地址 host
  * @param connectTimeout: Long              选填      OkRetrofit框架-默认连接超时
  * @param readTimeout: Long                 选填      OkRetrofit框架-默认读取超时
  * @param headerInterceptor: Interceptor    选填      OkRetrofit框架-请求头部拦截器
  * @param loggingInterceptor: Interceptor   选填      OkRetrofit框架-网络访问日志拦截器
- * @param glideCacheMemory: Long            选填      glide缓存大小
- * @param glideCachePath: String            选填      glide缓存地址
- * @param toastColorNormal: Int             选填      toast颜色
- * @param toastColorInfo: Int               选填      toast颜色
- * @param toastColorWarning: Int            选填      toast颜色
- * @param toastColorSuccess: Int            选填      toast颜色
- * @param toastColorError: Int              选填      toast颜色
- * @param toastSize : Int                   选填      toast文字大小
+ * @param glideCacheMemory: Long            选填      glide框架-设置缓存大小
+ * @param glideCachePath: String            选填      glide框架-设置缓存地址
+ * @param toastColorNormal: Int             选填      toast框架-普通提示弹窗颜色
+ * @param toastColorInfo: Int               选填      toast框架-消息提示弹窗颜色
+ * @param toastColorWarning: Int            选填      toast框架-警告提示弹窗颜色
+ * @param toastColorSuccess: Int            选填      toast框架-成功提示弹窗颜色
+ * @param toastColorError: Int              选填      toast框架-错误提示弹窗颜色
+ * @param toastSize : Int                   选填      toast框架-弹窗文字大小
  * @param isSimpleResponseToast:Boolean     选填      如果true,网络返回的错误信息均提示网络相关问题
  */
 @ExperimentalCoroutinesApi

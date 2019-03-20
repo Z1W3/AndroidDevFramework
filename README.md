@@ -16,21 +16,25 @@
     class GlobalApplication : Application() {
         override fun onCreate() {
             super.onCreate()
-            /*
-               第一个参数，传入上下文
-               第二个参数传入适配的像素
-             */
-            initializeDevelopmentFrameworks(applicationContext, "1920x1080,2046x1536")
-            
-            
-            initializeNetwork(
-                            headerInterceptor = HeaderInterceptor(),
-                            loggingInterceptor = LoggingInterceptor()
-                        )
+            initializeDevelopmentFrameworks(
+              applicationContext,
+              "1920x1080,2046x1536",
+              connectTimeout = 10L * 2,
+              readTimeout = 10L,
+              headerInterceptor = HeaderInterceptor(),
+              loggingInterceptor = LoggingInterceptor(),
+              serviceBaseUrl =  BuildConfig.SERVICE_BASE_URL,
+              umengAppId = BuildConfig.UMENG_APP_IDENTITY,
+              umengChannel = BuildConfig.UMENG_CHANNEL,
+              umengSecretKey = BuildConfig.UMENG_SECRET_KEY,
+              glideCacheMemory = BuildConfig.GLIDE_CACHE_MEMORY,
+              glideCachePath = BuildConfig.GLIDE_CACHE_PATH,
+              toastSize = 40,
+              isSimpleResponseToast = true
+          )
         }
     }
 ```
-
 
 ### 1 委托类
 #### 1.1 创建委托类
