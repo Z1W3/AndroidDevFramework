@@ -1,0 +1,8 @@
+# AndroidDevFramework
+采用MVP的设计模式设计的框架
+
+这个分支去保留了最原始的MVP模式，并且根据实际使用结果对这个框架进行了一定修改来满足业务需求。
+
+原来每个View都只能注入一个Presenter，但是现在已经可以进行多个Presenter注入一个View中，只需要使用@InjectMultiPresenter。
+
+该修改可以明显解决Presenter臃肿的问题，更加灵活的进行搭配使用
