@@ -1,4 +1,1 @@
-include ':app'
-include ':ToastyLibs'
-include ':AndroidEventBusLibs'
-include ':DevelopmentFramework'
+include ':app', ':mvp_lib'
