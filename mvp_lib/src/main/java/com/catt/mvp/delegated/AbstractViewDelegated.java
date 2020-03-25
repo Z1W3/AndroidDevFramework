@@ -9,6 +9,9 @@ import com.catt.mvp.annotations.InjectMultiPresenter;
 import com.catt.mvp.exception.DelegatedException;
 import com.catt.mvp.presenter.AbstractPresenter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author:         支玮
  * @createDate:     2019-07-18 12:48
@@ -37,6 +40,8 @@ import com.catt.mvp.presenter.AbstractPresenter;
  */
 public abstract class AbstractViewDelegated {
 
+    private Map<Class, Object> presenterInterfaceMap;
+
     /**
      * Presenter层实例对象
      */
@@ -56,6 +61,7 @@ public abstract class AbstractViewDelegated {
             abstractPresenters = AbstractViewDelegated.newInstancePresenters(annotation);
             declaredPresenterClzs = AbstractViewDelegated.getDeclaredPresenterClassArray(abstractPresenters);
             declaredViewClass = AbstractViewDelegated.getDeclaredViewClass(this);
+            presenterInterfaceMap = getPresenterInterfaceMap();
         } catch (DelegatedException e) {
             e.printStackTrace();
         }
@@ -73,45 +79,34 @@ public abstract class AbstractViewDelegated {
         return abstractPresenters;
     }
 
-    protected <P> P getPresenterInterface(int index){
-        if (declaredPresenterClzs == null
-                || abstractPresenters == null
-                || declaredPresenterClzs.length == 0
-                || abstractPresenters.length == 0
-                || declaredPresenterClzs.length != abstractPresenters.length) {
-            return null;
-        }
-
-        final Class<?> declaredPresenterClz = declaredPresenterClzs[index];
-        final AbstractPresenter abstractPresenter = abstractPresenters[index];
-        return (P)declaredPresenterClz.cast(abstractPresenter);
-    }
-
-    protected <P> P getPresenterInterface(Class clz) {
-        if (declaredPresenterClzs == null
-                || abstractPresenters == null
-                || declaredPresenterClzs.length == 0
-                || abstractPresenters.length == 0
-                || declaredPresenterClzs.length != abstractPresenters.length) {
-            return null;
-        }
-
-        final int length = declaredPresenterClzs.length;
-        for (int index = 0; index < length; index++) {
+    private <P> Map<Class, P> getPresenterInterfaceMap(){
+        final Map<Class, P> map = new HashMap<>();
+        for (int index = 0; index < abstractPresenters.length; index++) {
             final Class<?> declaredPresenterClz = declaredPresenterClzs[index];
             final AbstractPresenter abstractPresenter = abstractPresenters[index];
             final Object cast = declaredPresenterClz.cast(abstractPresenter);
-            final Class<?>[] interfaces = cast.getClass().getInterfaces();
-            for (Class<?> anInterface : interfaces) {
+            if(cast == null){
+                continue;
+            }
+            for (Class<?> anInterface : cast.getClass().getInterfaces()) {
                 final DeclaredIPresenter annotation = anInterface.getAnnotation(DeclaredIPresenter.class);
-                if(annotation != null){
-                    if(clz.getName().equals(anInterface.getName())){
-                        return (P) cast;
-                    }
+                if (annotation != null) {
+                    map.put(anInterface, (P) cast);
                 }
             }
         }
-        return null;
+        return map;
+    }
+
+    protected <T> T getIPresenter(Class<T> cls){
+        if(presenterInterfaceMap.isEmpty()){
+            return null;
+        }
+        final Object obj = presenterInterfaceMap.get(cls);
+        if (obj == null){
+            return null;
+        }
+        return (T) obj;
     }
 
     private static Class<?> getDeclaredPresenterClass(Object o) throws DelegatedException {
@@ -140,11 +135,11 @@ public abstract class AbstractViewDelegated {
     }
 
     private static AbstractPresenter[] newInstancePresenters(InjectMultiPresenter annotation){
-        final String[] values = annotation.values();
+        final Class[] values = annotation.values();
         final AbstractPresenter[] abstractPresenters = new AbstractPresenter[values.length];
         for (int index = 0; index < values.length; index++) {
             try {
-                final AbstractPresenter abstractPresenter = (AbstractPresenter) Class.forName(values[index]).newInstance();
+                final AbstractPresenter abstractPresenter = (AbstractPresenter) Class.forName(values[index].getName()).newInstance();
                 abstractPresenters[index] = abstractPresenter;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

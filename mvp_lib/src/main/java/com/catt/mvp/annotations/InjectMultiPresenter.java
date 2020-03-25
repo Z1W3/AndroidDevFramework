@@ -29,5 +29,5 @@ public @interface InjectMultiPresenter {
      *          com.a.b.presenter.MySecondPresenterImpl,
      *      }
      */
-    String[] values();
+    Class[] values();
 }

@@ -6,22 +6,21 @@ import android.widget.Button;
 import com.catt.mvp.annotations.InjectMultiPresenter;
 import com.catt.mvp.delegated.BaseActivityDelegated;
 
+import java.util.Map;
+
 
 @InjectMultiPresenter(
         values = {
-        "com.example.test.FirstPresenter",
-        "com.example.test.SecondPresenter",
-        "com.example.test.ThirdPresenter"
+                FirstPresenter.class,
+                SecondPresenter.class,
+                ThirdPresenter.class
 })
 public class MainView extends BaseActivityDelegated<MainActivity>
         implements IMainActivity.IView {
 
-    private IMainActivity.IPresenter iPresenter;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        iPresenter = getPresenterInterface(0);
     }
 
     @Override
@@ -40,8 +39,9 @@ public class MainView extends BaseActivityDelegated<MainActivity>
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (iPresenter instanceof IMainActivity.IFirstPresenter){
-                            ((IMainActivity.IFirstPresenter) iPresenter).testMethod();
+                        final IMainActivity.IFirstPresenter iFirstPresenter = getIPresenter(IMainActivity.IFirstPresenter.class);
+                        if (iFirstPresenter != null){
+                            iFirstPresenter.testMethod();
                         }
                     }
                 }
@@ -51,8 +51,9 @@ public class MainView extends BaseActivityDelegated<MainActivity>
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (iPresenter instanceof IMainActivity.ISecondPresenter){
-                            ((IMainActivity.ISecondPresenter) iPresenter).testMethod();
+                        final IMainActivity.ISecondPresenter iSecondPresenter = getIPresenter(IMainActivity.ISecondPresenter.class);
+                        if (iSecondPresenter != null){
+                            iSecondPresenter.testMethod();
                         }
                     }
                 }
@@ -62,8 +63,9 @@ public class MainView extends BaseActivityDelegated<MainActivity>
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (iPresenter instanceof IMainActivity.IThirdPresenter){
-                            ((IMainActivity.IThirdPresenter) iPresenter).testMethod();
+                        final IMainActivity.IThirdPresenter iThirdPresenter = getIPresenter(IMainActivity.IThirdPresenter.class);
+                        if (iThirdPresenter != null){
+                            iThirdPresenter.testMethod();
                         }
                     }
                 }

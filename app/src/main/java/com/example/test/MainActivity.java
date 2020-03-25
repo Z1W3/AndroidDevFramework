@@ -1,7 +1,5 @@
 package com.example.test;
 
-import android.os.Bundle;
-
 import com.catt.mvp.BaseActivity;
 import com.catt.mvp.delegated.BaseActivityDelegated;
 
