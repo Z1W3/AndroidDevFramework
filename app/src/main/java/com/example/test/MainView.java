@@ -34,7 +34,7 @@ public class MainView extends BaseActivityDelegated<MainActivity>
     @Override
     public void onViewCreated() {
         super.onViewCreated();
-        btn_first = (Button) findViewById(R.id.btn_first);
+        btn_first = findViewById(R.id.btn_first);
         btn_first.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -46,7 +46,7 @@ public class MainView extends BaseActivityDelegated<MainActivity>
                     }
                 }
         );
-        btn_second = (Button) findViewById(R.id.btn_second);
+        btn_second = findViewById(R.id.btn_second);
         btn_second.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -58,7 +58,7 @@ public class MainView extends BaseActivityDelegated<MainActivity>
                     }
                 }
         );
-        btn_third = (Button) findViewById(R.id.btn_third);
+        btn_third = findViewById(R.id.btn_third);
         btn_third.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

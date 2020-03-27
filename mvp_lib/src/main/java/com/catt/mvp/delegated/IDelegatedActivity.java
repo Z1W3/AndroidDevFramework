@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
  */
 public interface IDelegatedActivity extends IDelegatedView {
 
-    View findViewById(int id);
+    <V extends View> V findViewById(int id);
 
     /**
      * @author:         支玮

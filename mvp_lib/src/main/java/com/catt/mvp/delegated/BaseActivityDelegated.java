@@ -76,7 +76,7 @@ public abstract class BaseActivityDelegated<T extends Activity> extends Abstract
     }
 
     @Override
-    public View findViewById(int id) {
+    public <V extends View> V findViewById(int id) {
         return getActivity().findViewById(id);
     }
 
