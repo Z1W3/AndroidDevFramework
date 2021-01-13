@@ -9,22 +9,15 @@
 
 
     <Button
-        android:id="@+id/btn_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="第一个" />
+        android:onClick="submit"
+        android:text="设置TextView" />
 
-    <Button
-        android:id="@+id/btn_second"
+    <TextView
+        android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="第二个" />
-
-    <Button
-        android:id="@+id/btn_third"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="第三个" />
-
+        android:layout_gravity="center" />
 
 </LinearLayout>
