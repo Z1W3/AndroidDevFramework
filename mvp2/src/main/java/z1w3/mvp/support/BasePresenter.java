@@ -25,6 +25,17 @@ public abstract class BasePresenter {
         this.otherPresenterMap = otherPresenterMap;
         this.viewAPI = cast;
         this.target = target;
+        applicationContext = getContext();
+    }
+
+    private Context applicationContext;
+
+    protected Context getApplicationContext() {
+        return applicationContext;
+    }
+
+    public void setApplicationContext(Context applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     protected void onCreate(){
@@ -34,6 +45,7 @@ public abstract class BasePresenter {
     protected void onDestroy() {
         viewAPI = null;
         target = null;
+        applicationContext = null;
     }
 
     protected <V> V getViewAPI() {
