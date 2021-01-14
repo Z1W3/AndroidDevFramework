@@ -3,6 +3,7 @@ package z1w3.mvp.support;
 import android.app.Activity;
 import android.content.Context;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,38 +15,29 @@ public abstract class BasePresenter {
 
     private Object viewAPI;
     private Object target;
+    private Context applicationContext;
+
 
     public void attach(Class<?> viewAPIClazz, Object target, Map<Class<?>, Object> otherPresenterMap) {
         final Object cast = viewAPIClazz.cast(target);
         if (cast == null) {
             throw new ClassCastException("View-API convert error");
         }
-        for (Map.Entry<Class<?>, Object> entry : otherPresenterMap.entrySet()) {
-            if (entry.getValue() == this) {
-                otherPresenterMap.remove(entry.getKey());
-            }
-        }
-        this.otherPresenterMap = otherPresenterMap;
+        this.otherPresenterMap = copyMap(otherPresenterMap);
         this.viewAPI = cast;
         this.target = target;
         applicationContext = getContext();
     }
 
-    private Context applicationContext;
-
     protected Context getApplicationContext() {
         return applicationContext;
     }
 
-    public void setApplicationContext(Context applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    protected void onCreate(){
+    public void onCreate(){
 
     }
 
-    protected void onDestroy() {
+    public void onDestroy() {
         viewAPI = null;
         target = null;
         applicationContext = null;
@@ -86,4 +78,16 @@ public abstract class BasePresenter {
         }
         return (T) obj;
     }
+
+    private Map<Class<?>, Object> copyMap(Map<Class<?>, Object> otherPresenterMap){
+        final HashMap<Class<?>, Object> map = new HashMap<>(otherPresenterMap);
+        for (Map.Entry<Class<?>, Object> entry : map.entrySet()) {
+            if (entry.getValue() == this) {
+                map.remove(entry.getKey());
+            }
+        }
+        return map;
+    }
+
+
 }

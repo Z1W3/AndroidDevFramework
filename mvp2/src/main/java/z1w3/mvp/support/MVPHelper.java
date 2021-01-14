@@ -56,6 +56,9 @@ public class MVPHelper {
 
     public void detach() {
         invokePresenterMethod("onDestroy", new Class[0], new Object[0]);
+        presenterApiClazz = null;
+        presenterArray = null;
+        presenterMap = null;
     }
 
     private <P> Map<Class<?>, P> getPresenterMap(){
