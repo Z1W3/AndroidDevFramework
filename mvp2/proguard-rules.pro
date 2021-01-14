@@ -21,6 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 
--keep class z1w3.mvp.support.BasePresenter{
-    public *;
- }
+-keep class z1w3.mvp.support.**{public *;}
