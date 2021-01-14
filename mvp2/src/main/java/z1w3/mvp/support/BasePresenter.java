@@ -2,7 +2,6 @@ package z1w3.mvp.support;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.Map;
 
@@ -17,10 +16,14 @@ public abstract class BasePresenter {
     private Object target;
 
     public void attach(Class<?> viewAPIClazz, Object target, Map<Class<?>, Object> otherPresenterMap) {
-        Log.e("TAG", "target="+target + ", viewAPIClazz="+viewAPIClazz);
         final Object cast = viewAPIClazz.cast(target);
         if (cast == null) {
             throw new ClassCastException("View-API convert error");
+        }
+        for (Map.Entry<Class<?>, Object> entry : otherPresenterMap.entrySet()) {
+            if (entry.getValue() == this) {
+                otherPresenterMap.remove(entry.getKey());
+            }
         }
         this.otherPresenterMap = otherPresenterMap;
         this.viewAPI = cast;

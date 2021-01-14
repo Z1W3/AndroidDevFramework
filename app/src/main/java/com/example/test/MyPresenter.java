@@ -26,6 +26,9 @@ public class MyPresenter extends BasePresenter implements MyPresenterAPI {
                 firstViewAPI = (FirstViewAPI) viewAPI;
             }
         }
+
+        final MyPresenterAPI otherPresenterAPI = getOtherPresenterAPI(MyPresenterAPI.class);
+        Log.e("TAG", "otherPresenterAPI="+otherPresenterAPI);
     }
 
     @Override
