@@ -48,8 +48,8 @@ public abstract class BasePresenter {
         if (target instanceof android.app.Fragment) {
             activity = ((android.app.Fragment) target).getActivity();
         }
-        if (target instanceof androidx.fragment.app.Fragment) {
-            activity = ((androidx.fragment.app.Fragment) target).getActivity();
+        if (target instanceof android.support.v4.app.Fragment) {
+            activity = ((android.support.v4.app.Fragment) target).getActivity();
         }
         if (target instanceof Activity) {
             activity = (Activity) target;

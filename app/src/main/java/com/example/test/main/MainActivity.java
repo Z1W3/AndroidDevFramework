@@ -2,10 +2,9 @@ package com.example.test.main;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 
 import com.example.test.BaseActivity;
 import com.example.test.MyPresenter;
