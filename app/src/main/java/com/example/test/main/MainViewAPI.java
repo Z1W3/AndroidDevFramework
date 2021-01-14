@@ -1,8 +1,8 @@
-package com.example.test;
+package com.example.test.main;
 import z1w3.mvp.support.annotations.ViewAPI;
 
 @ViewAPI
-interface MainViewAPI {
+public interface MainViewAPI {
 
     void setText(String content);
 }

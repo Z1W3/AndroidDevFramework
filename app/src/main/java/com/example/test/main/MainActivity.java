@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.test.main;
 
 
 import android.os.Bundle;
@@ -7,9 +7,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import z1w3.mvp.support.annotations.MultiPresenter;
+import com.example.test.BaseActivity;
+import com.example.test.MyPresenter;
+import com.example.test.MyPresenterAPI;
+import com.example.test.R;
+import com.example.test.first.FirstFragment;
 
-@MultiPresenter(values = {MyPresenter.class})
+import z1w3.mvp.support.annotations.InjectPresenter;
+
+@InjectPresenter(values = {MyPresenter.class})
 public class MainActivity extends BaseActivity implements MainViewAPI {
 
     private TextView textView;
@@ -19,14 +25,17 @@ public class MainActivity extends BaseActivity implements MainViewAPI {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.text_view);
+        getSupportFragmentManager().beginTransaction().add(R.id.container, new FirstFragment(), "FirstFragment").commit();
     }
 
     public void submit(View view) {
         getPresenterAPI(MyPresenterAPI.class).fetchText();
+
     }
 
     @Override
     public void setText(String content) {
         textView.setText(content);
     }
+
 }

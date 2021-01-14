@@ -4,14 +4,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import z1w3.mvp.support.annotations.MultiPresenter;
+import z1w3.mvp.support.annotations.InjectPresenter;
 import z1w3.mvp.support.annotations.PresenterAPI;
 import z1w3.mvp.support.annotations.ViewAPI;
 import z1w3.mvp.support.exception.PresenterException;
 
-public class SupportMVP {
+public class MVPHelper {
 
-    private Map<Class<?>, Object> presenterInterfaceMap;
+    private Map<Class<?>, Object> presenterMap;
 
     /**
      * Presenter层实例对象
@@ -24,12 +24,12 @@ public class SupportMVP {
 
     public void attach(Object obj) {
         try {
-            final MultiPresenter annotation = getMultiInjectPresenter(obj);
+            final InjectPresenter annotation = getMultiInjectPresenter(obj);
             presenterArray = newPresenterArray(annotation);
             presenterApiClazz = getPresenterAPIClassArray(presenterArray);
-            presenterInterfaceMap = getPresenterInterfaceMap();
+            presenterMap = getPresenterMap();
             Class<?> viewAPIClass = getViewAPIClass(obj);
-            invokePresenterMethod("attach", new Class[]{Class.class, Object.class}, new Object[]{viewAPIClass, obj});
+            invokePresenterMethod("attach", new Class[]{Class.class, Object.class, Map.class}, new Object[]{viewAPIClass, obj, presenterMap});
         } catch (PresenterException e) {
             e.printStackTrace();
         }
@@ -58,7 +58,7 @@ public class SupportMVP {
         invokePresenterMethod("onDestroy", new Class[0], new Object[0]);
     }
 
-    private <P> Map<Class<?>, P> getPresenterInterfaceMap(){
+    private <P> Map<Class<?>, P> getPresenterMap(){
         final Map<Class<?>, P> map = new HashMap<>();
         for (int index = 0; index < presenterArray.length; index++) {
             final Class<?> presenterApiClazz = this.presenterApiClazz[index];
@@ -78,10 +78,10 @@ public class SupportMVP {
     }
 
     public <T> T getPresenterAPI(Class<T> cls){
-        if(presenterInterfaceMap.isEmpty()){
+        if(presenterMap == null || presenterMap.isEmpty()){
             return null;
         }
-        final Object obj = presenterInterfaceMap.get(cls);
+        final Object obj = presenterMap.get(cls);
         if (obj == null){
             return null;
         }
@@ -114,15 +114,15 @@ public class SupportMVP {
      * @param o
      * @return
      */
-    private MultiPresenter getMultiInjectPresenter(Object o){
-        return o.getClass().getAnnotation(MultiPresenter.class);
+    private InjectPresenter getMultiInjectPresenter(Object o){
+        return o.getClass().getAnnotation(InjectPresenter.class);
     }
 
     /**
      * 实例Presenter类
      * 将注解中的Presenter全部进行实例
      */
-    private BasePresenter[] newPresenterArray(MultiPresenter annotation){
+    private BasePresenter[] newPresenterArray(InjectPresenter annotation){
         final Class<? extends BasePresenter>[] values = annotation.values();
         final BasePresenter[] presenterArray = new BasePresenter[values.length];
         for (int index = 0; index < values.length; index++) {

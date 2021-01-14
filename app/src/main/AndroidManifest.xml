@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.test.MainActivity"
+            android:name="com.example.test.main.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="fullSensor">
             <intent-filter>
