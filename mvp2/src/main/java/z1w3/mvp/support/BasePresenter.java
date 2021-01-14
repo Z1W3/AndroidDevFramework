@@ -49,6 +49,7 @@ public abstract class BasePresenter {
         viewAPI = null;
         target = null;
         applicationContext = null;
+        otherPresenterMap = null;
     }
 
     protected <V> V getViewAPI() {
