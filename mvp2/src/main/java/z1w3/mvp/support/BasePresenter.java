@@ -3,6 +3,7 @@ package z1w3.mvp.support;
 import android.app.Activity;
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,10 +82,14 @@ public abstract class BasePresenter {
 
     private Map<Class<?>, Object> copyMap(Map<Class<?>, Object> otherPresenterMap){
         final HashMap<Class<?>, Object> map = new HashMap<>(otherPresenterMap);
+        final ArrayList<Class<?>> list = new ArrayList<>();
         for (Map.Entry<Class<?>, Object> entry : map.entrySet()) {
             if (entry.getValue() == this) {
-                map.remove(entry.getKey());
+                list.add(entry.getKey());
             }
+        }
+        for (Class<?> clazz : list) {
+            map.remove(clazz);
         }
         return map;
     }
