@@ -1,5 +1,7 @@
 package z1w3.mvp.support;
 
+import android.util.Log;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,10 @@ public class MVPHelper {
     public void attach(Object obj) {
         try {
             final InjectPresenter annotation = getMultiInjectPresenter(obj);
+            if(annotation == null) {
+                Log.e("MVPHelper", "Annotation Not Found >>> 'InjectPresenter'. Stop attach...");
+                return;
+            }
             presenterArray = newPresenterArray(annotation);
             presenterApiClazz = getPresenterAPIClassArray(presenterArray);
             presenterMap = getPresenterMap();
@@ -37,12 +43,14 @@ public class MVPHelper {
 
     private void invokePresenterMethod(String name, Class<?>[] parameterTypes, Object[] args){
         try {
-            for (BasePresenter basePresenter : presenterArray) {
-                final Class<? extends BasePresenter> clazz = basePresenter.getClass();
-                final Method method = clazz.getMethod(name, parameterTypes);
-                method.setAccessible(true);
-                method.invoke(basePresenter, args);
-                method.setAccessible(false);
+            if(presenterArray != null) {
+                for (BasePresenter basePresenter : presenterArray) {
+                    final Class<? extends BasePresenter> clazz = basePresenter.getClass();
+                    final Method method = clazz.getMethod(name, parameterTypes);
+                    method.setAccessible(true);
+                    method.invoke(basePresenter, args);
+                    method.setAccessible(false);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
