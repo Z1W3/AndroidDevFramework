@@ -106,7 +106,7 @@ public class MVPHelper {
                 return o.getClass().asSubclass(anInterface);
             }
         }
-        throw new PresenterException("Must use declaration annotation class DeclaredIPresenter");
+        throw new PresenterException("Must use annotation class PresenterAPI");
     }
 
     private Class<?> getViewAPIClass(Object o) throws PresenterException {
@@ -116,7 +116,7 @@ public class MVPHelper {
                 return o.getClass().asSubclass(anInterface);
             }
         }
-        throw new PresenterException("Must use declaration annotation class DeclaredIView");
+        throw new PresenterException("Must use annotation class ViewAPI");
     }
 
 
