@@ -2,10 +2,13 @@ package z1w3.mvp.support;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import z1w3.mvp.support.annotations.Singleton;
 
 /**
  * 子类必须是public访问权限，否则无法被实例
@@ -19,7 +22,7 @@ public abstract class BasePresenter {
     private Context applicationContext;
 
 
-    public void attach(Class<?> viewAPIClazz, Object target, Map<Class<?>, Object> otherPresenterMap) {
+    public void attach(Class<?> viewAPIClazz, Object target, Map<Class<?>, Object> otherPresenterMap) throws ClassCastException {
         final Object cast = viewAPIClazz.cast(target);
         if (cast == null) {
             throw new ClassCastException("View-API convert error");
@@ -27,7 +30,14 @@ public abstract class BasePresenter {
         this.otherPresenterMap = copyMap(otherPresenterMap);
         this.viewAPI = cast;
         this.target = target;
-        applicationContext = getContext();
+        final Context context = getContext();
+        if(context != null){
+            applicationContext = context.getApplicationContext();
+            final Singleton annotation = this.getClass().getAnnotation(Singleton.class);
+            if(annotation != null){
+                this.target = null;
+            }
+        }
     }
 
     protected Context getApplicationContext() {
@@ -39,6 +49,11 @@ public abstract class BasePresenter {
     }
 
     public void onDestroy() {
+        final Singleton annotation = this.getClass().getAnnotation(Singleton.class);
+        if(annotation != null){
+            Log.w("Presenter", "Current is Singleton Presenter, Cannot be destroyed.");
+            return;
+        }
         viewAPI = null;
         target = null;
         applicationContext = null;
@@ -50,9 +65,16 @@ public abstract class BasePresenter {
     }
 
     protected Context getContext() {
+        final Singleton annotation = this.getClass().getAnnotation(Singleton.class);
+        if(annotation != null && applicationContext != null){
+            Log.w("Presenter", "Current is Singleton Presenter, Only provide ApplicationContext.");
+            return applicationContext;
+        }
+
         if (target == null) {
             return null;
         }
+
         Activity activity = null;
         if (target instanceof android.app.Fragment) {
             activity = ((android.app.Fragment) target).getActivity();
@@ -70,6 +92,10 @@ public abstract class BasePresenter {
     }
 
     protected <T> T getOtherPresenterAPI(Class<T> cls) {
+        final Singleton annotation = this.getClass().getAnnotation(Singleton.class);
+        if(annotation != null){
+            Log.e("Presenter", "Current is Singleton Presenter, Not recommended for use 'getOtherPresenterAPI' method. Because the current 'View' may not be the object that initializes the Singleton Presenter. Origin 'View' >>> " + viewAPI);
+        }
         if (otherPresenterMap == null || otherPresenterMap.isEmpty()) {
             return null;
         }

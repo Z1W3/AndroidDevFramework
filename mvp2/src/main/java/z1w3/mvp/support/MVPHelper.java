@@ -8,6 +8,7 @@ import java.util.Map;
 
 import z1w3.mvp.support.annotations.InjectPresenter;
 import z1w3.mvp.support.annotations.PresenterAPI;
+import z1w3.mvp.support.annotations.Singleton;
 import z1w3.mvp.support.annotations.ViewAPI;
 import z1w3.mvp.support.exception.PresenterException;
 
@@ -41,10 +42,22 @@ public class MVPHelper {
         }
     }
 
-    private void invokePresenterMethod(String name, Class<?>[] parameterTypes, Object[] args){
+    private void invokePresenterMethod(String name, Class<?>[] parameterTypes, Object[] args) {
         try {
-            if(presenterArray != null) {
+            if (presenterArray != null) {
                 for (BasePresenter basePresenter : presenterArray) {
+                    if ("attach".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && Storage.INSTANCE.isAttachFinishedMark(basePresenter)) {
+                        continue;
+                    } else if ("onCreate".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && Storage.INSTANCE.isCreatFinishedMark(basePresenter)) {
+                        continue;
+                    } else if ("onDestroy".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter)) {
+                        continue;
+                    }
+                    else if ("attach".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && !Storage.INSTANCE.isAttachFinishedMark(basePresenter)) {
+                        Storage.INSTANCE.modifyAttachMark(basePresenter);
+                    } else if ("onCreate".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && !Storage.INSTANCE.isCreatFinishedMark(basePresenter)) {
+                        Storage.INSTANCE.modifyCreatedMark(basePresenter);
+                    }
                     final Class<? extends BasePresenter> clazz = basePresenter.getClass();
                     final Method method = clazz.getMethod(name, parameterTypes);
                     method.setAccessible(true);
@@ -129,18 +142,30 @@ public class MVPHelper {
         return o.getClass().getAnnotation(InjectPresenter.class);
     }
 
+    private Singleton getSingleton(Object o){
+        return o.getClass().getAnnotation(Singleton.class);
+    }
+
     /**
      * 实例Presenter类
      * 将注解中的Presenter全部进行实例
      */
-    private BasePresenter[] newPresenterArray(InjectPresenter annotation){
+    private BasePresenter[] newPresenterArray(InjectPresenter annotation) {
         final Class<? extends BasePresenter>[] values = annotation.values();
         final BasePresenter[] presenterArray = new BasePresenter[values.length];
         for (int index = 0; index < values.length; index++) {
             try {
                 final String name = values[index].getName();
-                final BasePresenter abstractPresenter = (BasePresenter) Class.forName(name).newInstance();
-                presenterArray[index] = abstractPresenter;
+                final BasePresenter basePresenter = (BasePresenter) Class.forName(name).newInstance();
+                final Singleton singleton = getSingleton(basePresenter);
+                if (singleton != null) {
+                    Storage.INSTANCE.addSingleton(basePresenter);
+                    final BasePresenter singletonPresenter = Storage.INSTANCE.getSingleton(basePresenter);
+                    presenterArray[index] = singletonPresenter != null ? singletonPresenter : basePresenter;
+                }
+                else {
+                    presenterArray[index] = basePresenter;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
