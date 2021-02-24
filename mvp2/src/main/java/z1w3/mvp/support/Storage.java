@@ -8,8 +8,8 @@ enum Storage {
     private final int ATTACH_FINISHED = 1;
     private final int CREATE_FINISHED = 2;
 
-    private final HashMap<Class<?>, BasePresenter> mSingletonMap = new HashMap<>();
-    private final HashMap<Class<?>, Integer> mMarkMap = new HashMap<>();
+    private transient static final HashMap<Class<?>, BasePresenter> mSingletonMap = new HashMap<>();
+    private transient static final HashMap<Class<?>, Integer> mMarkMap = new HashMap<>();
 
 
     protected void addSingleton(BasePresenter presenter){
@@ -39,7 +39,7 @@ enum Storage {
         return result != null && (result == ATTACH_FINISHED || result == CREATE_FINISHED);
     }
 
-    protected Boolean isCreatFinishedMark(BasePresenter presenter){
+    protected Boolean isCreateFinishedMark(BasePresenter presenter){
         final Integer result = mMarkMap.get(presenter.getClass());
         return result != null && result == CREATE_FINISHED;
     }

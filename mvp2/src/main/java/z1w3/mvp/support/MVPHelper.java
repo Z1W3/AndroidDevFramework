@@ -48,14 +48,14 @@ public class MVPHelper {
                 for (BasePresenter basePresenter : presenterArray) {
                     if ("attach".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && Storage.INSTANCE.isAttachFinishedMark(basePresenter)) {
                         continue;
-                    } else if ("onCreate".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && Storage.INSTANCE.isCreatFinishedMark(basePresenter)) {
+                    } else if ("onCreate".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && Storage.INSTANCE.isCreateFinishedMark(basePresenter)) {
                         continue;
                     } else if ("onDestroy".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter)) {
                         continue;
                     }
                     else if ("attach".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && !Storage.INSTANCE.isAttachFinishedMark(basePresenter)) {
                         Storage.INSTANCE.modifyAttachMark(basePresenter);
-                    } else if ("onCreate".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && !Storage.INSTANCE.isCreatFinishedMark(basePresenter)) {
+                    } else if ("onCreate".equalsIgnoreCase(name) && Storage.INSTANCE.isSingleton(basePresenter) && !Storage.INSTANCE.isCreateFinishedMark(basePresenter)) {
                         Storage.INSTANCE.modifyCreatedMark(basePresenter);
                     }
                     final Class<? extends BasePresenter> clazz = basePresenter.getClass();
