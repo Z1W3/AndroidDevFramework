@@ -1,5 +1,9 @@
 # MVP辅助框架
 
+本项目不在维护
+新项目迁移至 -> https://github.com/LuckyCattZW/MVPHelper
+
+
 ### 前言
 如果你的项目是一个纯app商业项目，你更应使用以下两种其一的框架进行开发
 1. MVVM框架（Databinding+LiveData +ViewModel）的方式
